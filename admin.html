@@ -30,7 +30,7 @@ body{
 }
 
 .container{
-    max-width:900px;
+    max-width:950px;
     margin:20px auto;
     padding:15px;
 }
@@ -47,6 +47,20 @@ button{
 .refresh{
     background:#2563eb;
     color:white;
+}
+
+.section{
+    background:white;
+    padding:18px;
+    margin-bottom:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px #ddd;
+}
+
+.section-title{
+    margin-top:0;
+    border-bottom:1px solid #ddd;
+    padding-bottom:12px;
 }
 
 .stats{
@@ -70,15 +84,17 @@ button{
     margin-top:8px;
 }
 
-.order{
-    background:white;
-    margin-bottom:18px;
+.order,
+.booking{
+    background:#fff;
+    margin-bottom:15px;
     padding:18px;
     border-radius:12px;
     box-shadow:0 2px 8px #ddd;
 }
 
-.order-header{
+.order-header,
+.booking-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -86,11 +102,13 @@ button{
     flex-wrap:wrap;
 }
 
-.order h3{
+.order h3,
+.booking h3{
     margin:0;
 }
 
-.customer{
+.customer,
+.booking-info{
     line-height:1.7;
     margin-top:12px;
 }
@@ -176,6 +194,15 @@ button{
     background:#999;
 }
 
+.booking-status-select{
+    width:100%;
+    padding:11px;
+    margin-top:8px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
 .success{
     margin-top:10px;
     padding:10px;
@@ -195,6 +222,12 @@ button{
 .loading{
     text-align:center;
     padding:20px;
+}
+
+.no-data{
+    text-align:center;
+    padding:20px;
+    color:#666;
 }
 
 @media(max-width:600px){
@@ -226,8 +259,8 @@ button{
 
     <button
         class="refresh"
-        onclick="loadOrders()">
-        🔄 Refresh Orders
+        onclick="loadAll()">
+        🔄 Refresh All
     </button>
 
 </div>
@@ -235,34 +268,70 @@ button{
 
 <div class="container">
 
-    <div class="stats">
 
-        <div class="stat">
-            Total Orders
-            <strong id="totalOrders">0</strong>
-        </div>
+<!-- ========================= -->
+<!-- STATISTICS -->
+<!-- ========================= -->
 
-        <div class="stat">
-            Pending Orders
-            <strong id="pendingOrders">0</strong>
-        </div>
+<div class="stats">
 
-        <div class="stat">
-            Total Sales
-            <strong>
-                ₹<span id="totalSales">0</span>
-            </strong>
-        </div>
-
+    <div class="stat">
+        Total Orders
+        <strong id="totalOrders">0</strong>
     </div>
 
+    <div class="stat">
+        Pending Orders
+        <strong id="pendingOrders">0</strong>
+    </div>
 
-    <div id="message" class="loading">
+    <div class="stat">
+        Total Sales
+        <strong>
+            ₹<span id="totalSales">0</span>
+        </strong>
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- ORDERS -->
+<!-- ========================= -->
+
+<div class="section">
+
+    <h2 class="section-title">
+        📦 Customer Orders
+    </h2>
+
+    <div id="orderMessage" class="loading">
         ⏳ Loading orders...
     </div>
 
-
     <div id="orders"></div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- BOOKINGS -->
+<!-- ========================= -->
+
+<div class="section">
+
+    <h2 class="section-title">
+        📅 Table Bookings
+    </h2>
+
+    <div id="bookingMessage" class="loading">
+        ⏳ Loading bookings...
+    </div>
+
+    <div id="bookings"></div>
+
+</div>
+
 
 </div>
 
@@ -272,6 +341,22 @@ button{
 const API =
 "https://1251file.xboy7334.workers.dev/api/admin/orders";
 
+const BOOKING_API =
+"https://1251file.xboy7334.workers.dev/api/admin/bookings";
+
+
+// ========================================
+// LOAD ALL
+// ========================================
+
+function loadAll(){
+
+    loadOrders();
+
+    loadBookings();
+
+}
+
 
 // ========================================
 // LOAD ORDERS
@@ -280,10 +365,11 @@ const API =
 async function loadOrders(){
 
     const message =
-        document.getElementById("message");
+        document.getElementById("orderMessage");
 
     const ordersBox =
         document.getElementById("orders");
+
 
     message.className = "loading";
 
@@ -295,10 +381,11 @@ async function loadOrders(){
 
     try{
 
-        const response = await fetch(API,{
-            method:"GET",
-            cache:"no-store"
-        });
+        const response =
+            await fetch(API,{
+                method:"GET",
+                cache:"no-store"
+            });
 
 
         const data =
@@ -319,7 +406,8 @@ async function loadOrders(){
 
         document.getElementById(
             "totalOrders"
-        ).textContent = orders.length;
+        ).textContent =
+            orders.length;
 
 
         let pending = 0;
@@ -341,7 +429,8 @@ async function loadOrders(){
 
         document.getElementById(
             "pendingOrders"
-        ).textContent = pending;
+        ).textContent =
+            pending;
 
 
         document.getElementById(
@@ -355,11 +444,10 @@ async function loadOrders(){
 
         if(orders.length === 0){
 
-            ordersBox.innerHTML = `
-                <div class="order">
+            ordersBox.innerHTML =
+                `<div class="no-data">
                     No orders found.
-                </div>
-            `;
+                </div>`;
 
             return;
         }
@@ -398,7 +486,6 @@ async function loadOrders(){
                 order.status || "Pending";
 
 
-            // Clean phone number for WhatsApp
             const phone =
                 String(order.phone || "")
                 .replace(/\D/g,"");
@@ -429,6 +516,7 @@ async function loadOrders(){
 
                         <b>Phone:</b>
                         ${order.phone || "-"}
+
 
                         <div class="contact-buttons">
 
@@ -485,8 +573,6 @@ async function loadOrders(){
                     </div>
 
 
-                    <!-- STATUS -->
-
                     <div class="status-box">
 
                         <label>
@@ -496,45 +582,31 @@ async function loadOrders(){
 
                         <select
                             class="status-select"
-                            id="status-${order.id}"
+                            id="order-status-${order.id}"
                         >
 
-                            <option
-                                value="Pending"
-                                ${currentStatus === "Pending" ? "selected" : ""}
-                            >
+                            <option value="Pending"
+                                ${currentStatus === "Pending" ? "selected" : ""}>
                                 🟡 Pending
                             </option>
 
-
-                            <option
-                                value="Confirmed"
-                                ${currentStatus === "Confirmed" ? "selected" : ""}
-                            >
+                            <option value="Confirmed"
+                                ${currentStatus === "Confirmed" ? "selected" : ""}>
                                 🔵 Confirmed
                             </option>
 
-
-                            <option
-                                value="Preparing"
-                                ${currentStatus === "Preparing" ? "selected" : ""}
-                            >
+                            <option value="Preparing"
+                                ${currentStatus === "Preparing" ? "selected" : ""}>
                                 🟠 Preparing
                             </option>
 
-
-                            <option
-                                value="Delivered"
-                                ${currentStatus === "Delivered" ? "selected" : ""}
-                            >
+                            <option value="Delivered"
+                                ${currentStatus === "Delivered" ? "selected" : ""}>
                                 🟢 Delivered
                             </option>
 
-
-                            <option
-                                value="Cancelled"
-                                ${currentStatus === "Cancelled" ? "selected" : ""}
-                            >
+                            <option value="Cancelled"
+                                ${currentStatus === "Cancelled" ? "selected" : ""}>
                                 🔴 Cancelled
                             </option>
 
@@ -543,15 +615,15 @@ async function loadOrders(){
 
                         <button
                             class="update-btn"
-                            id="update-${order.id}"
-                            onclick="updateStatus(${order.id})"
+                            id="order-update-${order.id}"
+                            onclick="updateOrderStatus(${order.id})"
                         >
                             ✅ Update Status
                         </button>
 
 
                         <div
-                            id="result-${order.id}"
+                            id="order-result-${order.id}"
                         ></div>
 
                     </div>
@@ -573,12 +645,9 @@ async function loadOrders(){
 
         message.className = "error";
 
-
-        message.innerHTML = `
-            ❌ Orders load হচ্ছে না.
-            <br><br>
-            ${error.message}
-        `;
+        message.innerHTML =
+            "❌ Orders load হচ্ছে না.<br><br>" +
+            error.message;
 
     }
 
@@ -586,14 +655,241 @@ async function loadOrders(){
 
 
 // ========================================
-// CALL CUSTOMER
+// LOAD BOOKINGS
+// ========================================
+
+async function loadBookings(){
+
+    const message =
+        document.getElementById(
+            "bookingMessage"
+        );
+
+    const bookingsBox =
+        document.getElementById(
+            "bookings"
+        );
+
+
+    message.className = "loading";
+
+    message.innerHTML =
+        "⏳ Loading bookings...";
+
+    bookingsBox.innerHTML = "";
+
+
+    try{
+
+        const response =
+            await fetch(
+                BOOKING_API,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.success){
+
+            throw new Error(
+                data.message ||
+                "Booking API error"
+            );
+        }
+
+
+        const bookings =
+            data.bookings || [];
+
+
+        message.innerHTML = "";
+
+
+        if(bookings.length === 0){
+
+            bookingsBox.innerHTML =
+                `<div class="no-data">
+                    No bookings found.
+                </div>`;
+
+            return;
+        }
+
+
+        bookings.forEach(function(booking){
+
+            const currentStatus =
+                booking.status || "Pending";
+
+
+            const phone =
+                String(booking.phone || "")
+                .replace(/\D/g,"");
+
+
+            const html = `
+
+                <div class="booking">
+
+                    <div class="booking-header">
+
+                        <h3>
+                            📅 Booking #${booking.id}
+                        </h3>
+
+                        <span class="status">
+                            ${currentStatus}
+                        </span>
+
+                    </div>
+
+
+                    <div class="booking-info">
+
+                        <b>Customer:</b>
+                        ${booking.customer_name || "-"}
+                        <br>
+
+                        <b>Phone:</b>
+                        ${booking.phone || "-"}
+
+
+                        <div class="contact-buttons">
+
+                            <button
+                                class="call-btn"
+                                onclick="callCustomer('${phone}')"
+                            >
+                                📞 Call Customer
+                            </button>
+
+
+                            <button
+                                class="whatsapp-btn"
+                                onclick="whatsappBooking('${phone}','${booking.id}')"
+                            >
+                                💬 WhatsApp
+                            </button>
+
+                        </div>
+
+
+                        <br>
+
+                        <b>Booking Date:</b>
+                        ${booking.booking_date || "-"}
+
+                        <br>
+
+                        <b>Booking Time:</b>
+                        ${booking.booking_time || "-"}
+
+                        <br>
+
+                        <b>Guests:</b>
+                        ${booking.guests || "-"}
+
+                        <br>
+
+                        <b>Created:</b>
+                        ${booking.created_at || ""}
+
+                    </div>
+
+
+                    <div class="status-box">
+
+                        <label>
+                            Change Booking Status
+                        </label>
+
+
+                        <select
+                            class="booking-status-select"
+                            id="booking-status-${booking.id}"
+                        >
+
+                            <option value="Pending"
+                                ${currentStatus === "Pending" ? "selected" : ""}>
+                                🟡 Pending
+                            </option>
+
+                            <option value="Confirmed"
+                                ${currentStatus === "Confirmed" ? "selected" : ""}>
+                                🔵 Confirmed
+                            </option>
+
+                            <option value="Completed"
+                                ${currentStatus === "Completed" ? "selected" : ""}>
+                                🟢 Completed
+                            </option>
+
+                            <option value="Cancelled"
+                                ${currentStatus === "Cancelled" ? "selected" : ""}>
+                                🔴 Cancelled
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            class="update-btn"
+                            id="booking-update-${booking.id}"
+                            onclick="updateBookingStatus(${booking.id})"
+                        >
+                            ✅ Update Booking
+                        </button>
+
+
+                        <div
+                            id="booking-result-${booking.id}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            bookingsBox.innerHTML += html;
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        message.className = "error";
+
+        message.innerHTML =
+            "❌ Bookings load হচ্ছে না.<br><br>" +
+            error.message;
+
+    }
+
+}
+
+
+// ========================================
+// CALL
 // ========================================
 
 function callCustomer(phone){
 
     if(!phone){
 
-        alert("Phone number পাওয়া যায়নি");
+        alert(
+            "Phone number পাওয়া যায়নি"
+        );
 
         return;
     }
@@ -606,14 +902,19 @@ function callCustomer(phone){
 
 
 // ========================================
-// WHATSAPP CUSTOMER
+// WHATSAPP ORDER
 // ========================================
 
-function whatsappCustomer(phone, orderId){
+function whatsappCustomer(
+    phone,
+    orderId
+){
 
     if(!phone){
 
-        alert("Phone number পাওয়া যায়নি");
+        alert(
+            "Phone number পাওয়া যায়নি"
+        );
 
         return;
     }
@@ -625,7 +926,7 @@ function whatsappCustomer(phone, orderId){
         ".";
 
 
-    const whatsappURL =
+    const url =
         "https://wa.me/" +
         phone +
         "?text=" +
@@ -633,7 +934,7 @@ function whatsappCustomer(phone, orderId){
 
 
     window.open(
-        whatsappURL,
+        url,
         "_blank"
     );
 
@@ -641,26 +942,68 @@ function whatsappCustomer(phone, orderId){
 
 
 // ========================================
-// UPDATE STATUS
+// WHATSAPP BOOKING
 // ========================================
 
-async function updateStatus(orderId){
+function whatsappBooking(
+    phone,
+    bookingId
+){
+
+    if(!phone){
+
+        alert(
+            "Phone number পাওয়া যায়নি"
+        );
+
+        return;
+    }
+
+
+    const message =
+        "Hello, this is Your Choice Family Restaurant regarding your Table Booking #" +
+        bookingId +
+        ".";
+
+
+    const url =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+// ========================================
+// UPDATE ORDER STATUS
+// ========================================
+
+async function updateOrderStatus(
+    orderId
+){
 
     const select =
         document.getElementById(
-            "status-" + orderId
+            "order-status-" + orderId
         );
 
 
     const button =
         document.getElementById(
-            "update-" + orderId
+            "order-update-" + orderId
         );
 
 
     const result =
         document.getElementById(
-            "result-" + orderId
+            "order-result-" + orderId
         );
 
 
@@ -672,9 +1015,6 @@ async function updateStatus(orderId){
 
     button.textContent =
         "⏳ Updating...";
-
-
-    result.innerHTML = "";
 
 
     try{
@@ -701,7 +1041,8 @@ async function updateStatus(orderId){
             await response.json();
 
 
-        if(!response.ok || !data.success){
+        if(!response.ok ||
+           !data.success){
 
             throw new Error(
                 data.message ||
@@ -723,42 +1064,10 @@ async function updateStatus(orderId){
             "✅ Updated";
 
 
-        setTimeout(function(){
-
-            loadOrders();
-
-        },1000);
-
-
-    }catch(error){
-
-        console.error(error);
+        setTimeout(
+            loadOrders,
+            1000
+        );
 
 
-        result.innerHTML = `
-            <div class="error">
-                ❌ ${error.message}
-            </div>
-        `;
-
-
-        button.disabled = false;
-
-        button.textContent =
-            "✅ Update Status";
-
-    }
-
-}
-
-
-// ========================================
-// START
-// ========================================
-
-loadOrders();
-
-</script>
-
-</body>
-</html>
+    
