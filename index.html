@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your Choice Family Restaurant in Durgachak, Haldia. Family dining, fresh food and table booking via WhatsApp.">
+  <meta name="theme-color" content="#b5121b">
+  <title>Your Choice Family Restaurant | Haldia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Your Choice Family Restaurant home">
+      <span class="brand-mark">🍴</span>
+      <span><strong>Your Choice</strong><small>Family Restaurant</small></span>
+    </a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav" id="nav">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#booking">Book a Table</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="eyebrow">WELCOME TO</span>
+        <h1>Your Choice<br><span>Family Restaurant</span></h1>
+        <p>A comfortable family dining destination in Durgachak, Haldia.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#booking">Book a Table</a>
+          <a class="btn btn-outline" href="tel:+917364989504">Call 73649 89504</a>
+        </div>
+        <div class="hero-note">Family restaurant • No alcohol drinks</div>
+      </div>
+    </section>
+
+    <section class="quick-info">
+      <div><span>🕐</span><div><b>Open Daily</b><small>08:00 AM – 10:30 PM</small></div></div>
+      <div><span>👨‍👩‍👧‍👦</span><div><b>Family Dining</b><small>Comfortable family-friendly space</small></div></div>
+      <div><span>📍</span><div><b>Haldia</b><small>Durgachak, West Bengal</small></div></div>
+      <div><span>🍹</span><div><b>No Alcohol</b><small>Family-friendly environment</small></div></div>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="section-image image-kitchen"></div>
+      <div class="section-copy">
+        <span class="eyebrow dark">ABOUT US</span>
+        <h2>A place for food, family & good moments.</h2>
+        <p>Your Choice Family Restaurant is a family restaurant located at HPL Link Road, Manjushree, Durgachak, Haldia. Our space is designed for families and groups looking for a comfortable place to dine together.</p>
+        <div class="facts">
+          <div><strong>08:00 AM</strong><span>Opening</span></div>
+          <div><strong>10:30 PM</strong><span>Closing</span></div>
+          <div><strong>10 Guests</strong><span>Max. booking</span></div>
+        </div>
+        <a class="text-link" href="#booking">Reserve your table →</a>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="gallery">
+      <div class="section-heading">
+        <span class="eyebrow dark">OUR RESTAURANT</span>
+        <h2>See the space</h2>
+        <p>Take a look at the restaurant, dining area and kitchen.</p>
+      </div>
+      <div class="gallery">
+        <img src="images/02-front.jpg" alt="Your Choice Family Restaurant exterior">
+        <img src="images/04-dining-1.jpg" alt="Your Choice Family Restaurant dining area">
+        <img src="images/05-dining-2.jpg" alt="Family dining area">
+        <img src="images/06-dining-3.jpg" alt="Restaurant interior">
+        <img src="images/07-theme-room.jpg" alt="Decorated restaurant seating">
+        <img src="images/08-interior.jpg" alt="Restaurant interior with colorful lighting">
+        <img src="images/03-drinks.jpg" alt="Restaurant drinks and serving area">
+        <img src="images/01-kitchen.jpg" alt="Chef preparing food in the kitchen">
+      </div>
+    </section>
+
+    <section class="booking" id="booking">
+      <div class="booking-card">
+        <div class="booking-copy">
+          <span class="eyebrow">TABLE RESERVATION</span>
+          <h2>Book your table on WhatsApp</h2>
+          <p>Fill in the details and tap the button. WhatsApp will open with your booking request ready to send.</p>
+          <div class="booking-rules">
+            <div>✓ Table booking for <b>up to 10 guests</b></div>
+            <div>✓ Booking request is sent directly to the restaurant WhatsApp</div>
+            <div>✓ Your table is confirmed only after the restaurant replies</div>
+          </div>
+        </div>
+
+        <form id="bookingForm" class="booking-form">
+          <label>Full Name
+            <input id="name" type="text" placeholder="Enter your name" required>
+          </label>
+          <label>Mobile Number
+            <input id="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number" required>
+          </label>
+          <div class="two-col">
+            <label>Date
+              <input id="date" type="date" required>
+            </label>
+            <label>Time
+              <input id="time" type="time" min="08:00" max="22:30" required>
+            </label>
+          </div>
+          <label>Number of Guests <span class="muted">(1–10)</span>
+            <select id="guests" required>
+              <option value="">Select guests</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+            </select>
+          </label>
+          <label>Special Request <span class="muted">(optional)</span>
+            <textarea id="note" rows="3" placeholder="Birthday, family dinner, seating request, etc."></textarea>
+          </label>
+          <button class="btn btn-whatsapp" type="submit">💬 Send Booking on WhatsApp</button>
+          <p class="form-note">Restaurant WhatsApp: <a href="https://wa.me/917364989504" target="_blank" rel="noopener">+91 73649 89504</a></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div>
+        <span class="eyebrow dark">FIND US</span>
+        <h2>Your table is waiting.</h2>
+        <p>HPL Link Rd, Manjushree, Durgachak, Haldia, West Bengal 721602</p>
+        <div class="contact-actions">
+          <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=Your%20Choice%20Family%20Restaurant%2C%20HPL%20Link%20Rd%2C%20Manjushree%2C%20Durgachak%2C%20Haldia%2C%20West%20Bengal%20721602" target="_blank" rel="noopener">📍 Open in Google Maps</a>
+          <a class="btn btn-dark" href="tel:+917364989504">📞 Call Now</a>
+        </div>
+      </div>
+      <div class="hours">
+        <h3>Opening Hours</h3>
+        <div><span>Every Day</span><strong>08:00 AM – 10:30 PM</strong></div>
+        <div><span>Alcohol</span><strong>No Alcohol Drinks</strong></div>
+        <div><span>Booking</span><strong>Up to 10 Guests</strong></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>Your Choice Family Restaurant</strong><span>HPL Link Rd, Manjushree, Durgachak, Haldia</span></div>
+    <div>© <span id="year"></span> Your Choice Family Restaurant</div>
+  </footer>
+
+  <a class="floating-wa" href="https://wa.me/917364989504" target="_blank" rel="noopener" aria-label="WhatsApp Your Choice Family Restaurant">💬</a>
+  <script src="script.js"></script>
+</body>
+</html>
