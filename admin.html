@@ -1,1856 +1,1077 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Choice Admin</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<title>Your Choice Admin</title>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
 
-<style>
+    header {
+      background: #111827;
+      color: white;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
 
-*{
-box-sizing:border-box;
-}
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f3f4f6;
-color:#111;
-}
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.header{
-background:#111827;
-color:white;
-padding:18px;
-text-align:center;
-}
+    .refresh-btn {
+      background: #2563eb;
+      color: white;
+    }
 
-.header h1{
-margin:0 0 12px;
-}
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
 
-.container{
-max-width:950px;
-margin:auto;
-padding:15px;
-}
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
 
-button{
-border:0;
-cursor:pointer;
-padding:11px 16px;
-border-radius:8px;
-font-weight:bold;
-}
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-.refresh{
-background:#2563eb;
-color:white;
-}
+    .stat-title {
+      color: #666;
+      font-size: 14px;
+    }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-margin-bottom:20px;
-}
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
 
-.stat{
-background:white;
-padding:20px;
-border-radius:10px;
-text-align:center;
-box-shadow:0 2px 8px #ddd;
-}
+    .section {
+      background: white;
+      margin-bottom: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-.stat strong{
-display:block;
-font-size:28px;
-margin-top:8px;
-}
+    .section h2 {
+      margin-top: 0;
+    }
 
-.section{
-background:white;
-padding:18px;
-margin-bottom:20px;
-border-radius:12px;
-box-shadow:0 2px 8px #ddd;
-}
+    .loading {
+      padding: 20px;
+      text-align: center;
+      color: #666;
+    }
 
-.section h2{
-margin-top:0;
-}
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 7px;
+      margin-bottom: 10px;
+    }
 
-.order,
-.booking,
-.menu-card{
-background:white;
-padding:16px;
-margin-top:15px;
-border-radius:10px;
-box-shadow:0 2px 7px #ddd;
-}
+    .success {
+      background: #dcfce7;
+      color: #166534;
+      padding: 12px;
+      border-radius: 7px;
+      margin-bottom: 10px;
+    }
 
-.header-row{
-display:flex;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap;
-}
+    .table-wrap {
+      overflow-x: auto;
+    }
 
-.status{
-background:#f59e0b;
-color:white;
-padding:6px 10px;
-border-radius:20px;
-font-size:13px;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
 
-.info{
-line-height:1.8;
-margin-top:10px;
-}
+    th,
+    td {
+      padding: 11px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
 
-.items{
-background:#f8fafc;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
-}
+    th {
+      background: #f3f4f6;
+    }
 
-.item{
-padding:7px 0;
-border-bottom:1px solid #ddd;
-}
+    .status {
+      padding: 7px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-.total{
-font-size:19px;
-font-weight:bold;
-margin-top:12px;
-}
+    .update-btn {
+      background: #16a34a;
+      color: white;
+      margin-left: 5px;
+    }
 
-.contact{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
+    .call-btn {
+      background: #2563eb;
+      color: white;
+      margin: 3px;
+    }
 
-.call{
-background:#2563eb;
-color:white;
-}
+    .whatsapp-btn {
+      background: #16a34a;
+      color: white;
+      margin: 3px;
+    }
 
-.whatsapp{
-background:#16a34a;
-color:white;
-}
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+    }
 
-select,
-input,
-textarea{
-width:100%;
-padding:11px;
-margin-top:8px;
-border:1px solid #ccc;
-border-radius:8px;
-font-size:15px;
-background:white;
-}
+    .edit-btn {
+      background: #f59e0b;
+      color: white;
+    }
 
-textarea{
-min-height:80px;
-resize:vertical;
-}
+    .toggle-btn {
+      background: #6366f1;
+      color: white;
+    }
 
-.update{
-width:100%;
-margin-top:10px;
-background:#16a34a;
-color:white;
-}
+    .menu-form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
 
-.delete{
-background:#dc2626;
-color:white;
-width:100%;
-margin-top:10px;
-}
+    .menu-form input,
+    .menu-form textarea,
+    .menu-form select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+    }
 
-.edit{
-background:#2563eb;
-color:white;
-width:100%;
-margin-top:10px;
-}
+    .menu-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
 
-.add-btn{
-background:#16a34a;
-color:white;
-width:100%;
-margin-top:12px;
-}
+    .full {
+      grid-column: 1 / -1;
+    }
 
-.cancel-btn{
-background:#6b7280;
-color:white;
-width:100%;
-margin-top:10px;
-}
+    .save-btn {
+      background: #2563eb;
+      color: white;
+    }
 
-.form-box{
-background:#f8fafc;
-padding:15px;
-border-radius:10px;
-margin-bottom:18px;
-}
+    .cancel-btn {
+      background: #6b7280;
+      color: white;
+      margin-left: 5px;
+    }
 
-.form-box label{
-display:block;
-font-weight:bold;
-margin-top:10px;
-}
+    .menu-image {
+      width: 70px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #eee;
+    }
 
-.menu-image{
-width:100%;
-max-width:180px;
-height:130px;
-object-fit:cover;
-border-radius:8px;
-margin-bottom:10px;
-background:#eee;
-}
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
 
-.menu-price{
-font-size:20px;
-font-weight:bold;
-margin-top:8px;
-}
+      .menu-form {
+        grid-template-columns: 1fr;
+      }
 
-.available{
-background:#16a34a;
-color:white;
-padding:5px 9px;
-border-radius:15px;
-font-size:12px;
-}
+      .full {
+        grid-column: auto;
+      }
 
-.unavailable{
-background:#dc2626;
-color:white;
-padding:5px 9px;
-border-radius:15px;
-font-size:12px;
-}
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
 
-.success{
-background:#dcfce7;
-color:#166534;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-}
-
-.error{
-background:#fee2e2;
-color:#991b1b;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-}
-
-.loading{
-text-align:center;
-padding:20px;
-}
-
-.no-data{
-text-align:center;
-padding:20px;
-color:#666;
-}
-
-.menu-actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
-
-.menu-actions button{
-width:100%;
-}
-
-@media(max-width:600px){
-
-.stats{
-grid-template-columns:1fr;
-}
-
-.contact{
-flex-direction:column;
-}
-
-.contact button{
-width:100%;
-}
-
-.menu-actions{
-grid-template-columns:1fr;
-}
-
-}
-
-</style>
-
+      .container {
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="header">
-
-<h1>🍽️ Your Choice Admin</h1>
-
-<button
-class="refresh"
-onclick="loadAll()">
-🔄 Refresh All
-</button>
-
-</div>
-
+<header>
+  <h1>Your Choice Admin</h1>
+  <button class="refresh-btn" onclick="loadAll()">⟳ Refresh All</button>
+</header>
 
 <div class="container">
 
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-title">Total Orders</div>
+      <div class="stat-value" id="totalOrders">0</div>
+    </div>
 
-<!-- ========================= -->
-<!-- STATISTICS -->
-<!-- ========================= -->
+    <div class="stat">
+      <div class="stat-title">Pending Orders</div>
+      <div class="stat-value" id="pendingOrders">0</div>
+    </div>
 
-<div class="stats">
+    <div class="stat">
+      <div class="stat-title">Total Sales</div>
+      <div class="stat-value" id="totalSales">₹0</div>
+    </div>
+  </div>
 
-<div class="stat">
-Total Orders
-<strong id="totalOrders">0</strong>
-</div>
+  <!-- ORDERS -->
+  <div class="section">
+    <h2>🛒 Customer Orders</h2>
 
-<div class="stat">
-Pending Orders
-<strong id="pendingOrders">0</strong>
-</div>
+    <div id="ordersMessage"></div>
 
-<div class="stat">
-Total Sales
-<strong>
-₹<span id="totalSales">0</span>
-</strong>
-</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-</div>
+        <tbody id="ordersBody">
+          <tr>
+            <td colspan="7" class="loading">Loading orders...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
+  <!-- BOOKINGS -->
+  <div class="section">
+    <h2>📅 Table Bookings</h2>
 
-<!-- ========================= -->
-<!-- ORDERS -->
-<!-- ========================= -->
+    <div id="bookingsMessage"></div>
 
-<div class="section">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Guests</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-<h2>📦 Customer Orders</h2>
+        <tbody id="bookingsBody">
+          <tr>
+            <td colspan="8" class="loading">Loading bookings...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<div id="orders"
-class="loading">
-Loading orders...
-</div>
+  <!-- MENU MANAGEMENT -->
+  <div class="section">
+    <h2>🍽️ Menu Management</h2>
 
-</div>
+    <div id="menuMessage"></div>
 
+    <form id="menuForm" class="menu-form">
 
-<!-- ========================= -->
-<!-- BOOKINGS -->
-<!-- ========================= -->
+      <input type="hidden" id="menuId">
 
-<div class="section">
+      <input
+        type="text"
+        id="menuName"
+        placeholder="Menu Name"
+        required
+      >
 
-<h2>📅 Table Bookings</h2>
+      <input
+        type="text"
+        id="menuCategory"
+        placeholder="Category"
+      >
 
-<div id="bookings"
-class="loading">
-Loading bookings...
-</div>
+      <input
+        type="number"
+        id="menuPrice"
+        placeholder="Price"
+        min="0"
+        step="0.01"
+        required
+      >
 
-</div>
+      <input
+        type="text"
+        id="menuImage"
+        placeholder="Image path e.g. images/chicken-biryani.jpg"
+      >
 
+      <textarea
+        id="menuDescription"
+        class="full"
+        placeholder="Description"
+      ></textarea>
 
-<!-- ========================= -->
-<!-- MENU -->
-<!-- ========================= -->
+      <select id="menuAvailable">
+        <option value="1">Available</option>
+        <option value="0">Not Available</option>
+      </select>
 
-<div class="section">
+      <div>
+        <button type="submit" class="save-btn" id="saveMenuButton">
+          ➕ Add Menu
+        </button>
 
-<h2>🍽️ Menu Management</h2>
+        <button
+          type="button"
+          class="cancel-btn"
+          id="cancelEditButton"
+          onclick="cancelEdit()"
+          style="display:none;"
+        >
+          Cancel
+        </button>
+      </div>
 
+    </form>
+  </div>
 
-<!-- ADD MENU -->
+  <!-- CURRENT MENU -->
+  <div class="section">
+    <h2>📋 Current Menu</h2>
 
-<div class="form-box">
-
-<h3 id="formTitle">
-➕ Add New Food
-</h3>
-
-
-<label>
-Food Name
-</label>
-
-<input
-id="menuName"
-type="text"
-placeholder="Example: Chicken Biryani">
-
-
-<label>
-Category
-</label>
-
-<input
-id="menuCategory"
-type="text"
-placeholder="Example: Biryani">
-
-
-<label>
-Description
-</label>
-
-<textarea
-id="menuDescription"
-placeholder="Food description"></textarea>
-
-
-<label>
-Price
-</label>
-
-<input
-id="menuPrice"
-type="number"
-placeholder="Example: 220">
-
-
-<label>
-Image Path / URL
-</label>
-
-<input
-id="menuImage"
-type="text"
-placeholder="images/chicken-biryani.jpg">
-
-
-<label>
-Availability
-</label>
-
-<select id="menuAvailable">
-
-<option value="1">
-🟢 Available
-</option>
-
-<option value="0">
-🔴 Unavailable
-</option>
-
-</select>
-
-
-<button
-id="saveMenuBtn"
-class="add-btn"
-onclick="saveMenu()">
-
-➕ Add Food
-
-</button>
-
-
-<button
-id="cancelEditBtn"
-class="cancel-btn"
-onclick="cancelEdit()"
-style="display:none;">
-
-❌ Cancel Edit
-
-</button>
-
-
-<div id="menuFormResult"></div>
+    <div id="currentMenu">
+      <div class="loading">Loading menu...</div>
+    </div>
+  </div>
 
 </div>
-
-
-<!-- MENU LIST -->
-
-<h3>
-📋 Current Menu
-</h3>
-
-<div id="menuList"
-class="loading">
-
-Loading menu...
-
-</div>
-
-</div>
-
-
-</div>
-
 
 <script>
 
+  /* ================================
+     API
+  ================================= */
 
-// =====================================
-// API
-// =====================================
+  const API = "https://1251file.xboy7334.workers.dev";
 
-const API =
-"https://1251file.xboy7334.workers.dev";
 
-let editingMenuId = null;
+  /* ================================
+     HELPERS
+  ================================= */
 
+  function escapeHTML(value) {
+    if (value === null || value === undefined) {
+      return "";
+    }
 
-// =====================================
-// LOAD ALL
-// =====================================
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-function loadAll(){
 
-loadOrders();
+  function showMessage(id, message, type) {
+    const box = document.getElementById(id);
 
-loadBookings();
+    if (!box) {
+      return;
+    }
 
-loadMenu();
+    box.innerHTML =
+      '<div class="' + type + '">' +
+      escapeHTML(message) +
+      '</div>';
+  }
 
-}
 
+  function clearMessage(id) {
+    const box = document.getElementById(id);
 
-// =====================================
-// LOAD ORDERS
-// =====================================
+    if (box) {
+      box.innerHTML = "";
+    }
+  }
 
-async function loadOrders(){
 
-const box =
-document.getElementById("orders");
+  async function apiFetch(path, options) {
 
-try{
+    const response = await fetch(API + path, options);
 
-const response =
-await fetch(
-API + "/api/admin/orders?x=" +
-Date.now()
-);
+    const text = await response.text();
 
-const data =
-await response.json();
+    let data;
 
-if(!data.success){
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      throw new Error(
+        "Server থেকে সঠিক JSON response পাওয়া যায়নি। HTTP " +
+        response.status
+      );
+    }
 
-throw new Error(
-"Order API failed"
-);
+    if (!response.ok || data.success === false) {
+      throw new Error(
+        data.message || ("HTTP Error " + response.status)
+      );
+    }
 
-}
+    return data;
+  }
 
-const orders =
-data.orders || [];
 
+  /* ================================
+     LOAD ALL
+  ================================= */
 
-document.getElementById(
-"totalOrders"
-).textContent =
-orders.length;
+  async function loadAll() {
 
+    clearMessage("ordersMessage");
+    clearMessage("bookingsMessage");
+    clearMessage("menuMessage");
 
-let pending = 0;
-let sales = 0;
+    await Promise.all([
+      loadOrders(),
+      loadBookings(),
+      loadMenu()
+    ]);
+  }
 
 
-orders.forEach(function(order){
+  /* ================================
+     ORDERS
+  ================================= */
 
-if(order.status === "Pending"){
-pending++;
-}
+  async function loadOrders() {
 
-sales += Number(
-order.total_amount || 0
-);
+    const body = document.getElementById("ordersBody");
 
-});
+    body.innerHTML =
+      '<tr>' +
+      '<td colspan="7" class="loading">Loading orders...</td>' +
+      '</tr>';
 
+    try {
 
-document.getElementById(
-"pendingOrders"
-).textContent =
-pending;
+      const data = await apiFetch("/api/admin/orders");
 
+      const orders = Array.isArray(data.orders)
+        ? data.orders
+        : [];
 
-document.getElementById(
-"totalSales"
-).textContent =
-sales.toFixed(0);
+      document.getElementById("totalOrders").textContent =
+        orders.length;
 
+      let pending = 0;
+      let sales = 0;
 
-if(orders.length === 0){
+      for (const order of orders) {
 
-box.innerHTML =
-"<div class='no-data'>No orders found.</div>";
+        if (order.status === "Pending") {
+          pending++;
+        }
 
-return;
+        sales += Number(order.total_amount || 0);
+      }
 
-}
+      document.getElementById("pendingOrders").textContent =
+        pending;
 
+      document.getElementById("totalSales").textContent =
+        "₹" + sales.toFixed(0);
 
-box.className = "";
 
-box.innerHTML = "";
+      if (orders.length === 0) {
 
+        body.innerHTML =
+          '<tr>' +
+          '<td colspan="7" class="loading">কোনো Order নেই</td>' +
+          '</tr>';
 
-orders.forEach(function(order){
+        return;
+      }
 
-let items = "";
 
+      body.innerHTML = "";
 
-(order.items || [])
-.forEach(function(item){
+      orders.forEach(function(order) {
 
-items += `
-<div class="item">
-${item.item_name}
-× ${item.quantity}
-— ₹${Number(item.price) *
-Number(item.quantity)}
-</div>
-`;
+        let itemsHTML = "";
 
-});
+        if (Array.isArray(order.items)) {
 
+          order.items.forEach(function(item) {
 
-const phone =
-String(order.phone || "")
-.replace(/\D/g,"");
+            itemsHTML +=
+              escapeHTML(item.item_name) +
+              " × " +
+              escapeHTML(item.quantity) +
+              " ₹" +
+              Number(item.price || 0).toFixed(0) +
+              "<br>";
 
+          });
 
-box.innerHTML += `
+        }
 
-<div class="order">
 
-<div class="header-row">
+        const row = document.createElement("tr");
 
-<h3>
-📦 Order #${order.id}
-</h3>
+        row.innerHTML =
+          "<td><b>#" +
+          escapeHTML(order.id) +
+          "</b><br><small>" +
+          escapeHTML(order.created_at || "") +
+          "</small></td>" +
 
-<span class="status">
-${order.status || "Pending"}
-</span>
+          "<td>" +
+          "<b>" +
+          escapeHTML(order.customer_name) +
+          "</b><br>" +
+          escapeHTML(order.phone) +
+          "<br>" +
+          escapeHTML(order.address || "") +
+          "<br>" +
 
-</div>
+          '<button class="call-btn" onclick="callCustomer(\'' +
+          escapeHTML(order.phone) +
+          "')\">📞 Call</button>" +
 
+          '<button class="whatsapp-btn" onclick="sendWhatsApp(\'' +
+          escapeHTML(order.phone) +
+          "','" +
+          escapeHTML(order.customer_name) +
+          "')\">WhatsApp</button>" +
 
-<div class="info">
+          "</td>" +
 
-<b>Customer:</b>
-${order.customer_name || "-"}
-<br>
+          "<td>" +
+          itemsHTML +
+          "</td>" +
 
-<b>Phone:</b>
-${order.phone || "-"}
+          "<td><b>₹" +
+          Number(order.total_amount || 0).toFixed(0) +
+          "</b></td>" +
 
+          "<td>" +
+          escapeHTML(order.payment_method || "COD") +
+          "</td>" +
 
-<div class="contact">
+          "<td>" +
+          '<select class="status" id="orderStatus' +
+          order.id +
+          '">' +
 
-<button
-class="call"
-onclick="callCustomer('${phone}')">
-📞 Call
-</button>
+          statusOption("Pending", order.status) +
+          statusOption("Confirmed", order.status) +
+          statusOption("Preparing", order.status) +
+          statusOption("Delivered", order.status) +
+          statusOption("Cancelled", order.status) +
 
-<button
-class="whatsapp"
-onclick="sendWhatsApp('${phone}','${order.id}')">
-💬 WhatsApp
-</button>
+          "</select>" +
+          "</td>" +
 
-</div>
+          "<td>" +
 
+          '<button class="update-btn" onclick="updateOrder(' +
+          order.id +
+          ')">' +
+          "Update" +
+          "</button>" +
 
-<br>
+          "</td>";
 
-<b>Address:</b>
-${order.address || "-"}
+        body.appendChild(row);
 
-<br>
+      });
 
-<b>Payment:</b>
-${order.payment_method || "COD"}
+    } catch (error) {
 
-<br>
+      body.innerHTML =
+        '<tr>' +
+        '<td colspan="7" class="error">' +
+        escapeHTML(error.message) +
+        "</td>" +
+        "</tr>";
 
-<b>Date:</b>
-${order.created_at || ""}
+      showMessage(
+        "ordersMessage",
+        error.message,
+        "error"
+      );
+    }
+  }
 
-</div>
 
+  function statusOption(value, selected) {
 
-<div class="items">
+    return (
+      '<option value="' +
+      value +
+      '"' +
+      (value === selected ? " selected" : "") +
+      ">" +
+      value +
+      "</option>"
+    );
+  }
 
-<b>Items</b>
 
-${items}
+  async function updateOrder(id) {
 
-</div>
+    const select =
+      document.getElementById("orderStatus" + id);
 
+    const status = select.value;
 
-<div class="total">
+    try {
 
-Total:
-₹${order.total_amount}
+      await apiFetch(
+        "/api/admin/orders/" + id,
+        {
+          method: "PATCH",
 
-</div>
+          headers: {
+            "Content-Type": "application/json"
+          },
 
+          body: JSON.stringify({
+            status: status
+          })
+        }
+      );
 
-<select id="orderStatus${order.id}">
+      alert("Order status updated");
 
-<option value="Pending">🟡 Pending</option>
+      loadOrders();
 
-<option value="Confirmed">🔵 Confirmed</option>
+    } catch (error) {
 
-<option value="Preparing">🟠 Preparing</option>
+      alert("Error: " + error.message);
 
-<option value="Delivered">🟢 Delivered</option>
+    }
+  }
 
-<option value="Cancelled">🔴 Cancelled</option>
 
-</select>
+  /* ================================
+     BOOKINGS
+  ================================= */
 
+  async function loadBookings() {
 
-<button
-class="update"
-onclick="updateOrder(${order.id})">
+    const body = document.getElementById("bookingsBody");
 
-✅ Update Order Status
+    body.innerHTML =
+      '<tr>' +
+      '<td colspan="8" class="loading">Loading bookings...</td>' +
+      '</tr>';
 
-</button>
+    try {
 
+      const data =
+        await apiFetch("/api/admin/bookings");
 
-<div id="orderResult${order.id}">
-</div>
+      const bookings =
+        Array.isArray(data.bookings)
+          ? data.bookings
+          : [];
 
-</div>
 
-`;
+      if (bookings.length === 0) {
 
-document.getElementById(
-"orderStatus" + order.id
-).value =
-order.status || "Pending";
+        body.innerHTML =
+          '<tr>' +
+          '<td colspan="8" class="loading">' +
+          "কোনো Table Booking নেই" +
+          "</td>" +
+          "</tr>";
 
-});
+        return;
+      }
 
-}catch(error){
 
-box.innerHTML = `
-<div class="error">
-❌ Orders load হচ্ছে না.
-<br><br>
-${error.message}
-</div>
-`;
+      body.innerHTML = "";
 
-}
 
-}
+      bookings.forEach(function(booking) {
 
+        const row = document.createElement("tr");
 
-// =====================================
-// LOAD BOOKINGS
-// =====================================
+        row.innerHTML =
 
-async function loadBookings(){
+          "<td>#" +
+          escapeHTML(booking.id) +
+          "</td>" +
 
-const box =
-document.getElementById("bookings");
+          "<td>" +
+          escapeHTML(booking.customer_name) +
+          "</td>" +
 
-try{
+          "<td>" +
+          escapeHTML(booking.phone) +
+          "<br>" +
 
-const response =
-await fetch(
-API + "/api/admin/bookings?x=" +
-Date.now()
-);
+          '<button class="call-btn" onclick="callCustomer(\'' +
+          escapeHTML(booking.phone) +
+          "')\">📞 Call</button>" +
 
-const data =
-await response.json();
+          '<button class="whatsapp-btn" onclick="bookingWhatsApp(\'' +
+          escapeHTML(booking.phone) +
+          "','" +
+          escapeHTML(booking.customer_name) +
+          "')\">WhatsApp</button>" +
 
-if(!data.success){
+          "</td>" +
 
-throw new Error(
-"Booking API failed"
-);
+          "<td>" +
+          escapeHTML(booking.booking_date) +
+          "</td>" +
 
-}
+          "<td>" +
+          escapeHTML(booking.booking_time) +
+          "</td>" +
 
-const bookings =
-data.bookings || [];
+          "<td>" +
+          escapeHTML(booking.guests) +
+          "</td>" +
 
+          "<td>" +
 
-if(bookings.length === 0){
+          '<select class="status" id="bookingStatus' +
+          booking.id +
+          '">' +
 
-box.innerHTML =
-"<div class='no-data'>No bookings found.</div>";
+          bookingStatusOption(
+            "Pending",
+            booking.status
+          ) +
 
-return;
+          bookingStatusOption(
+            "Confirmed",
+            booking.status
+          ) +
 
-}
+          bookingStatusOption(
+            "Completed",
+            booking.status
+          ) +
 
+          bookingStatusOption(
+            "Cancelled",
+            booking.status
+          ) +
 
-box.className = "";
+          "</select>" +
 
-box.innerHTML = "";
+          "</td>" +
 
+          "<td>" +
 
-bookings.forEach(function(booking){
+          '<button class="update-btn" onclick="updateBooking(' +
+          booking.id +
+          ')">' +
+          "Update" +
+          "</button>" +
 
-const phone =
-String(booking.phone || "")
-.replace(/\D/g,"");
+          "</td>";
 
+        body.appendChild(row);
 
-box.innerHTML += `
+      });
 
-<div class="booking">
+    } catch (error) {
 
-<div class="header-row">
+      body.innerHTML =
+        '<tr>' +
+        '<td colspan="8" class="error">' +
+        escapeHTML(error.message) +
+        "</td>" +
+        "</tr>";
 
-<h3>
-📅 Booking #${booking.id}
-</h3>
+      showMessage(
+        "bookingsMessage",
+        error.message,
+        "error"
+      );
+    }
+  }
 
-<span class="status">
-${booking.status || "Pending"}
-</span>
 
-</div>
+  function bookingStatusOption(value, selected) {
 
+    return (
+      '<option value="' +
+      value +
+      '"' +
+      (value === selected ? " selected" : "") +
+      ">" +
+      value +
+      "</option>"
+    );
+  }
 
-<div class="info">
 
-<b>Customer:</b>
-${booking.customer_name || "-"}
-<br>
+  async function updateBooking(id) {
 
-<b>Phone:</b>
-${booking.phone || "-"}
+    const select =
+      document.getElementById("bookingStatus" + id);
 
+    const status = select.value;
 
-<div class="contact">
+    try {
 
-<button
-class="call"
-onclick="callCustomer('${phone}')">
-📞 Call
-</button>
+      await apiFetch(
+        "/api/admin/bookings/" + id,
+        {
+          method: "PATCH",
 
-<button
-class="whatsapp"
-onclick="bookingWhatsApp('${phone}','${booking.id}')">
-💬 WhatsApp
-</button>
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-</div>
+          body: JSON.stringify({
+            status: status
+          })
+        }
+      );
 
+      alert("Booking status updated");
 
-<br>
+      loadBookings();
 
-<b>Booking Date:</b>
-${booking.booking_date || "-"}
+    } catch (error) {
 
-<br>
+      alert("Error: " + error.message);
 
-<b>Booking Time:</b>
-${booking.booking_time || "-"}
+    }
+  }
 
-<br>
 
-<b>Guests:</b>
-${booking.guests || "-"}
+  /* ================================
+     MENU
+  ================================= */
 
-<br>
+  async function loadMenu() {
 
-<b>Created:</b>
-${booking.created_at || ""}
+    const container =
+      document.getElementById("currentMenu");
 
-</div>
+    container.innerHTML =
+      '<div class="loading">Loading menu...</div>';
 
 
-<select
-id="bookingStatus${booking.id}">
+    try {
 
-<option value="Pending">🟡 Pending</option>
+      const data =
+        await apiFetch("/api/admin/menu");
 
-<option value="Confirmed">🔵 Confirmed</option>
+      const menu =
+        Array.isArray(data.menu)
+          ? data.menu
+          : [];
 
-<option value="Completed">🟢 Completed</option>
 
-<option value="Cancelled">🔴 Cancelled</option>
+      if (menu.length === 0) {
 
-</select>
+        container.innerHTML =
+          '<div class="loading">' +
+          "কোনো Menu Item নেই" +
+          "</div>";
 
+        return;
+      }
 
-<button
-class="update"
-onclick="updateBooking(${booking.id})">
 
-✅ Update Booking Status
+      let html =
+        '<div class="table-wrap">' +
+        "<table>" +
 
-</button>
+        "<thead>" +
+        "<tr>" +
+        "<th>ID</th>" +
+        "<th>Image</th>" +
+        "<th>Name</th>" +
+        "<th>Category</th>" +
+        "<th>Price</th>" +
+        "<th>Available</th>" +
+        "<th>Action</th>" +
+        "</tr>" +
+        "</thead>" +
 
+        "<tbody>";
 
-<div id="bookingResult${booking.id}">
-</div>
 
-</div>
+      menu.forEach(function(item) {
 
-`;
+        const image =
+          item.image
+            ? '<img class="menu-image" src="' +
+              escapeHTML(item.image) +
+              '" onerror="this.style.display=\'none\'">'
+            : "No Image";
 
-document.getElementById(
-"bookingStatus" + booking.id
-).value =
-booking.status || "Pending";
 
-});
+        html +=
+          "<tr>" +
 
-}catch(error){
+          "<td>#" +
+          escapeHTML(item.id) +
+          "</td>" +
 
-box.innerHTML = `
-<div class="error">
-❌ Bookings load হচ্ছে না.
-<br><br>
-${error.message}
-</div>
-`;
+          "<td>" +
+          image +
+          "</td>" +
 
-}
+          "<td>" +
+          "<b>" +
+          escapeHTML(item.name) +
+          "</b>" +
 
-}
+          "<br><small>" +
+          escapeHTML(item.description || "") +
+          "</small>" +
 
+          "</td>" +
 
-// =====================================
-// LOAD MENU
-// =====================================
+          "<td>" +
+          escapeHTML(item.category || "") +
+          "</td>" +
 
-async function loadMenu(){
+          "<td><b>₹" +
+          Number(item.price || 0).toFixed(0) +
+          "</b></td>" +
 
-const box =
-document.getElementById("menuList");
+          "<td>" +
+          (Number(item.available) === 1
+            ? "✅ Available"
+            : "❌ Hidden") +
+          "</td>" +
 
-box.innerHTML =
-"⏳ Loading menu...";
+          "<td>" +
 
+          '<button class="edit-btn" onclick="editMenu(' +
+          item.id +
+          ')">' +
+          "Edit" +
+          "</button> " +
 
-try{
+          '<button class="toggle-btn" onclick="toggleMenu(' +
+          item.id +
+          "," +
+          Number(item.available) +
+          ')">' +
 
-const response =
-await fetch(
-API + "/api/admin/menu?x=" +
-Date.now()
-);
+          (
+            Number(item.available) === 1
+              ? "Hide"
+              : "Show"
+          ) +
 
-const data =
-await response.json();
+          "</button> " +
 
+          '<button class="delete-btn" onclick="deleteMenu(' +
+          item.id +
+          ')">' +
+          "Delete" +
+          "</button>" +
 
-if(!data.success){
+          "</td>" +
 
-throw new Error(
-"Menu API failed"
-);
+          "</tr>";
 
-}
+      });
 
 
-const menu =
-data.menu || [];
+      html +=
+        "</tbody>" +
+        "</table>" +
+        "</div>";
 
 
-if(menu.length === 0){
+      container.innerHTML = html;
 
-box.innerHTML =
-"<div class='no-data'>No menu items found.</div>";
 
-return;
+    } catch (error) {
 
-}
+      container.innerHTML =
+        '<div class="error">' +
+        escapeHTML(error.message) +
+        "</div>";
 
+      showMessage(
+        "menuMessage",
+        error.message,
+        "error"
+      );
+    }
+  }
 
-box.className = "";
 
-box.innerHTML = "";
+  /* ================================
+     ADD / EDIT MENU
+  ================================= */
 
-
-menu.forEach(function(item){
-
-const availability =
-Number(item.available) === 1;
-
-
-let imageHTML = "";
-
-if(item.image){
-
-imageHTML = `
-<img
-class="menu-image"
-src="${item.image}"
-alt="${item.name}"
-onerror="this.style.display='none'">
-`;
-
-}
-
-
-box.innerHTML += `
-
-<div class="menu-card">
-
-${imageHTML}
-
-
-<div class="header-row">
-
-<h3>
-${item.name}
-</h3>
-
-<span class="${
-availability
-? "available"
-: "unavailable"
-}">
-
-${
-availability
-? "🟢 Available"
-: "🔴 Unavailable"
-}
-
-</span>
-
-</div>
-
-
-<div class="info">
-
-<b>Category:</b>
-${item.category || "-"}
-
-<br>
-
-<b>Description:</b>
-${item.description || "-"}
-
-</div>
-
-
-<div class="menu-price">
-
-₹${Number(item.price).toFixed(0)}
-
-</div>
-
-
-<div class="menu-actions">
-
-<button
-class="edit"
-onclick="editMenu(${item.id})">
-
-✏️ Edit
-
-</button>
-
-<button
-class="delete"
-onclick="deleteMenu(${item.id})">
-
-🗑️ Delete
-
-</button>
-
-</div>
-
-
-<button
-class="update"
-onclick="toggleMenu(${item.id},${availability ? 0 : 1})">
-
-${
-availability
-? "🔴 Make Unavailable"
-: "🟢 Make Available"
-}
-
-</button>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-box.innerHTML = `
-<div class="error">
-❌ Menu load হচ্ছে না.
-<br><br>
-${error.message}
-</div>
-`;
-
-}
-
-}
-
-
-// =====================================
-// SAVE MENU
-// =====================================
-
-async function saveMenu(){
-
-const name =
-document.getElementById("menuName")
-.value.trim();
-
-const category =
-document.getElementById("menuCategory")
-.value.trim();
-
-const description =
-document.getElementById("menuDescription")
-.value.trim();
-
-const price =
-document.getElementById("menuPrice")
-.value;
-
-const image =
-document.getElementById("menuImage")
-.value.trim();
-
-const available =
-document.getElementById("menuAvailable")
-.value;
-
-
-const result =
-document.getElementById(
-"menuFormResult"
-);
-
-
-if(!name || price === ""){
-
-result.innerHTML = `
-<div class="error">
-❌ Food name এবং price দিতে হবে।
-</div>
-`;
-
-return;
-
-}
-
-
-const payload = {
-
-name:name,
-
-category:category,
-
-description:description,
-
-price:Number(price),
-
-image:image,
-
-available:Number(available)
-
-};
-
-
-try{
-
-let response;
-
-
-if(editingMenuId){
-
-response =
-await fetch(
-API + "/api/admin/menu/" +
-editingMenuId,
-{
-method:"PATCH",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify(payload)
-
-}
-);
-
-}else{
-
-response =
-await fetch(
-API + "/api/admin/menu",
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify(payload)
-
-}
-);
-
-}
-
-
-const data =
-await response.json();
-
-
-if(!response.ok ||
-!data.success){
-
-throw new Error(
-data.message ||
-"Menu save failed"
-);
-
-}
-
-
-result.innerHTML = `
-<div class="success">
-✅ ${
-editingMenuId
-? "Food updated successfully"
-: "Food added successfully"
-}
-</div>
-`;
-
-
-cancelEdit();
-
-loadMenu();
-
-
-}catch(error){
-
-result.innerHTML = `
-<div class="error">
-❌ ${error.message}
-</div>
-`;
-
-}
-
-}
-
-
-// =====================================
-// EDIT MENU
-// =====================================
-
-async function editMenu(id){
-
-try{
-
-const response =
-await fetch(
-API + "/api/admin/menu?x=" +
-Date.now()
-);
-
-const data =
-await response.json();
-
-
-const item =
-(data.menu || [])
-.find(function(menu){
-
-return Number(menu.id) === Number(id);
-
-});
-
-
-if(!item){
-
-alert(
-"Menu item পাওয়া যায়নি"
-);
-
-return;
-
-}
-
-
-editingMenuId = id;
-
-
-document.getElementById(
-"formTitle"
-).textContent =
-"✏️ Edit Food";
-
-
-document.getElementById(
-"menuName"
-).value =
-item.name || "";
-
-
-document.getElementById(
-"menuCategory"
-).value =
-item.category || "";
-
-
-document.getElementById(
-"menuDescription"
-).value =
-item.description || "";
-
-
-document.getElementById(
-"menuPrice"
-).value =
-item.price || "";
-
-
-document.getElementById(
-"menuImage"
-).value =
-item.image || "";
-
-
-document.getElementById(
-"menuAvailable"
-).value =
-Number(item.available) === 1
-? "1"
-: "0";
-
-
-document.getElementById(
-"saveMenuBtn"
-).textContent =
-"💾 Update Food";
-
-
-document.getElementById(
-"cancelEditBtn"
-).style.display =
-"block";
-
-
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
-});
-
-
-}catch(error){
-
-alert(
-"Menu load করতে সমস্যা হয়েছে"
-);
-
-}
-
-}
-
-
-// =====================================
-// CANCEL EDIT
-// =====================================
-
-function cancelEdit(){
-
-editingMenuId = null;
-
-
-document.getElementById(
-"formTitle"
-).textContent =
-"➕ Add New Food";
-
-
-document.getElementById(
-"menuName"
-).value = "";
-
-document.getElementById(
-"menuCategory"
-).value = "";
-
-document.getElementById(
-"menuDescription"
-).value = "";
-
-document.getElementById(
-"menuPrice"
-).value = "";
-
-document.getElementById(
-"menuImage"
-).value = "";
-
-document.getElementById(
-"menuAvailable"
-).value = "1";
-
-
-document.getElementById(
-"saveMenuBtn"
-).textContent =
-"➕ Add Food";
-
-
-document.getElementById(
-"cancelEditBtn"
-).style.display =
-"none";
-
-}
-
-
-// =====================================
-// DELETE MENU
-// =====================================
-
-async function deleteMenu(id){
-
-if(!confirm(
-"এই খাবারটি Delete করতে চান?"
-)){
-
-return;
-
-}
-
-
-try{
-
-const response =
-await fetch(
-API + "/api/admin/menu/" + id,
-{
-method:"DELETE"
-}
-);
-
-
-const data =
-await response.json();
-
-
-if(!response.ok ||
-!data.success){
-
-throw new Error(
-data.message ||
-"Delete failed"
-);
-
-}
-
-
-alert(
-"✅ Food deleted successfully"
-);
-
-
-loadMenu();
-
-
-}catch(error){
-
-alert(
-"❌ " + error.message
-);
-
-}
-
-}
-
-
-// =====================================
-// TOGGLE AVAILABLE
-// =====================================
-
-async function toggleMenu(
-id,
-available
-){
-
-try{
-
-const response =
-await fetch(
-API + "/api/admin/menu/" + id,
-{
-method:"PATCH",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify(
-await getMenuData(
-id,
-available
-)
-)
-
-}
-);
-
-
-const data =
-await response.json();
-
-
-if(!response.ok ||
-!data.success){
-
-throw new Error(
-data.message ||
-"Update failed"
-);
-
-}
-
-
-loadMenu();
-
-
-}catch(error){
-
-alert(
-"❌ " + error.message
-);
-
-}
-
-}
-
-
-// =====================================
-// GET MENU DATA
-// =====================================
-
-async function getMenuData(
-id,
-available
-){
-
-const response =
-await fetch(
-API + "/api/admin/menu?x=" +
-Date.now()
-);
-
-const data =
-await response.json();
-
-
-const item =
-(data.menu || [])
-.find(function(menu){
-
-return Number(menu.id) === Number(id);
-
-});
-
-
-if(!item){
-
-throw new Error(
-"Menu item not found"
-);
-
-}
-
-
-return {
-
-name:item.name,
-
-category:item.category || "",
-
-description:item.description || "",
-
-price:Number(item.price),
-
-image:item.image || "",
-
-available:Number(available)
-
-};
-
-}
-
-
-// =====================================
-// UPDATE ORDER
-// =====================================
-
-async function updateOrder(id){
-
-const status =
-document.getElementById(
-"orderStatus" + id
-).value;
-
-
-const result =
-document.getElementById(
-"orderResult" + id
-);
-
-
-try{
-
-const response =
-await fetch(
-API + "/api/admin/orders/" + id,
-{
-method:"PATCH",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-status:status
-})
-
-}
-);
-
-
-const data =
-await response.json();
-
-
-if(!data.success){
-
-throw new Error(
-data.message ||
-"Update failed"
-);
-
-}
-
-
-result.innerHTML = `
-<div class="success">
-✅ Order status updated:
-<b>${status}</b>
-</div>
-`;
-
-
-setTimeout(
-loadOrders,
-800
-);
-
-
-}catch(error){
-
-result.innerHTML = `
-<div class="error">
-❌ ${error.message}
-</div>
-`;
-
-}
-
-}
-
-
-// =====================================
-// UPDATE BOOKING
-// =====================================
-
-async function updateBooking(id){
-
-const status =
-document.getElementById(
-"bookingStatus" + id
-).value;
-
-
-const result =
-document.getElementById(
-"bookingResult" + id
-);
-
-
-try{
-
-const response =
-await fetch(
-API + "/api/admin/bookings/" + id,
-{
-method:"PATCH",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-status:status
-})
-
-}
-);
-
-
-const data =
-await response.json();
-
-
-if(!data.success){
-
-throw new Error(
-data.message ||
-"Update failed"
-);
-
-}
-
-
-result.innerHTML = `
-<div class="success">
-✅ Booking status updated:
-<b>${status}</b>
-</div>
-`;
-
-
-setTimeout(
-loadBookings,
-800
-);
-
-
-}catch(error){
-
-result.innerHTML = `
-<div class="error">
-❌ ${error.message}
-</div>
-`;
-
-}
-
-}
-
-
-// =====================================
-// CALL
-// =====================================
-
-function callCustomer(phone){
-
-if(!phone){
-
-alert(
-"Phone number পাওয়া যায়নি"
-);
-
-return;
-
-}
-
-window.location.href =
-"tel:" + phone;
-
-}
-
-
-// =====================================
-// WHATSAPP ORDER
-// =====================================
-
-function sendWhatsApp(
-phone,
-orderId
-){
-
-if(!phone){
-
-alert(
-"Phone number পাওয়া যায়নি"
-);
-
-return;
-
-}
-
-const text =
-"Hello, this is Your Choice Family Restaurant regarding your Order #" +
-orderId +
-".";
-
-window.open(
-"https://wa.me/" +
-phone +
-"?text=" +
-encodeURIComponent(text),
-"_blank"
-);
-
-}
-
-
-// =====================================
-// WHATSAPP BOOKING
-// =====================================
-
-function bookingWhatsApp(
-phon
+  document
+    .getElementById("m
