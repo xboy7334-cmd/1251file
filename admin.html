@@ -20,7 +20,7 @@
 
     header {
       background: #111827;
-      color: #fff;
+      color: white;
       padding: 16px;
       display: flex;
       justify-content: space-between;
@@ -48,7 +48,7 @@
 
     .refresh-btn {
       background: #2563eb;
-      color: #fff;
+      color: white;
     }
 
     .container {
@@ -65,7 +65,7 @@
     }
 
     .stat {
-      background: #fff;
+      background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,.08);
@@ -83,7 +83,7 @@
     }
 
     .section {
-      background: #fff;
+      background: white;
       padding: 18px;
       margin-bottom: 22px;
       border-radius: 10px;
@@ -144,41 +144,41 @@
       padding: 7px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      background: #fff;
+      background: white;
     }
 
     .update-btn {
       background: #16a34a;
-      color: #fff;
+      color: white;
     }
 
     .call-btn {
       background: #2563eb;
-      color: #fff;
+      color: white;
       margin: 3px 2px;
     }
 
     .whatsapp-btn {
       background: #16a34a;
-      color: #fff;
+      color: white;
       margin: 3px 2px;
     }
 
     .edit-btn {
       background: #f59e0b;
-      color: #fff;
+      color: white;
       margin: 2px;
     }
 
     .delete-btn {
       background: #dc2626;
-      color: #fff;
+      color: white;
       margin: 2px;
     }
 
     .toggle-btn {
       background: #6366f1;
-      color: #fff;
+      color: white;
       margin: 2px;
     }
 
@@ -209,12 +209,12 @@
 
     .save-btn {
       background: #2563eb;
-      color: #fff;
+      color: white;
     }
 
     .cancel-btn {
       background: #6b7280;
-      color: #fff;
+      color: white;
       margin-left: 5px;
     }
 
@@ -229,6 +229,15 @@
     .small-text {
       color: #666;
       font-size: 12px;
+    }
+
+    .js-test {
+      background: red;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
     }
 
     @media (max-width: 700px) {
@@ -266,53 +275,31 @@
   </button>
 </header>
 
-
 <div class="container">
 
-  <!-- =========================
-       STATS
-  ========================== -->
+  <!-- STATS -->
 
   <div class="stats">
 
     <div class="stat">
-      <div class="stat-title">
-        Total Orders
-      </div>
-
-      <div id="totalOrders" class="stat-value">
-        0
-      </div>
+      <div class="stat-title">Total Orders</div>
+      <div id="totalOrders" class="stat-value">0</div>
     </div>
 
-
     <div class="stat">
-      <div class="stat-title">
-        Pending Orders
-      </div>
-
-      <div id="pendingOrders" class="stat-value">
-        0
-      </div>
+      <div class="stat-title">Pending Orders</div>
+      <div id="pendingOrders" class="stat-value">0</div>
     </div>
 
-
     <div class="stat">
-      <div class="stat-title">
-        Total Sales
-      </div>
-
-      <div id="totalSales" class="stat-value">
-        ₹0
-      </div>
+      <div class="stat-title">Total Sales</div>
+      <div id="totalSales" class="stat-value">₹0</div>
     </div>
 
   </div>
 
 
-  <!-- =========================
-       ORDERS
-  ========================== -->
+  <!-- ORDERS -->
 
   <div class="section">
 
@@ -325,7 +312,6 @@
       <table>
 
         <thead>
-
           <tr>
             <th>Order</th>
             <th>Customer</th>
@@ -335,7 +321,6 @@
             <th>Status</th>
             <th>Action</th>
           </tr>
-
         </thead>
 
         <tbody id="ordersBody">
@@ -355,9 +340,7 @@
   </div>
 
 
-  <!-- =========================
-       BOOKINGS
-  ========================== -->
+  <!-- BOOKINGS -->
 
   <div class="section">
 
@@ -370,7 +353,6 @@
       <table>
 
         <thead>
-
           <tr>
             <th>ID</th>
             <th>Customer</th>
@@ -381,7 +363,6 @@
             <th>Status</th>
             <th>Action</th>
           </tr>
-
         </thead>
 
         <tbody id="bookingsBody">
@@ -401,9 +382,7 @@
   </div>
 
 
-  <!-- =========================
-       MENU MANAGEMENT
-  ========================== -->
+  <!-- MENU MANAGEMENT -->
 
   <div class="section">
 
@@ -413,11 +392,7 @@
 
     <form id="menuForm" class="menu-form">
 
-      <input
-        type="hidden"
-        id="menuId"
-      >
-
+      <input type="hidden" id="menuId">
 
       <input
         type="text"
@@ -426,13 +401,11 @@
         required
       >
 
-
       <input
         type="text"
         id="menuCategory"
         placeholder="Category"
       >
-
 
       <input
         type="number"
@@ -443,20 +416,17 @@
         required
       >
 
-
       <input
         type="text"
         id="menuImage"
-        placeholder="Image path e.g. images/chicken-biryani.jpg"
+        placeholder="images/chicken-biryani.jpg"
       >
-
 
       <textarea
         id="menuDescription"
         class="full"
         placeholder="Description"
       ></textarea>
-
 
       <select id="menuAvailable">
 
@@ -470,7 +440,6 @@
 
       </select>
 
-
       <div>
 
         <button
@@ -480,7 +449,6 @@
         >
           ➕ Add Menu
         </button>
-
 
         <button
           type="button"
@@ -498,9 +466,7 @@
   </div>
 
 
-  <!-- =========================
-       CURRENT MENU
-  ========================== -->
+  <!-- CURRENT MENU -->
 
   <div class="section">
 
@@ -521,731 +487,792 @@
 
 <script>
 
-  /* ==========================================
-     API
-  ========================================== */
+const API = "https://1251file.xboy7334.workers.dev";
 
-  const API =
-    "https://1251file.xboy7334.workers.dev";
+let menuCache = [];
 
 
-  /* ==========================================
-     GLOBAL DATA
-  ========================================== */
+/* ================================
+   BASIC HELPERS
+================================ */
 
-  let menuCache = [];
+function $(id) {
+  return document.getElementById(id);
+}
 
 
-  /* ==========================================
-     DOM SHORTCUT
-  ========================================== */
+function escapeHTML(value) {
 
-  function $(id) {
-    return document.getElementById(id);
+  if (value === null || value === undefined) {
+    return "";
   }
 
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-  /* ==========================================
-     HTML ESCAPE
-  ========================================== */
 
-  function escapeHTML(value) {
+function showMessage(id, message, type) {
 
-    if (
-      value === null ||
-      value === undefined
-    ) {
-      return "";
-    }
+  const element = $(id);
 
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  if (!element) {
+    return;
   }
 
+  element.innerHTML =
+    '<div class="' +
+    type +
+    '">' +
+    escapeHTML(message) +
+    "</div>";
+}
 
-  /* ==========================================
-     MESSAGE
-  ========================================== */
 
-  function showMessage(
-    elementId,
-    message,
-    type
-  ) {
+function clearMessage(id) {
 
-    const element = $(elementId);
+  const element = $(id);
 
-    if (!element) {
-      return;
-    }
-
-    element.innerHTML =
-      '<div class="' +
-      type +
-      '">' +
-      escapeHTML(message) +
-      "</div>";
+  if (element) {
+    element.innerHTML = "";
   }
+}
 
 
-  function clearMessage(elementId) {
+/* ================================
+   API
+================================ */
 
-    const element = $(elementId);
+async function apiRequest(path, options = {}) {
 
-    if (element) {
-      element.innerHTML = "";
-    }
-  }
-
-
-  /* ==========================================
-     API REQUEST
-  ========================================== */
-
-  async function apiRequest(
-    path,
+  const response = await fetch(
+    API + path,
     options
-  ) {
+  );
 
-    const response =
-      await fetch(
-        API + path,
-        options || {}
-      );
+  const text = await response.text();
 
+  let data;
 
-    const text =
-      await response.text();
+  try {
 
+    data = JSON.parse(text);
 
-    let data;
+  } catch (error) {
 
-
-    try {
-
-      data =
-        JSON.parse(text);
-
-    } catch (error) {
-
-      throw new Error(
-        "Server response ঠিক নয়। HTTP " +
-        response.status
-      );
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.message ||
-        ("HTTP Error " + response.status)
-      );
-
-    }
-
-
-    if (
-      data.success === false
-    ) {
-
-      throw new Error(
-        data.message ||
-        "API Error"
-      );
-
-    }
-
-
-    return data;
-  }
-
-
-  /* ==========================================
-     LOAD EVERYTHING
-  ========================================== */
-
-  async function loadAll() {
-
-    clearMessage("ordersMessage");
-    clearMessage("bookingsMessage");
-    clearMessage("menuMessage");
-
-    await Promise.all([
-      loadOrders(),
-      loadBookings(),
-      loadMenu()
-    ]);
-
-  }
-
-
-  /* ==========================================
-     ORDERS
-  ========================================== */
-
-  async function loadOrders() {
-
-    const body =
-      $("ordersBody");
-
-
-    body.innerHTML =
-      '<tr>' +
-      '<td colspan="7" class="loading">' +
-      "Loading orders..." +
-      "</td>" +
-      "</tr>";
-
-
-    try {
-
-      const data =
-        await apiRequest(
-          "/api/admin/orders"
-        );
-
-
-      const orders =
-        Array.isArray(data.orders)
-          ? data.orders
-          : [];
-
-
-      $("totalOrders").textContent =
-        orders.length;
-
-
-      let pending = 0;
-      let sales = 0;
-
-
-      orders.forEach(function(order) {
-
-        if (
-          order.status === "Pending"
-        ) {
-          pending++;
-        }
-
-        sales +=
-          Number(
-            order.total_amount || 0
-          );
-
-      });
-
-
-      $("pendingOrders").textContent =
-        pending;
-
-
-      $("totalSales").textContent =
-        "₹" +
-        sales.toFixed(0);
-
-
-      if (orders.length === 0) {
-
-        body.innerHTML =
-          '<tr>' +
-          '<td colspan="7" class="loading">' +
-          "কোনো Order নেই" +
-          "</td>" +
-          "</tr>";
-
-        return;
-      }
-
-
-      body.innerHTML = "";
-
-
-      orders.forEach(function(order) {
-
-        let itemsHTML = "";
-
-
-        if (
-          Array.isArray(order.items)
-        ) {
-
-          order.items.forEach(
-            function(item) {
-
-              itemsHTML +=
-                escapeHTML(
-                  item.item_name
-                ) +
-                " × " +
-                escapeHTML(
-                  item.quantity
-                ) +
-                " ₹" +
-                Number(
-                  item.price || 0
-                ).toFixed(0) +
-                "<br>";
-
-            }
-          );
-
-        }
-
-
-        const row =
-          document.createElement("tr");
-
-
-        row.innerHTML =
-
-          "<td>" +
-
-          "<b>#" +
-          escapeHTML(order.id) +
-          "</b>" +
-
-          "<br>" +
-
-          '<span class="small-text">' +
-          escapeHTML(
-            order.created_at || ""
-          ) +
-          "</span>" +
-
-          "</td>" +
-
-
-          "<td>" +
-
-          "<b>" +
-          escapeHTML(
-            order.customer_name || ""
-          ) +
-          "</b>" +
-
-          "<br>" +
-
-          escapeHTML(
-            order.phone || ""
-          ) +
-
-          "<br>" +
-
-          escapeHTML(
-            order.address || ""
-          ) +
-
-          "<br>" +
-
-          '<button class="call-btn" ' +
-          'data-action="call" ' +
-          'data-phone="' +
-          escapeHTML(
-            order.phone || ""
-          ) +
-          '">' +
-          "📞 Call" +
-          "</button>" +
-
-          '<button class="whatsapp-btn" ' +
-          'data-action="whatsapp" ' +
-          'data-phone="' +
-          escapeHTML(
-            order.phone || ""
-          ) +
-          '" data-name="' +
-          escapeHTML(
-            order.customer_name || ""
-          ) +
-          '">' +
-          "WhatsApp" +
-          "</button>" +
-
-          "</td>" +
-
-
-          "<td>" +
-          itemsHTML +
-          "</td>" +
-
-
-          "<td>" +
-
-          "<b>₹" +
-          Number(
-            order.total_amount || 0
-          ).toFixed(0) +
-          "</b>" +
-
-          "</td>" +
-
-
-          "<td>" +
-
-          escapeHTML(
-            order.payment_method || "COD"
-          ) +
-
-          "</td>" +
-
-
-          "<td>" +
-
-          '<select class="status" ' +
-          'id="orderStatus_' +
-          order.id +
-          '">' +
-
-          statusOption(
-            "Pending",
-            order.status
-          ) +
-
-          statusOption(
-            "Confirmed",
-            order.status
-          ) +
-
-          statusOption(
-            "Preparing",
-            order.status
-          ) +
-
-          statusOption(
-            "Delivered",
-            order.status
-          ) +
-
-          statusOption(
-            "Cancelled",
-            order.status
-          ) +
-
-          "</select>" +
-
-          "</td>" +
-
-
-          "<td>" +
-
-          '<button class="update-btn" ' +
-          'data-action="update-order" ' +
-          'data-id="' +
-          order.id +
-          '">' +
-          "Update" +
-          "</button>" +
-
-          "</td>";
-
-
-        body.appendChild(row);
-
-      });
-
-
-    } catch (error) {
-
-      body.innerHTML =
-        '<tr>' +
-        '<td colspan="7" class="error">' +
-        escapeHTML(
-          "Order Error: " +
-          error.message
-        ) +
-        "</td>" +
-        "</tr>";
-
-
-      showMessage(
-        "ordersMessage",
-        error.message,
-        "error"
-      );
-
-    }
-
-  }
-
-
-  function statusOption(
-    value,
-    selected
-  ) {
-
-    return (
-      '<option value="' +
-      value +
-      '"' +
-      (
-        value === selected
-          ? " selected"
-          : ""
-      ) +
-      ">" +
-      value +
-      "</option>"
+    throw new Error(
+      "Server response ঠিক নয়। HTTP " +
+      response.status
     );
 
   }
 
+  if (!response.ok) {
 
-  /* ==========================================
-     UPDATE ORDER
-  ========================================== */
+    throw new Error(
+      data.message ||
+      ("HTTP Error " + response.status)
+    );
 
-  async function updateOrder(id) {
+  }
 
-    const select =
-      $("orderStatus_" + id);
+  if (data.success === false) {
+
+    throw new Error(
+      data.message ||
+      "API Error"
+    );
+
+  }
+
+  return data;
+}
 
 
-    if (!select) {
+/* ================================
+   ORDERS
+================================ */
+
+async function loadOrders() {
+
+  const body = $("ordersBody");
+
+  body.innerHTML =
+    '<tr>' +
+    '<td colspan="7" class="loading">' +
+    'Loading orders...' +
+    '</td>' +
+    '</tr>';
+
+  try {
+
+    const data =
+      await apiRequest("/api/admin/orders");
+
+    const orders =
+      Array.isArray(data.orders)
+        ? data.orders
+        : [];
+
+    $("totalOrders").textContent =
+      orders.length;
+
+    let pending = 0;
+    let sales = 0;
+
+    orders.forEach(function(order) {
+
+      if (order.status === "Pending") {
+        pending++;
+      }
+
+      sales += Number(
+        order.total_amount || 0
+      );
+
+    });
+
+    $("pendingOrders").textContent =
+      pending;
+
+    $("totalSales").textContent =
+      "₹" + sales.toFixed(0);
+
+
+    if (orders.length === 0) {
+
+      body.innerHTML =
+        '<tr>' +
+        '<td colspan="7" class="loading">' +
+        'কোনো Order নেই' +
+        '</td>' +
+        '</tr>';
+
       return;
     }
 
 
-    const status =
-      select.value;
+    body.innerHTML = "";
 
 
-    try {
+    orders.forEach(function(order) {
 
-      await apiRequest(
-        "/api/admin/orders/" + id,
-        {
-          method: "PATCH",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            status: status
-          })
-        }
-      );
+      const row =
+        document.createElement("tr");
 
 
-      alert(
-        "Order status সফলভাবে update হয়েছে।"
-      );
+      let itemsHTML = "";
 
 
-      await loadOrders();
+      if (Array.isArray(order.items)) {
 
+        order.items.forEach(function(item) {
 
-    } catch (error) {
+          itemsHTML +=
+            escapeHTML(item.item_name) +
+            " × " +
+            escapeHTML(item.quantity) +
+            " ₹" +
+            Number(item.price || 0).toFixed(0) +
+            "<br>";
 
-      alert(
-        "Error: " +
-        error.message
-      );
+        });
 
-    }
-
-  }
-
-
-  /* ==========================================
-     BOOKINGS
-  ========================================== */
-
-  async function loadBookings() {
-
-    const body =
-      $("bookingsBody");
-
-
-    body.innerHTML =
-      '<tr>' +
-      '<td colspan="8" class="loading">' +
-      "Loading bookings..." +
-      "</td>" +
-      "</tr>";
-
-
-    try {
-
-      const data =
-        await apiRequest(
-          "/api/admin/bookings"
-        );
-
-
-      const bookings =
-        Array.isArray(data.bookings)
-          ? data.bookings
-          : [];
-
-
-      if (bookings.length === 0) {
-
-        body.innerHTML =
-          '<tr>' +
-          '<td colspan="8" class="loading">' +
-          "কোনো Table Booking নেই" +
-          "</td>" +
-          "</tr>";
-
-        return;
       }
 
 
-      body.innerHTML = "";
+      row.innerHTML =
+
+        "<td>" +
+        "<b>#" +
+        escapeHTML(order.id) +
+        "</b>" +
+        "<br>" +
+        '<span class="small-text">' +
+        escapeHTML(order.created_at || "") +
+        "</span>" +
+        "</td>" +
 
 
-      bookings.forEach(
-        function(booking) {
+        "<td>" +
 
-          const row =
-            document.createElement("tr");
+        "<b>" +
+        escapeHTML(order.customer_name || "") +
+        "</b>" +
 
+        "<br>" +
 
-          row.innerHTML =
+        escapeHTML(order.phone || "") +
 
-            "<td>#" +
-            escapeHTML(
-              booking.id
-            ) +
-            "</td>" +
+        "<br>" +
 
+        escapeHTML(order.address || "") +
 
-            "<td>" +
-            escapeHTML(
-              booking.customer_name || ""
-            ) +
-            "</td>" +
+        "<br>" +
 
+        '<button class="call-btn" ' +
+        'data-action="call" ' +
+        'data-phone="' +
+        escapeHTML(order.phone || "") +
+        '">' +
+        '📞 Call' +
+        '</button>' +
 
-            "<td>" +
+        '<button class="whatsapp-btn" ' +
+        'data-action="whatsapp" ' +
+        'data-phone="' +
+        escapeHTML(order.phone || "") +
+        '" data-name="' +
+        escapeHTML(order.customer_name || "") +
+        '">' +
+        'WhatsApp' +
+        '</button>' +
 
-            escapeHTML(
-              booking.phone || ""
-            ) +
-
-            "<br>" +
-
-            '<button class="call-btn" ' +
-            'data-action="call" ' +
-            'data-phone="' +
-            escapeHTML(
-              booking.phone || ""
-            ) +
-            '">' +
-            "📞 Call" +
-            "</button>" +
-
-            '<button class="whatsapp-btn" ' +
-            'data-action="booking-whatsapp" ' +
-            'data-phone="' +
-            escapeHTML(
-              booking.phone || ""
-            ) +
-            '" data-name="' +
-            escapeHTML(
-              booking.customer_name || ""
-            ) +
-            '">' +
-            "WhatsApp" +
-            "</button>" +
-
-            "</td>" +
+        "</td>" +
 
 
-            "<td>" +
-            escapeHTML(
-              booking.booking_date || ""
-            ) +
-            "</td>" +
+        "<td>" +
+        itemsHTML +
+        "</td>" +
 
 
-            "<td>" +
-            escapeHTML(
-              booking.booking_time || ""
-            ) +
-            "</td>" +
+        "<td>" +
+        "<b>₹" +
+        Number(order.total_amount || 0).toFixed(0) +
+        "</b>" +
+        "</td>" +
 
 
-            "<td>" +
-            escapeHTML(
-              booking.guests || ""
-            ) +
-            "</td>" +
+        "<td>" +
+        escapeHTML(
+          order.payment_method || "COD"
+        ) +
+        "</td>" +
 
 
-            "<td>" +
+        "<td>" +
 
-            '<select class="status" ' +
-            'id="bookingStatus_' +
-            booking.id +
-            '">' +
+        '<select class="status" id="orderStatus_' +
+        order.id +
+        '">' +
 
-            bookingStatusOption(
-              "Pending",
-              booking.status
-            ) +
+        statusOption("Pending", order.status) +
+        statusOption("Confirmed", order.status) +
+        statusOption("Preparing", order.status) +
+        statusOption("Delivered", order.status) +
+        statusOption("Cancelled", order.status) +
 
-            bookingStatusOption(
-              "Confirmed",
-              booking.status
-            ) +
+        "</select>" +
 
-            bookingStatusOption(
-              "Completed",
-              booking.status
-            ) +
-
-            bookingStatusOption(
-              "Cancelled",
-              booking.status
-            ) +
-
-            "</select>" +
-
-            "</td>" +
+        "</td>" +
 
 
-            "<td>" +
+        "<td>" +
 
-            '<button class="update-btn" ' +
-            'data-action="update-booking" ' +
-            'data-id="' +
-            booking.id +
-            '">' +
-            "Update" +
-            "</button>" +
+        '<button class="update-btn" ' +
+        'data-action="update-order" ' +
+        'data-id="' +
+        order.id +
+        '">' +
+        'Update' +
+        '</button>' +
 
-            "</td>";
+        "</td>";
 
 
-          body.appendChild(row);
+      body.appendChild(row);
 
-        }
+    });
+
+
+  } catch (error) {
+
+    body.innerHTML =
+      '<tr>' +
+      '<td colspan="7" class="error">' +
+      escapeHTML(
+        "Order Error: " + error.message
+      ) +
+      '</td>' +
+      '</tr>';
+
+    showMessage(
+      "ordersMessage",
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+function statusOption(value, selected) {
+
+  return (
+    '<option value="' +
+    value +
+    '"' +
+    (value === selected ? " selected" : "") +
+    ">" +
+    value +
+    "</option>"
+  );
+
+}
+
+
+/* ================================
+   UPDATE ORDER
+================================ */
+
+async function updateOrder(id) {
+
+  const select =
+    $("orderStatus_" + id);
+
+  if (!select) {
+    return;
+  }
+
+  try {
+
+    await apiRequest(
+      "/api/admin/orders/" + id,
+      {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          status: select.value
+        })
+      }
+    );
+
+    alert(
+      "Order status successfully updated."
+    );
+
+    await loadOrders();
+
+  } catch (error) {
+
+    alert(
+      "Error: " + error.message
+    );
+
+  }
+
+}
+
+
+/* ================================
+   BOOKINGS
+================================ */
+
+async function loadBookings() {
+
+  const body =
+    $("bookingsBody");
+
+  body.innerHTML =
+    '<tr>' +
+    '<td colspan="8" class="loading">' +
+    'Loading bookings...' +
+    '</td>' +
+    '</tr>';
+
+  try {
+
+    const data =
+      await apiRequest(
+        "/api/admin/bookings"
       );
 
+    const bookings =
+      Array.isArray(data.bookings)
+        ? data.bookings
+        : [];
 
-    } catch (error) {
+
+    if (bookings.length === 0) {
 
       body.innerHTML =
         '<tr>' +
-        '<td colspan="8" class="error">' +
+        '<td colspan="8" class="loading">' +
+        'কোনো Table Booking নেই' +
+        '</td>' +
+        '</tr>';
+
+      return;
+    }
+
+
+    body.innerHTML = "";
+
+
+    bookings.forEach(function(booking) {
+
+      const row =
+        document.createElement("tr");
+
+
+      row.innerHTML =
+
+        "<td>#" +
+        escapeHTML(booking.id) +
+        "</td>" +
+
+
+        "<td>" +
         escapeHTML(
-          "Booking Error: " +
-          error.message
+          booking.customer_name || ""
         ) +
         "</td>" +
-        "</tr>";
 
 
-      showMessage(
-        "bookingsMessage",
-        error.message,
-        "er
+        "<td>" +
+
+        escapeHTML(
+          booking.phone || ""
+        ) +
+
+        "<br>" +
+
+        '<button class="call-btn" ' +
+        'data-action="call" ' +
+        'data-phone="' +
+        escapeHTML(booking.phone || "") +
+        '">' +
+        '📞 Call' +
+        '</button>' +
+
+        '<button class="whatsapp-btn" ' +
+        'data-action="booking-whatsapp" ' +
+        'data-phone="' +
+        escapeHTML(booking.phone || "") +
+        '" data-name="' +
+        escapeHTML(booking.customer_name || "") +
+        '">' +
+        'WhatsApp' +
+        '</button>' +
+
+        "</td>" +
+
+
+        "<td>" +
+        escapeHTML(
+          booking.booking_date || ""
+        ) +
+        "</td>" +
+
+
+        "<td>" +
+        escapeHTML(
+          booking.booking_time || ""
+        ) +
+        "</td>" +
+
+
+        "<td>" +
+        escapeHTML(
+          booking.guests || ""
+        ) +
+        "</td>" +
+
+
+        "<td>" +
+
+        '<select class="status" id="bookingStatus_' +
+        booking.id +
+        '">' +
+
+        bookingStatusOption(
+          "Pending",
+          booking.status
+        ) +
+
+        bookingStatusOption(
+          "Confirmed",
+          booking.status
+        ) +
+
+        bookingStatusOption(
+          "Completed",
+          booking.status
+        ) +
+
+        bookingStatusOption(
+          "Cancelled",
+          booking.status
+        ) +
+
+        "</select>" +
+
+        "</td>" +
+
+
+        "<td>" +
+
+        '<button class="update-btn" ' +
+        'data-action="update-booking" ' +
+        'data-id="' +
+        booking.id +
+        '">' +
+        'Update' +
+        '</button>' +
+
+        "</td>";
+
+
+      body.appendChild(row);
+
+    });
+
+
+  } catch (error) {
+
+    body.innerHTML =
+      '<tr>' +
+      '<td colspan="8" class="error">' +
+      escapeHTML(
+        "Booking Error: " +
+        error.message
+      ) +
+      '</td>' +
+      '</tr>';
+
+    showMessage(
+      "bookingsMessage",
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+function bookingStatusOption(
+  value,
+  selected
+) {
+
+  return (
+    '<option value="' +
+    value +
+    '"' +
+    (value === selected ? " selected" : "") +
+    ">" +
+    value +
+    "</option>"
+  );
+
+}
+
+
+/* ================================
+   UPDATE BOOKING
+================================ */
+
+async function updateBooking(id) {
+
+  const select =
+    $("bookingStatus_" + id);
+
+  if (!select) {
+    return;
+  }
+
+  try {
+
+    await apiRequest(
+      "/api/admin/bookings/" + id,
+      {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          status: select.value
+        })
+      }
+    );
+
+    alert(
+      "Booking status successfully updated."
+    );
+
+    await loadBookings();
+
+  } catch (error) {
+
+    alert(
+      "Error: " + error.message
+    );
+
+  }
+
+}
+
+
+/* ================================
+   MENU
+================================ */
+
+async function loadMenu() {
+
+  const container =
+    $("currentMenu");
+
+  container.innerHTML =
+    '<div class="loading">' +
+    'Loading menu...' +
+    '</div>';
+
+  try {
+
+    const data =
+      await apiRequest(
+        "/api/admin/menu"
+      );
+
+    menuCache =
+      Array.isArray(data.menu)
+        ? data.menu
+        : [];
+
+
+    if (menuCache.length === 0) {
+
+      container.innerHTML =
+        '<div class="loading">' +
+        'কোনো Menu Item নেই' +
+        '</div>';
+
+      return;
+    }
+
+
+    let html =
+
+      '<div class="table-wrap">' +
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+      '<th>ID</th>' +
+      '<th>Image</th>' +
+      '<th>Name</th>' +
+      '<th>Category</th>' +
+      '<th>Price</th>' +
+      '<th>Available</th>' +
+      '<th>Action</th>' +
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>';
+
+
+    menuCache.forEach(function(item) {
+
+      let imageHTML = "No Image";
+
+
+      if (item.image) {
+
+        imageHTML =
+          '<img class="menu-image" src="' +
+          escapeHTML(item.image) +
+          '" alt="' +
+          escapeHTML(item.name) +
+          '">';
+
+      }
+
+
+      html +=
+
+        "<tr>" +
+
+        "<td>#" +
+        escapeHTML(item.id) +
+        "</td>" +
+
+
+        "<td>" +
+        imageHTML +
+        "</td>" +
+
+
+        "<td>" +
+
+        "<b>" +
+        escapeHTML(item.name) +
+        "</b>" +
+
+        "<br>" +
+
+        '<span class="small-text">' +
+        escapeHTML(
+          item.description || ""
+        ) +
+        "</span>" +
+
+        "</td>" +
+
+
+        "<td>" +
+        escapeHTML(
+          item.category || ""
+        ) +
+        "</td>" +
+
+
+        "<td>" +
+
+        "<b>₹" +
+        Number(item.price || 0).toFixed(0) +
+        "</b>" +
+
+        "</td>" +
+
+
+        "<td>" +
+
+        (
+          Number(item.available) === 1
+            ? "✅ Available"
+            : "❌ Hidden"
+        ) +
+
+        "</td>" +
+
+
+        "<td>" +
+
+        '<button class="edit-btn" ' +
+        'data-action="edit-menu" ' +
+        'data-id="' +
+        item.id +
+        '">' +
+        'Edit' +
+        '</button>' +
+
+
+        '<button class="toggle-btn" ' +
+        'data-action="toggle-menu" ' +
+        'data-id=
