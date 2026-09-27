@@ -7,6 +7,10 @@
 <title>Your Choice Admin</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
@@ -21,19 +25,28 @@ body{
     text-align:center;
 }
 
+.header h1{
+    margin:0 0 12px;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    padding:11px 16px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.refresh{
+    background:#2563eb;
+    color:white;
+}
+
 .container{
     max-width:900px;
     margin:20px auto;
     padding:15px;
-}
-
-button{
-    background:#2563eb;
-    color:white;
-    border:0;
-    padding:12px 20px;
-    border-radius:8px;
-    font-size:16px;
 }
 
 .stats{
@@ -59,44 +72,128 @@ button{
 
 .order{
     background:white;
-    margin-bottom:15px;
+    margin-bottom:18px;
     padding:18px;
-    border-radius:10px;
+    border-radius:12px;
     box-shadow:0 2px 8px #ddd;
 }
 
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
 .order h3{
-    margin-top:0;
+    margin:0;
+}
+
+.customer{
+    line-height:1.7;
+    margin-top:12px;
 }
 
 .items{
     background:#f9fafb;
-    padding:10px;
-    margin-top:10px;
+    padding:12px;
+    margin-top:12px;
     border-radius:8px;
 }
 
 .item{
-    padding:7px 0;
+    padding:8px 0;
     border-bottom:1px solid #ddd;
+}
+
+.item:last-child{
+    border-bottom:0;
 }
 
 .total{
     font-size:20px;
     font-weight:bold;
-    margin-top:12px;
+    margin-top:14px;
 }
 
-.error{
-    background:#fee2e2;
-    color:#991b1b;
-    padding:15px;
+.status-box{
+    margin-top:15px;
+    padding:14px;
+    background:#f8fafc;
+    border-radius:10px;
+}
+
+.status-box label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.status-select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    background:white;
+}
+
+.update-btn{
+    margin-top:10px;
+    background:#16a34a;
+    color:white;
+    width:100%;
+}
+
+.update-btn:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+    background:#f59e0b;
+    color:white;
+}
+
+.success{
+    margin-top:10px;
+    padding:10px;
+    background:#dcfce7;
+    color:#166534;
     border-radius:8px;
 }
 
+.error{
+    margin-top:10px;
+    padding:10px;
+    background:#fee2e2;
+    color:#991b1b;
+    border-radius:8px;
+}
+
+.loading{
+    text-align:center;
+    padding:20px;
+}
+
 @media(max-width:600px){
+
     .stats{
         grid-template-columns:1fr;
+    }
+
+    .container{
+        padding:10px;
+    }
+
+    .order{
+        padding:14px;
     }
 }
 </style>
@@ -105,11 +202,21 @@ button{
 <body>
 
 <div class="header">
+
     <h1>🍽️ Your Choice Admin</h1>
-    <button onclick="loadOrders()">🔄 Refresh Orders</button>
+
+    <button
+        class="refresh"
+        onclick="loadOrders()">
+        🔄 Refresh Orders
+    </button>
+
 </div>
 
+
 <div class="container">
+
+    <!-- Statistics -->
 
     <div class="stats">
 
@@ -125,21 +232,33 @@ button{
 
         <div class="stat">
             Total Sales
-            <strong>₹<span id="totalSales">0</span></strong>
+            <strong>
+                ₹<span id="totalSales">0</span>
+            </strong>
         </div>
 
     </div>
 
-    <div id="message">Loading orders...</div>
+
+    <div id="message" class="loading">
+        ⏳ Loading orders...
+    </div>
+
 
     <div id="orders"></div>
 
 </div>
 
+
 <script>
 
 const API =
 "https://1251file.xboy7334.workers.dev/api/admin/orders";
+
+
+// ========================================
+// LOAD ORDERS
+// ========================================
 
 async function loadOrders(){
 
@@ -149,19 +268,25 @@ async function loadOrders(){
     const ordersBox =
         document.getElementById("orders");
 
-    message.innerHTML = "⏳ Loading orders...";
+    message.className = "loading";
+
+    message.innerHTML =
+        "⏳ Loading orders...";
+
     ordersBox.innerHTML = "";
+
 
     try{
 
-        const response = await fetch(API, {
-            method: "GET",
-            cache: "no-store"
+        const response = await fetch(API,{
+            method:"GET",
+            cache:"no-store"
         });
 
-        const data = await response.json();
 
-        console.log(data);
+        const data =
+            await response.json();
+
 
         if(!data.success){
 
@@ -170,94 +295,144 @@ async function loadOrders(){
             );
         }
 
-        const orders = data.orders || [];
 
-        document.getElementById("totalOrders")
-            .textContent = orders.length;
+        const orders =
+            data.orders || [];
+
+
+        // Statistics
+
+        document.getElementById(
+            "totalOrders"
+        ).textContent = orders.length;
+
 
         let pending = 0;
         let sales = 0;
 
+
         orders.forEach(function(order){
 
-            if(order.status === "Pending"){
+            if(
+                order.status === "Pending"
+            ){
                 pending++;
             }
 
-            sales += Number(order.total_amount || 0);
+            sales += Number(
+                order.total_amount || 0
+            );
 
         });
 
-        document.getElementById("pendingOrders")
-            .textContent = pending;
 
-        document.getElementById("totalSales")
-            .textContent = sales.toFixed(0);
+        document.getElementById(
+            "pendingOrders"
+        ).textContent = pending;
+
+
+        document.getElementById(
+            "totalSales"
+        ).textContent =
+            sales.toFixed(0);
+
 
         message.innerHTML = "";
 
+
         if(orders.length === 0){
 
-            ordersBox.innerHTML =
-                "<div class='order'>No orders found.</div>";
+            ordersBox.innerHTML = `
+                <div class="order">
+                    No orders found.
+                </div>
+            `;
 
             return;
         }
+
+
+        // Display orders
 
         orders.forEach(function(order){
 
             let itemsHTML = "";
 
-            (order.items || []).forEach(function(item){
+
+            (order.items || [])
+            .forEach(function(item){
 
                 const itemTotal =
                     Number(item.price) *
                     Number(item.quantity);
 
+
                 itemsHTML += `
+
                     <div class="item">
+
                         ${item.item_name}
                         × ${item.quantity}
+
                         — ₹${itemTotal}
+
                     </div>
+
                 `;
 
             });
+
+
+            const currentStatus =
+                order.status || "Pending";
+
 
             const html = `
 
                 <div class="order">
 
-                    <h3>
-                        📦 Order #${order.id}
-                    </h3>
+                    <div class="order-header">
 
-                    <p>
+                        <h3>
+                            📦 Order #${order.id}
+                        </h3>
+
+                        <span class="status">
+                            ${currentStatus}
+                        </span>
+
+                    </div>
+
+
+                    <div class="customer">
+
                         <b>Customer:</b>
                         ${order.customer_name || "-"}
-                    </p>
+                        <br>
 
-                    <p>
                         <b>Phone:</b>
-                        <a href="tel:${order.phone}">
+
+                        <a href="tel:${order.phone || ""}">
                             ${order.phone || "-"}
                         </a>
-                    </p>
 
-                    <p>
+                        <br>
+
                         <b>Address:</b>
                         ${order.address || "-"}
-                    </p>
 
-                    <p>
+                        <br>
+
                         <b>Payment:</b>
                         ${order.payment_method || "COD"}
-                    </p>
 
-                    <p>
-                        <b>Status:</b>
-                        ${order.status || "Pending"}
-                    </p>
+                        <br>
+
+                        <b>Date:</b>
+                        ${order.created_at || ""}
+
+                    </div>
+
 
                     <div class="items">
 
@@ -267,38 +442,231 @@ async function loadOrders(){
 
                     </div>
 
+
                     <div class="total">
-                        Total: ₹${order.total_amount}
+
+                        Total:
+                        ₹${order.total_amount}
+
                     </div>
 
-                    <p>
-                        <small>
-                            ${order.created_at || ""}
-                        </small>
-                    </p>
+
+                    <!-- STATUS UPDATE -->
+
+                    <div class="status-box">
+
+                        <label>
+                            Change Order Status
+                        </label>
+
+
+                        <select
+                            class="status-select"
+                            id="status-${order.id}"
+                        >
+
+                            <option
+                                value="Pending"
+                                ${currentStatus === "Pending" ? "selected" : ""}
+                            >
+                                🟡 Pending
+                            </option>
+
+
+                            <option
+                                value="Confirmed"
+                                ${currentStatus === "Confirmed" ? "selected" : ""}
+                            >
+                                🔵 Confirmed
+                            </option>
+
+
+                            <option
+                                value="Preparing"
+                                ${currentStatus === "Preparing" ? "selected" : ""}
+                            >
+                                🟠 Preparing
+                            </option>
+
+
+                            <option
+                                value="Delivered"
+                                ${currentStatus === "Delivered" ? "selected" : ""}
+                            >
+                                🟢 Delivered
+                            </option>
+
+
+                            <option
+                                value="Cancelled"
+                                ${currentStatus === "Cancelled" ? "selected" : ""}
+                            >
+                                🔴 Cancelled
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            class="update-btn"
+                            id="update-${order.id}"
+                            onclick="updateStatus(${order.id})"
+                        >
+                            ✅ Update Status
+                        </button>
+
+
+                        <div
+                            id="result-${order.id}"
+                        ></div>
+
+                    </div>
 
                 </div>
 
             `;
 
+
             ordersBox.innerHTML += html;
 
         });
+
 
     }catch(error){
 
         console.error(error);
 
+
+        message.className = "error";
+
+
         message.innerHTML = `
-            <div class="error">
-                ❌ Orders load হচ্ছে না.<br><br>
-                ${error.message}
-            </div>
+            ❌ Orders load হচ্ছে না.
+            <br><br>
+            ${error.message}
         `;
 
     }
 
 }
+
+
+// ========================================
+// UPDATE ORDER STATUS
+// ========================================
+
+async function updateStatus(orderId){
+
+    const select =
+        document.getElementById(
+            "status-" + orderId
+        );
+
+
+    const button =
+        document.getElementById(
+            "update-" + orderId
+        );
+
+
+    const result =
+        document.getElementById(
+            "result-" + orderId
+        );
+
+
+    const newStatus =
+        select.value;
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "⏳ Updating...";
+
+    result.innerHTML = "";
+
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/" + orderId,
+                {
+                    method:"PATCH",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        status:newStatus
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok || !data.success){
+
+            throw new Error(
+                data.message ||
+                "Status update failed"
+            );
+        }
+
+
+        result.innerHTML = `
+            <div class="success">
+                ✅ Order #${orderId}
+                status updated to
+                <b>${newStatus}</b>
+            </div>
+        `;
+
+
+        button.textContent =
+            "✅ Updated";
+
+
+        // Reload orders after 1 second
+
+        setTimeout(function(){
+
+            loadOrders();
+
+        },1000);
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        result.innerHTML = `
+            <div class="error">
+                ❌ ${error.message}
+            </div>
+        `;
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "✅ Update Status";
+
+    }
+
+}
+
+
+// ========================================
+// START
+// ========================================
 
 loadOrders();
 
