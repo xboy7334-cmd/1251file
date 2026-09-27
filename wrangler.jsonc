@@ -2,12 +2,11 @@
   "name": "1251file",
   "main": "worker.js",
   "compatibility_date": "2026-09-27",
-
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "main",
-      "database_id": "YOUR_DATABASE_ID"
+      "database_id": "09b489ac-4792-45c8-890b-88ecfb953153"
     }
   ]
 }
