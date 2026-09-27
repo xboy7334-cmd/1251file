@@ -1,87 +1,553 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Choice Family Restaurant | Haldia</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Your Choice Family Restaurant | Haldia</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header class="topbar">
-  <a class="brand" href="#home"><img src="images/logo.png" alt="Your Choice Family Restaurant logo"><span>Your Choice<small>Family Restaurant</small></span></a>
-  <nav>
-    <a href="#home">Home</a><a href="#menu">Menu</a><a href="#gallery">Gallery</a>
-    <a href="#booking">Table Booking</a><a href="#contact">Contact</a>
-  </nav>
-  <button class="cart-btn" id="cartBtn">Cart <b id="cartCount">0</b></button>
-</header>
 
-<main>
-<section id="home" class="hero">
-  <div class="hero-copy">
-    <p class="eyebrow">HALDIA • FAMILY RESTAURANT</p>
-    <h1>Good Food.<br><span>Good Moments.</span></h1>
-    <p>Welcome to Your Choice Family Restaurant. Enjoy a comfortable family dining experience in Haldia.</p>
-    <div class="actions"><a class="btn primary" href="#menu">Order Now</a><a class="btn" href="#booking">Book a Table</a></div>
-    <p class="hours">Open daily: <strong>11:00 AM – 11:00 PM</strong></p>
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="topbar">
+
+    <a class="brand" href="#home">
+
+      <img
+        src="images/logo.png"
+        alt="Your Choice Family Restaurant logo"
+      >
+
+      <span>
+        Your Choice
+        <small>Family Restaurant</small>
+      </span>
+
+    </a>
+
+
+    <nav>
+
+      <a href="#home">Home</a>
+
+      <a href="#menu">Menu</a>
+
+      <a href="#gallery">Gallery</a>
+
+      <a href="#booking">Table Booking</a>
+
+      <a href="#contact">Contact</a>
+
+    </nav>
+
+
+    <button class="cart-btn" id="cartBtn">
+
+      Cart
+
+      <b id="cartCount">0</b>
+
+    </button>
+
+  </header>
+
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main>
+
+
+    <!-- =========================
+         HOME / HERO
+    ========================== -->
+
+    <section id="home" class="hero">
+
+
+      <div class="hero-copy">
+
+        <p class="eyebrow">
+          HALDIA • FAMILY RESTAURANT
+        </p>
+
+
+        <h1>
+          Good Food.<br>
+          <span>Good Moments.</span>
+        </h1>
+
+
+        <p>
+          Welcome to Your Choice Family Restaurant.
+          Enjoy a comfortable family dining experience in Haldia.
+        </p>
+
+
+        <div class="actions">
+
+          <a
+            class="btn primary"
+            href="#menu"
+          >
+            Order Now
+          </a>
+
+
+          <a
+            class="btn"
+            href="#booking"
+          >
+            Book a Table
+          </a>
+
+        </div>
+
+
+        <p class="hours">
+          Open daily:
+          <strong>11:00 AM – 11:00 PM</strong>
+        </p>
+
+      </div>
+
+
+      <!--
+        Restaurant Front Photo
+        + Round Logo
+      -->
+
+      <div class="hero-art">
+
+        <div class="hero-logo">
+
+          <img
+            src="images/logo.png"
+            alt="Your Choice Family Restaurant"
+          >
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         FEATURES
+    ========================== -->
+
+    <section class="features">
+
+      <div>
+        <b>🍽️</b>
+        <span>Family Dining</span>
+      </div>
+
+
+      <div>
+        <b>🛵</b>
+        <span>Cash on Delivery</span>
+      </div>
+
+
+      <div>
+        <b>📞</b>
+        <span>Easy Booking</span>
+      </div>
+
+
+      <div>
+        <b>🕚</b>
+        <span>11 AM – 11 PM</span>
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MENU
+    ========================== -->
+
+    <section
+      id="menu"
+      class="section"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <p class="eyebrow">
+            OUR MENU
+          </p>
+
+          <h2>
+            Choose your favourites
+          </h2>
+
+        </div>
+
+
+        <input
+          id="search"
+          placeholder="Search menu…"
+        >
+
+      </div>
+
+
+      <!--
+        Menu will be loaded
+        automatically from D1
+      -->
+
+      <div
+        id="menuGrid"
+        class="menu-grid"
+      ></div>
+
+    </section>
+
+
+
+    <!-- =========================
+         GALLERY
+    ========================== -->
+
+    <section
+      id="gallery"
+      class="section"
+    >
+
+      <div class="section-head">
+
+        <div>
+
+          <p class="eyebrow">
+            OUR PLACE
+          </p>
+
+          <h2>
+            Restaurant Gallery
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="gallery">
+
+        <img
+          src="images/02-front.jpg"
+          alt="Your Choice Family Restaurant front"
+        >
+
+
+        <img
+          src="images/04-dining-1.jpg"
+          alt="Restaurant dining area"
+        >
+
+
+        <img
+          src="images/03-drinks.jpg"
+          alt="Restaurant drinks area"
+        >
+
+
+        <img
+          src="images/01-kitchen.jpg"
+          alt="Restaurant kitchen"
+        >
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TABLE BOOKING
+    ========================== -->
+
+    <section
+      id="booking"
+      class="section booking"
+    >
+
+
+      <div>
+
+        <p class="eyebrow">
+          TABLE BOOKING
+        </p>
+
+
+        <h2>
+          Reserve your table
+        </h2>
+
+
+        <p>
+          Table booking is available for up to 10 guests.
+        </p>
+
+
+        <p>
+
+          <strong>Opening:</strong>
+          11:00 AM
+
+          &nbsp;
+
+          <strong>Closing:</strong>
+          11:00 PM
+
+        </p>
+
+      </div>
+
+
+      <form id="bookingForm">
+
+        <input
+          required
+          name="name"
+          placeholder="Your name"
+        >
+
+
+        <input
+          required
+          name="phone"
+          type="tel"
+          placeholder="Mobile number"
+        >
+
+
+        <input
+          required
+          name="date"
+          type="date"
+        >
+
+
+        <input
+          required
+          name="time"
+          type="time"
+          min="11:00"
+          max="23:00"
+        >
+
+
+        <input
+          required
+          name="guests"
+          type="number"
+          min="1"
+          max="10"
+          placeholder="Guests (max 10)"
+        >
+
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          Request Booking
+        </button>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section
+      id="contact"
+      class="section contact"
+    >
+
+      <p class="eyebrow">
+        CONTACT
+      </p>
+
+
+      <h2>
+        Your Choice Family Restaurant
+      </h2>
+
+
+      <p>
+        Haldia, West Bengal
+      </p>
+
+
+      <p>
+        Open daily: 11:00 AM – 11:00 PM
+      </p>
+
+
+      <div class="contact-actions">
+
+
+        <a
+          class="btn primary"
+          href="tel:+917364989504"
+        >
+          📞 Call Now
+        </a>
+
+
+        <a
+          class="btn whatsapp"
+          target="_blank"
+          rel="noopener"
+          href="https://wa.me/917364989504"
+        >
+          💬 WhatsApp
+        </a>
+
+
+        <a
+          class="btn"
+          target="_blank"
+          rel="noopener"
+          href="https://maps.app.goo.gl/dpcUsCzb6NEvRCPr8?g_st=ac"
+        >
+          📍 Open in Google Maps
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =========================
+       CART DRAWER
+  ========================== -->
+
+  <div
+    id="cartPanel"
+    class="drawer"
+  >
+
+    <div class="drawer-head">
+
+      <h2>
+        Your Cart
+      </h2>
+
+
+      <button id="closeCart">
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="cartItems"></div>
+
+
+    <div class="total">
+
+      Total: ₹<span id="total">0</span>
+
+    </div>
+
+
+    <!-- =========================
+         ORDER FORM
+    ========================== -->
+
+    <form id="orderForm">
+
+      <input
+        required
+        name="name"
+        placeholder="Customer name"
+      >
+
+
+      <input
+        required
+        name="phone"
+        type="tel"
+        placeholder="Mobile number"
+      >
+
+
+      <textarea
+        required
+        name="address"
+        placeholder="Delivery address"
+      ></textarea>
+
+
+      <select name="payment">
+
+        <option>
+          Cash on Delivery
+        </option>
+
+      </select>
+
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Place Order
+      </button>
+
+    </form>
+
   </div>
-  <div class="hero-art"><div class="plate">YOUR<br>CHOICE</div></div>
-</section>
 
-<section class="features">
-  <div><b>🍽️</b><span>Family Dining</span></div><div><b>🛵</b><span>Cash on Delivery</span></div>
-  <div><b>📞</b><span>Easy Booking</span></div><div><b>🕚</b><span>11 AM – 11 PM</span></div>
-</section>
 
-<section id="menu" class="section">
-  <div class="section-head"><div><p class="eyebrow">OUR MENU</p><h2>Choose your favourites</h2></div><input id="search" placeholder="Search menu…"></div>
-  <div id="menuGrid" class="menu-grid"></div>
-</section>
 
-<section id="gallery" class="section">
-  <div class="section-head"><div><p class="eyebrow">OUR PLACE</p><h2>Restaurant Gallery</h2></div></div>
-  <div class="gallery">
-    <img src="images/02-front.jpg" alt="Restaurant front">
-    <img src="images/04-dining-1.jpg" alt="Restaurant dining area">
-    <img src="images/03-drinks.jpg" alt="Drinks area">
-    <img src="images/01-kitchen.jpg" alt="Restaurant kitchen">
-  </div>
-</section>
+  <!-- =========================
+       OVERLAY
+  ========================== -->
 
-<section id="booking" class="section booking">
-  <div><p class="eyebrow">TABLE BOOKING</p><h2>Reserve your table</h2><p>Table booking is available for up to 10 guests.</p><p><strong>Opening:</strong> 11:00 AM &nbsp; <strong>Closing:</strong> 11:00 PM</p></div>
-  <form id="bookingForm">
-    <input required name="name" placeholder="Your name">
-    <input required name="phone" type="tel" placeholder="Mobile number">
-    <input required name="date" type="date">
-    <input required name="time" type="time" min="11:00" max="23:00">
-    <input required name="guests" type="number" min="1" max="10" placeholder="Guests (max 10)">
-    <button class="btn primary" type="submit">Request Booking</button>
-  </form>
-</section>
+  <div id="overlay"></div>
 
-<section id="contact" class="section contact">
-  <p class="eyebrow">CONTACT</p><h2>Your Choice Family Restaurant</h2>
-  <p>Haldia, West Bengal</p><p>Open daily: 11:00 AM – 11:00 PM</p>
-  <div class="contact-actions">
-    <a class="btn primary" href="tel:+917364989504">📞 Call Now</a>
-    <a class="btn whatsapp" target="_blank" rel="noopener" href="https://wa.me/917364989504">💬 WhatsApp</a>
-    <a class="btn" target="_blank" href="https://maps.app.goo.gl/dpcUsCzb6NEvRCPr8?g_st=ac">📍 Open in Google Maps</a>
-  </div>
-</section>
-</main>
 
-<div id="cartPanel" class="drawer">
-  <div class="drawer-head"><h2>Your Cart</h2><button id="closeCart">×</button></div>
-  <div id="cartItems"></div><div class="total">Total: ₹<span id="total">0</span></div>
-  <form id="orderForm">
-    <input required name="name" placeholder="Customer name"><input required name="phone" type="tel" placeholder="Mobile number">
-    <textarea required name="address" placeholder="Delivery address"></textarea>
-    <select name="payment"><option>Cash on Delivery</option></select>
-    <button class="btn primary" type="submit">Place Order</button>
-  </form>
-</div>
-<div id="overlay"></div><div id="toast"></div>
-<script src="script.js"></script>
+  <!-- =========================
+       TOAST
+  ========================== -->
+
+  <div id="toast"></div>
+
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script src="script.js"></script>
+
 </body>
+
 </html>
