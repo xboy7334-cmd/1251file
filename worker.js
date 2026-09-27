@@ -2,8 +2,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // API: Health check
-    if (url.pathname === "/api/health") {
+    // ================================
+    // API: Health Check
+    // ================================
+    if (
+      url.pathname === "/api/health" &&
+      request.method === "GET"
+    ) {
       return Response.json({
         success: true,
         message: "Restaurant API is working",
@@ -11,7 +16,10 @@ export default {
       });
     }
 
-    // API: Admin orders
+    // ================================
+    // API: Admin Orders
+    // GET /api/admin/orders
+    // ================================
     if (
       url.pathname === "/api/admin/orders" &&
       request.method === "GET"
@@ -55,15 +63,87 @@ export default {
       });
     }
 
-    // API: Get menu
+    // ================================
+    // API: Update Order Status
+    // PATCH /api/admin/orders/:id
+    // ================================
+    if (
+      url.pathname.startsWith("/api/admin/orders/") &&
+      request.method === "PATCH"
+    ) {
+      const orderId = url.pathname.split("/").pop();
+
+      const data = await request.json();
+
+      const allowedStatuses = [
+        "Pending",
+        "Confirmed",
+        "Preparing",
+        "Delivered",
+        "Cancelled"
+      ];
+
+      if (!allowedStatuses.includes(data.status)) {
+        return Response.json(
+          {
+            success: false,
+            message: "Invalid order status"
+          },
+          { status: 400 }
+        );
+      }
+
+      const result = await env.DB
+        .prepare(`
+          UPDATE orders
+          SET status = ?
+          WHERE id = ?
+        `)
+        .bind(
+          data.status,
+          Number(orderId)
+        )
+        .run();
+
+      if (!result.meta.changes) {
+        return Response.json(
+          {
+            success: false,
+            message: "Order not found"
+          },
+          { status: 404 }
+        );
+      }
+
+      return Response.json({
+        success: true,
+        message: "Order status updated successfully",
+        order_id: Number(orderId),
+        status: data.status
+      });
+    }
+
+    // ================================
+    // API: Get Menu
+    // ================================
     if (
       url.pathname === "/api/menu" &&
       request.method === "GET"
     ) {
       const { results } = await env.DB
-        .prepare(
-          "SELECT id, name, category, description, price, image, available FROM menu_items WHERE available = 1 ORDER BY id DESC"
-        )
+        .prepare(`
+          SELECT
+            id,
+            name,
+            category,
+            description,
+            price,
+            image,
+            available
+          FROM menu_items
+          WHERE available = 1
+          ORDER BY id DESC
+        `)
         .all();
 
       return Response.json({
@@ -72,7 +152,9 @@ export default {
       });
     }
 
-    // API: Create booking
+    // ================================
+    // API: Create Booking
+    // ================================
     if (
       url.pathname === "/api/bookings" &&
       request.method === "POST"
@@ -98,7 +180,13 @@ export default {
       const result = await env.DB
         .prepare(`
           INSERT INTO bookings
-          (customer_name, phone, booking_date, booking_time, guests)
+          (
+            customer_name,
+            phone,
+            booking_date,
+            booking_time,
+            guests
+          )
           VALUES (?, ?, ?, ?, ?)
         `)
         .bind(
@@ -117,7 +205,9 @@ export default {
       });
     }
 
-    // API: Create order
+    // ================================
+    // API: Create Order
+    // ================================
     if (
       url.pathname === "/api/orders" &&
       request.method === "POST"
@@ -141,7 +231,13 @@ export default {
       const order = await env.DB
         .prepare(`
           INSERT INTO orders
-          (customer_name, phone, address, total_amount, payment_method)
+          (
+            customer_name,
+            phone,
+            address,
+            total_amount,
+            payment_method
+          )
           VALUES (?, ?, ?, ?, ?)
         `)
         .bind(
@@ -160,7 +256,13 @@ export default {
           await env.DB
             .prepare(`
               INSERT INTO order_items
-              (order_id, menu_item_id, item_name, quantity, price)
+              (
+                order_id,
+                menu_item_id,
+                item_name,
+                quantity,
+                price
+              )
               VALUES (?, ?, ?, ?, ?)
             `)
             .bind(
@@ -181,16 +283,21 @@ export default {
       });
     }
 
-    // Website files
+    // ================================
+    // Website Files
+    // ================================
     if (env.ASSETS) {
       return env.ASSETS.fetch(request);
     }
 
-    return new Response("Worker is working!", {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain"
+    return new Response(
+      "Worker is working!",
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain"
+        }
       }
-    });
+    );
   }
 };
