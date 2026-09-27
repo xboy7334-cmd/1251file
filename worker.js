@@ -72,7 +72,6 @@ export default {
       request.method === "PATCH"
     ) {
       const orderId = url.pathname.split("/").pop();
-
       const data = await request.json();
 
       const allowedStatuses = [
@@ -162,7 +161,6 @@ export default {
       request.method === "PATCH"
     ) {
       const bookingId = url.pathname.split("/").pop();
-
       const data = await request.json();
 
       const allowedStatuses = [
@@ -213,7 +211,196 @@ export default {
     }
 
     // ================================
-    // API: Get Menu
+    // API: ADMIN MENU
+    // GET /api/admin/menu
+    // ================================
+    if (
+      url.pathname === "/api/admin/menu" &&
+      request.method === "GET"
+    ) {
+      const { results: menu } = await env.DB
+        .prepare(`
+          SELECT
+            id,
+            name,
+            category,
+            description,
+            price,
+            image,
+            available,
+            created_at
+          FROM menu_items
+          ORDER BY id DESC
+        `)
+        .all();
+
+      return Response.json({
+        success: true,
+        menu: menu
+      });
+    }
+
+    // ================================
+    // API: ADD MENU ITEM
+    // POST /api/admin/menu
+    // ================================
+    if (
+      url.pathname === "/api/admin/menu" &&
+      request.method === "POST"
+    ) {
+      const data = await request.json();
+
+      if (
+        !data.name ||
+        data.price === undefined ||
+        data.price === null ||
+        data.price === ""
+      ) {
+        return Response.json(
+          {
+            success: false,
+            message: "Menu name and price are required"
+          },
+          { status: 400 }
+        );
+      }
+
+      const result = await env.DB
+        .prepare(`
+          INSERT INTO menu_items
+          (
+            name,
+            category,
+            description,
+            price,
+            image,
+            available
+          )
+          VALUES (?, ?, ?, ?, ?, ?)
+        `)
+        .bind(
+          data.name,
+          data.category || "",
+          data.description || "",
+          Number(data.price),
+          data.image || "",
+          data.available === undefined
+            ? 1
+            : Number(data.available)
+        )
+        .run();
+
+      return Response.json({
+        success: true,
+        message: "Menu item added successfully",
+        menu_id: result.meta.last_row_id
+      });
+    }
+
+    // ================================
+    // API: EDIT MENU ITEM
+    // PATCH /api/admin/menu/:id
+    // ================================
+    if (
+      url.pathname.startsWith("/api/admin/menu/") &&
+      request.method === "PATCH"
+    ) {
+      const menuId = url.pathname.split("/").pop();
+      const data = await request.json();
+
+      if (
+        !data.name ||
+        data.price === undefined ||
+        data.price === null ||
+        data.price === ""
+      ) {
+        return Response.json(
+          {
+            success: false,
+            message: "Menu name and price are required"
+          },
+          { status: 400 }
+        );
+      }
+
+      const result = await env.DB
+        .prepare(`
+          UPDATE menu_items
+          SET
+            name = ?,
+            category = ?,
+            description = ?,
+            price = ?,
+            image = ?,
+            available = ?
+          WHERE id = ?
+        `)
+        .bind(
+          data.name,
+          data.category || "",
+          data.description || "",
+          Number(data.price),
+          data.image || "",
+          Number(data.available),
+          Number(menuId)
+        )
+        .run();
+
+      if (!result.meta.changes) {
+        return Response.json(
+          {
+            success: false,
+            message: "Menu item not found"
+          },
+          { status: 404 }
+        );
+      }
+
+      return Response.json({
+        success: true,
+        message: "Menu item updated successfully",
+        menu_id: Number(menuId)
+      });
+    }
+
+    // ================================
+    // API: DELETE MENU ITEM
+    // DELETE /api/admin/menu/:id
+    // ================================
+    if (
+      url.pathname.startsWith("/api/admin/menu/") &&
+      request.method === "DELETE"
+    ) {
+      const menuId = url.pathname.split("/").pop();
+
+      const result = await env.DB
+        .prepare(`
+          DELETE FROM menu_items
+          WHERE id = ?
+        `)
+        .bind(Number(menuId))
+        .run();
+
+      if (!result.meta.changes) {
+        return Response.json(
+          {
+            success: false,
+            message: "Menu item not found"
+          },
+          { status: 404 }
+        );
+      }
+
+      return Response.json({
+        success: true,
+        message: "Menu item deleted successfully",
+        menu_id: Number(menuId)
+      });
+    }
+
+    // ================================
+    // API: Get Menu For Website
+    // GET /api/menu
     // ================================
     if (
       url.pathname === "/api/menu" &&
