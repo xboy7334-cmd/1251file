@@ -3,9 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Your Choice Admin</title>
 
@@ -86,8 +84,9 @@ margin-top:0;
 }
 
 .order,
-.booking{
-background:#fff;
+.booking,
+.menu-card{
+background:white;
 padding:16px;
 margin-top:15px;
 border-radius:10px;
@@ -148,13 +147,21 @@ background:#16a34a;
 color:white;
 }
 
-select{
+select,
+input,
+textarea{
 width:100%;
 padding:11px;
 margin-top:8px;
 border:1px solid #ccc;
 border-radius:8px;
 font-size:15px;
+background:white;
+}
+
+textarea{
+min-height:80px;
+resize:vertical;
 }
 
 .update{
@@ -162,6 +169,79 @@ width:100%;
 margin-top:10px;
 background:#16a34a;
 color:white;
+}
+
+.delete{
+background:#dc2626;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+.edit{
+background:#2563eb;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+.add-btn{
+background:#16a34a;
+color:white;
+width:100%;
+margin-top:12px;
+}
+
+.cancel-btn{
+background:#6b7280;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+.form-box{
+background:#f8fafc;
+padding:15px;
+border-radius:10px;
+margin-bottom:18px;
+}
+
+.form-box label{
+display:block;
+font-weight:bold;
+margin-top:10px;
+}
+
+.menu-image{
+width:100%;
+max-width:180px;
+height:130px;
+object-fit:cover;
+border-radius:8px;
+margin-bottom:10px;
+background:#eee;
+}
+
+.menu-price{
+font-size:20px;
+font-weight:bold;
+margin-top:8px;
+}
+
+.available{
+background:#16a34a;
+color:white;
+padding:5px 9px;
+border-radius:15px;
+font-size:12px;
+}
+
+.unavailable{
+background:#dc2626;
+color:white;
+padding:5px 9px;
+border-radius:15px;
+font-size:12px;
 }
 
 .success{
@@ -185,6 +265,23 @@ text-align:center;
 padding:20px;
 }
 
+.no-data{
+text-align:center;
+padding:20px;
+color:#666;
+}
+
+.menu-actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:10px;
+}
+
+.menu-actions button{
+width:100%;
+}
+
 @media(max-width:600px){
 
 .stats{
@@ -197,6 +294,10 @@ flex-direction:column;
 
 .contact button{
 width:100%;
+}
+
+.menu-actions{
+grid-template-columns:1fr;
 }
 
 }
@@ -223,7 +324,9 @@ onclick="loadAll()">
 <div class="container">
 
 
-<!-- STATS -->
+<!-- ========================= -->
+<!-- STATISTICS -->
+<!-- ========================= -->
 
 <div class="stats">
 
@@ -247,7 +350,9 @@ Total Sales
 </div>
 
 
+<!-- ========================= -->
 <!-- ORDERS -->
+<!-- ========================= -->
 
 <div class="section">
 
@@ -261,7 +366,9 @@ Loading orders...
 </div>
 
 
+<!-- ========================= -->
 <!-- BOOKINGS -->
+<!-- ========================= -->
 
 <div class="section">
 
@@ -275,10 +382,161 @@ Loading bookings...
 </div>
 
 
+<!-- ========================= -->
+<!-- MENU -->
+<!-- ========================= -->
+
+<div class="section">
+
+<h2>🍽️ Menu Management</h2>
+
+
+<!-- ADD MENU -->
+
+<div class="form-box">
+
+<h3 id="formTitle">
+➕ Add New Food
+</h3>
+
+
+<label>
+Food Name
+</label>
+
+<input
+id="menuName"
+type="text"
+placeholder="Example: Chicken Biryani">
+
+
+<label>
+Category
+</label>
+
+<input
+id="menuCategory"
+type="text"
+placeholder="Example: Biryani">
+
+
+<label>
+Description
+</label>
+
+<textarea
+id="menuDescription"
+placeholder="Food description"></textarea>
+
+
+<label>
+Price
+</label>
+
+<input
+id="menuPrice"
+type="number"
+placeholder="Example: 220">
+
+
+<label>
+Image Path / URL
+</label>
+
+<input
+id="menuImage"
+type="text"
+placeholder="images/chicken-biryani.jpg">
+
+
+<label>
+Availability
+</label>
+
+<select id="menuAvailable">
+
+<option value="1">
+🟢 Available
+</option>
+
+<option value="0">
+🔴 Unavailable
+</option>
+
+</select>
+
+
+<button
+id="saveMenuBtn"
+class="add-btn"
+onclick="saveMenu()">
+
+➕ Add Food
+
+</button>
+
+
+<button
+id="cancelEditBtn"
+class="cancel-btn"
+onclick="cancelEdit()"
+style="display:none;">
+
+❌ Cancel Edit
+
+</button>
+
+
+<div id="menuFormResult"></div>
+
+</div>
+
+
+<!-- MENU LIST -->
+
+<h3>
+📋 Current Menu
+</h3>
+
+<div id="menuList"
+class="loading">
+
+Loading menu...
+
+</div>
+
+</div>
+
+
 </div>
 
 
 <script>
+
+
+// =====================================
+// API
+// =====================================
+
+const API =
+"https://1251file.xboy7334.workers.dev";
+
+let editingMenuId = null;
+
+
+// =====================================
+// LOAD ALL
+// =====================================
+
+function loadAll(){
+
+loadOrders();
+
+loadBookings();
+
+loadMenu();
+
+}
 
 
 // =====================================
@@ -293,8 +551,10 @@ document.getElementById("orders");
 try{
 
 const response =
-await fetch("/api/admin/orders?x="
-+ Date.now());
+await fetch(
+API + "/api/admin/orders?x=" +
+Date.now()
+);
 
 const data =
 await response.json();
@@ -318,7 +578,6 @@ orders.length;
 
 
 let pending = 0;
-
 let sales = 0;
 
 
@@ -350,7 +609,7 @@ sales.toFixed(0);
 if(orders.length === 0){
 
 box.innerHTML =
-"<div>No orders found.</div>";
+"<div class='no-data'>No orders found.</div>";
 
 return;
 
@@ -358,7 +617,6 @@ return;
 
 
 box.className = "";
-
 
 box.innerHTML = "";
 
@@ -467,28 +725,17 @@ Total:
 </div>
 
 
-<select
-id="orderStatus${order.id}">
+<select id="orderStatus${order.id}">
 
-<option value="Pending">
-🟡 Pending
-</option>
+<option value="Pending">🟡 Pending</option>
 
-<option value="Confirmed">
-🔵 Confirmed
-</option>
+<option value="Confirmed">🔵 Confirmed</option>
 
-<option value="Preparing">
-🟠 Preparing
-</option>
+<option value="Preparing">🟠 Preparing</option>
 
-<option value="Delivered">
-🟢 Delivered
-</option>
+<option value="Delivered">🟢 Delivered</option>
 
-<option value="Cancelled">
-🔴 Cancelled
-</option>
+<option value="Cancelled">🔴 Cancelled</option>
 
 </select>
 
@@ -518,8 +765,6 @@ order.status || "Pending";
 
 }catch(error){
 
-console.error(error);
-
 box.innerHTML = `
 <div class="error">
 ❌ Orders load হচ্ছে না.
@@ -545,8 +790,10 @@ document.getElementById("bookings");
 try{
 
 const response =
-await fetch("/api/admin/bookings?x="
-+ Date.now());
+await fetch(
+API + "/api/admin/bookings?x=" +
+Date.now()
+);
 
 const data =
 await response.json();
@@ -566,7 +813,7 @@ data.bookings || [];
 if(bookings.length === 0){
 
 box.innerHTML =
-"<div>No bookings found.</div>";
+"<div class='no-data'>No bookings found.</div>";
 
 return;
 
@@ -655,21 +902,13 @@ ${booking.created_at || ""}
 <select
 id="bookingStatus${booking.id}">
 
-<option value="Pending">
-🟡 Pending
-</option>
+<option value="Pending">🟡 Pending</option>
 
-<option value="Confirmed">
-🔵 Confirmed
-</option>
+<option value="Confirmed">🔵 Confirmed</option>
 
-<option value="Completed">
-🟢 Completed
-</option>
+<option value="Completed">🟢 Completed</option>
 
-<option value="Cancelled">
-🔴 Cancelled
-</option>
+<option value="Cancelled">🔴 Cancelled</option>
 
 </select>
 
@@ -699,8 +938,6 @@ booking.status || "Pending";
 
 }catch(error){
 
-console.error(error);
-
 box.innerHTML = `
 <div class="error">
 ❌ Bookings load হচ্ছে না.
@@ -710,6 +947,686 @@ ${error.message}
 `;
 
 }
+
+}
+
+
+// =====================================
+// LOAD MENU
+// =====================================
+
+async function loadMenu(){
+
+const box =
+document.getElementById("menuList");
+
+box.innerHTML =
+"⏳ Loading menu...";
+
+
+try{
+
+const response =
+await fetch(
+API + "/api/admin/menu?x=" +
+Date.now()
+);
+
+const data =
+await response.json();
+
+
+if(!data.success){
+
+throw new Error(
+"Menu API failed"
+);
+
+}
+
+
+const menu =
+data.menu || [];
+
+
+if(menu.length === 0){
+
+box.innerHTML =
+"<div class='no-data'>No menu items found.</div>";
+
+return;
+
+}
+
+
+box.className = "";
+
+box.innerHTML = "";
+
+
+menu.forEach(function(item){
+
+const availability =
+Number(item.available) === 1;
+
+
+let imageHTML = "";
+
+if(item.image){
+
+imageHTML = `
+<img
+class="menu-image"
+src="${item.image}"
+alt="${item.name}"
+onerror="this.style.display='none'">
+`;
+
+}
+
+
+box.innerHTML += `
+
+<div class="menu-card">
+
+${imageHTML}
+
+
+<div class="header-row">
+
+<h3>
+${item.name}
+</h3>
+
+<span class="${
+availability
+? "available"
+: "unavailable"
+}">
+
+${
+availability
+? "🟢 Available"
+: "🔴 Unavailable"
+}
+
+</span>
+
+</div>
+
+
+<div class="info">
+
+<b>Category:</b>
+${item.category || "-"}
+
+<br>
+
+<b>Description:</b>
+${item.description || "-"}
+
+</div>
+
+
+<div class="menu-price">
+
+₹${Number(item.price).toFixed(0)}
+
+</div>
+
+
+<div class="menu-actions">
+
+<button
+class="edit"
+onclick="editMenu(${item.id})">
+
+✏️ Edit
+
+</button>
+
+<button
+class="delete"
+onclick="deleteMenu(${item.id})">
+
+🗑️ Delete
+
+</button>
+
+</div>
+
+
+<button
+class="update"
+onclick="toggleMenu(${item.id},${availability ? 0 : 1})">
+
+${
+availability
+? "🔴 Make Unavailable"
+: "🟢 Make Available"
+}
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+box.innerHTML = `
+<div class="error">
+❌ Menu load হচ্ছে না.
+<br><br>
+${error.message}
+</div>
+`;
+
+}
+
+}
+
+
+// =====================================
+// SAVE MENU
+// =====================================
+
+async function saveMenu(){
+
+const name =
+document.getElementById("menuName")
+.value.trim();
+
+const category =
+document.getElementById("menuCategory")
+.value.trim();
+
+const description =
+document.getElementById("menuDescription")
+.value.trim();
+
+const price =
+document.getElementById("menuPrice")
+.value;
+
+const image =
+document.getElementById("menuImage")
+.value.trim();
+
+const available =
+document.getElementById("menuAvailable")
+.value;
+
+
+const result =
+document.getElementById(
+"menuFormResult"
+);
+
+
+if(!name || price === ""){
+
+result.innerHTML = `
+<div class="error">
+❌ Food name এবং price দিতে হবে।
+</div>
+`;
+
+return;
+
+}
+
+
+const payload = {
+
+name:name,
+
+category:category,
+
+description:description,
+
+price:Number(price),
+
+image:image,
+
+available:Number(available)
+
+};
+
+
+try{
+
+let response;
+
+
+if(editingMenuId){
+
+response =
+await fetch(
+API + "/api/admin/menu/" +
+editingMenuId,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify(payload)
+
+}
+);
+
+}else{
+
+response =
+await fetch(
+API + "/api/admin/menu",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify(payload)
+
+}
+);
+
+}
+
+
+const data =
+await response.json();
+
+
+if(!response.ok ||
+!data.success){
+
+throw new Error(
+data.message ||
+"Menu save failed"
+);
+
+}
+
+
+result.innerHTML = `
+<div class="success">
+✅ ${
+editingMenuId
+? "Food updated successfully"
+: "Food added successfully"
+}
+</div>
+`;
+
+
+cancelEdit();
+
+loadMenu();
+
+
+}catch(error){
+
+result.innerHTML = `
+<div class="error">
+❌ ${error.message}
+</div>
+`;
+
+}
+
+}
+
+
+// =====================================
+// EDIT MENU
+// =====================================
+
+async function editMenu(id){
+
+try{
+
+const response =
+await fetch(
+API + "/api/admin/menu?x=" +
+Date.now()
+);
+
+const data =
+await response.json();
+
+
+const item =
+(data.menu || [])
+.find(function(menu){
+
+return Number(menu.id) === Number(id);
+
+});
+
+
+if(!item){
+
+alert(
+"Menu item পাওয়া যায়নি"
+);
+
+return;
+
+}
+
+
+editingMenuId = id;
+
+
+document.getElementById(
+"formTitle"
+).textContent =
+"✏️ Edit Food";
+
+
+document.getElementById(
+"menuName"
+).value =
+item.name || "";
+
+
+document.getElementById(
+"menuCategory"
+).value =
+item.category || "";
+
+
+document.getElementById(
+"menuDescription"
+).value =
+item.description || "";
+
+
+document.getElementById(
+"menuPrice"
+).value =
+item.price || "";
+
+
+document.getElementById(
+"menuImage"
+).value =
+item.image || "";
+
+
+document.getElementById(
+"menuAvailable"
+).value =
+Number(item.available) === 1
+? "1"
+: "0";
+
+
+document.getElementById(
+"saveMenuBtn"
+).textContent =
+"💾 Update Food";
+
+
+document.getElementById(
+"cancelEditBtn"
+).style.display =
+"block";
+
+
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+});
+
+
+}catch(error){
+
+alert(
+"Menu load করতে সমস্যা হয়েছে"
+);
+
+}
+
+}
+
+
+// =====================================
+// CANCEL EDIT
+// =====================================
+
+function cancelEdit(){
+
+editingMenuId = null;
+
+
+document.getElementById(
+"formTitle"
+).textContent =
+"➕ Add New Food";
+
+
+document.getElementById(
+"menuName"
+).value = "";
+
+document.getElementById(
+"menuCategory"
+).value = "";
+
+document.getElementById(
+"menuDescription"
+).value = "";
+
+document.getElementById(
+"menuPrice"
+).value = "";
+
+document.getElementById(
+"menuImage"
+).value = "";
+
+document.getElementById(
+"menuAvailable"
+).value = "1";
+
+
+document.getElementById(
+"saveMenuBtn"
+).textContent =
+"➕ Add Food";
+
+
+document.getElementById(
+"cancelEditBtn"
+).style.display =
+"none";
+
+}
+
+
+// =====================================
+// DELETE MENU
+// =====================================
+
+async function deleteMenu(id){
+
+if(!confirm(
+"এই খাবারটি Delete করতে চান?"
+)){
+
+return;
+
+}
+
+
+try{
+
+const response =
+await fetch(
+API + "/api/admin/menu/" + id,
+{
+method:"DELETE"
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(!response.ok ||
+!data.success){
+
+throw new Error(
+data.message ||
+"Delete failed"
+);
+
+}
+
+
+alert(
+"✅ Food deleted successfully"
+);
+
+
+loadMenu();
+
+
+}catch(error){
+
+alert(
+"❌ " + error.message
+);
+
+}
+
+}
+
+
+// =====================================
+// TOGGLE AVAILABLE
+// =====================================
+
+async function toggleMenu(
+id,
+available
+){
+
+try{
+
+const response =
+await fetch(
+API + "/api/admin/menu/" + id,
+{
+method:"PATCH",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify(
+await getMenuData(
+id,
+available
+)
+)
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(!response.ok ||
+!data.success){
+
+throw new Error(
+data.message ||
+"Update failed"
+);
+
+}
+
+
+loadMenu();
+
+
+}catch(error){
+
+alert(
+"❌ " + error.message
+);
+
+}
+
+}
+
+
+// =====================================
+// GET MENU DATA
+// =====================================
+
+async function getMenuData(
+id,
+available
+){
+
+const response =
+await fetch(
+API + "/api/admin/menu?x=" +
+Date.now()
+);
+
+const data =
+await response.json();
+
+
+const item =
+(data.menu || [])
+.find(function(menu){
+
+return Number(menu.id) === Number(id);
+
+});
+
+
+if(!item){
+
+throw new Error(
+"Menu item not found"
+);
+
+}
+
+
+return {
+
+name:item.name,
+
+category:item.category || "",
+
+description:item.description || "",
+
+price:Number(item.price),
+
+image:item.image || "",
+
+available:Number(available)
+
+};
 
 }
 
@@ -736,7 +1653,7 @@ try{
 
 const response =
 await fetch(
-"/api/admin/orders/" + id,
+API + "/api/admin/orders/" + id,
 {
 method:"PATCH",
 
@@ -816,7 +1733,7 @@ try{
 
 const response =
 await fetch(
-"/api/admin/bookings/" + id,
+API + "/api/admin/bookings/" + id,
 {
 method:"PATCH",
 
@@ -936,52 +1853,4 @@ encodeURIComponent(text),
 // =====================================
 
 function bookingWhatsApp(
-phone,
-bookingId
-){
-
-if(!phone){
-
-alert(
-"Phone number পাওয়া যায়নি"
-);
-
-return;
-
-}
-
-const text =
-"Hello, this is Your Choice Family Restaurant regarding your Table Booking #" +
-bookingId +
-".";
-
-window.open(
-"https://wa.me/" +
-phone +
-"?text=" +
-encodeURIComponent(text),
-"_blank"
-);
-
-}
-
-
-// =====================================
-// START
-// =====================================
-
-function loadAll(){
-
-loadOrders();
-
-loadBookings();
-
-}
-
-
-loadAll();
-
-</script>
-
-</body>
-</html>
+phon
