@@ -29,6 +29,12 @@ body{
     margin:0 0 12px;
 }
 
+.container{
+    max-width:900px;
+    margin:20px auto;
+    padding:15px;
+}
+
 button{
     border:0;
     cursor:pointer;
@@ -41,12 +47,6 @@ button{
 .refresh{
     background:#2563eb;
     color:white;
-}
-
-.container{
-    max-width:900px;
-    margin:20px auto;
-    padding:15px;
 }
 
 .stats{
@@ -95,6 +95,22 @@ button{
     margin-top:12px;
 }
 
+.contact-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.call-btn{
+    background:#2563eb;
+    color:white;
+}
+
+.whatsapp-btn{
+    background:#16a34a;
+    color:white;
+}
+
 .items{
     background:#f9fafb;
     padding:12px;
@@ -115,6 +131,16 @@ button{
     font-size:20px;
     font-weight:bold;
     margin-top:14px;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+    background:#f59e0b;
+    color:white;
 }
 
 .status-box{
@@ -148,17 +174,6 @@ button{
 
 .update-btn:disabled{
     background:#999;
-    cursor:not-allowed;
-}
-
-.status{
-    display:inline-block;
-    padding:6px 10px;
-    border-radius:20px;
-    font-size:13px;
-    font-weight:bold;
-    background:#f59e0b;
-    color:white;
 }
 
 .success{
@@ -188,12 +203,16 @@ button{
         grid-template-columns:1fr;
     }
 
-    .container{
-        padding:10px;
+    .contact-buttons{
+        flex-direction:column;
     }
 
-    .order{
-        padding:14px;
+    .contact-buttons button{
+        width:100%;
+    }
+
+    .container{
+        padding:10px;
     }
 }
 </style>
@@ -215,8 +234,6 @@ button{
 
 
 <div class="container">
-
-    <!-- Statistics -->
 
     <div class="stats">
 
@@ -300,8 +317,6 @@ async function loadOrders(){
             data.orders || [];
 
 
-        // Statistics
-
         document.getElementById(
             "totalOrders"
         ).textContent = orders.length;
@@ -313,9 +328,7 @@ async function loadOrders(){
 
         orders.forEach(function(order){
 
-            if(
-                order.status === "Pending"
-            ){
+            if(order.status === "Pending"){
                 pending++;
             }
 
@@ -352,8 +365,6 @@ async function loadOrders(){
         }
 
 
-        // Display orders
-
         orders.forEach(function(order){
 
             let itemsHTML = "";
@@ -387,6 +398,12 @@ async function loadOrders(){
                 order.status || "Pending";
 
 
+            // Clean phone number for WhatsApp
+            const phone =
+                String(order.phone || "")
+                .replace(/\D/g,"");
+
+
             const html = `
 
                 <div class="order">
@@ -411,10 +428,27 @@ async function loadOrders(){
                         <br>
 
                         <b>Phone:</b>
+                        ${order.phone || "-"}
 
-                        <a href="tel:${order.phone || ""}">
-                            ${order.phone || "-"}
-                        </a>
+                        <div class="contact-buttons">
+
+                            <button
+                                class="call-btn"
+                                onclick="callCustomer('${phone}')"
+                            >
+                                📞 Call Customer
+                            </button>
+
+
+                            <button
+                                class="whatsapp-btn"
+                                onclick="whatsappCustomer('${phone}','${order.id}')"
+                            >
+                                💬 WhatsApp
+                            </button>
+
+                        </div>
+
 
                         <br>
 
@@ -451,7 +485,7 @@ async function loadOrders(){
                     </div>
 
 
-                    <!-- STATUS UPDATE -->
+                    <!-- STATUS -->
 
                     <div class="status-box">
 
@@ -552,7 +586,62 @@ async function loadOrders(){
 
 
 // ========================================
-// UPDATE ORDER STATUS
+// CALL CUSTOMER
+// ========================================
+
+function callCustomer(phone){
+
+    if(!phone){
+
+        alert("Phone number পাওয়া যায়নি");
+
+        return;
+    }
+
+
+    window.location.href =
+        "tel:" + phone;
+
+}
+
+
+// ========================================
+// WHATSAPP CUSTOMER
+// ========================================
+
+function whatsappCustomer(phone, orderId){
+
+    if(!phone){
+
+        alert("Phone number পাওয়া যায়নি");
+
+        return;
+    }
+
+
+    const message =
+        "Hello, this is Your Choice Family Restaurant regarding your Order #" +
+        orderId +
+        ".";
+
+
+    const whatsappURL =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+}
+
+
+// ========================================
+// UPDATE STATUS
 // ========================================
 
 async function updateStatus(orderId){
@@ -583,6 +672,7 @@ async function updateStatus(orderId){
 
     button.textContent =
         "⏳ Updating...";
+
 
     result.innerHTML = "";
 
@@ -632,8 +722,6 @@ async function updateStatus(orderId){
         button.textContent =
             "✅ Updated";
 
-
-        // Reload orders after 1 second
 
         setTimeout(function(){
 
