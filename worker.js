@@ -124,6 +124,95 @@ export default {
     }
 
     // ================================
+    // API: Admin Bookings
+    // GET /api/admin/bookings
+    // ================================
+    if (
+      url.pathname === "/api/admin/bookings" &&
+      request.method === "GET"
+    ) {
+      const { results: bookings } = await env.DB
+        .prepare(`
+          SELECT
+            id,
+            customer_name,
+            phone,
+            booking_date,
+            booking_time,
+            guests,
+            status,
+            created_at
+          FROM bookings
+          ORDER BY id DESC
+        `)
+        .all();
+
+      return Response.json({
+        success: true,
+        bookings: bookings
+      });
+    }
+
+    // ================================
+    // API: Update Booking Status
+    // PATCH /api/admin/bookings/:id
+    // ================================
+    if (
+      url.pathname.startsWith("/api/admin/bookings/") &&
+      request.method === "PATCH"
+    ) {
+      const bookingId = url.pathname.split("/").pop();
+
+      const data = await request.json();
+
+      const allowedStatuses = [
+        "Pending",
+        "Confirmed",
+        "Completed",
+        "Cancelled"
+      ];
+
+      if (!allowedStatuses.includes(data.status)) {
+        return Response.json(
+          {
+            success: false,
+            message: "Invalid booking status"
+          },
+          { status: 400 }
+        );
+      }
+
+      const result = await env.DB
+        .prepare(`
+          UPDATE bookings
+          SET status = ?
+          WHERE id = ?
+        `)
+        .bind(
+          data.status,
+          Number(bookingId)
+        )
+        .run();
+
+      if (!result.meta.changes) {
+        return Response.json(
+          {
+            success: false,
+            message: "Booking not found"
+          },
+          { status: 404 }
+        );
+      }
+
+      return Response.json({
+        success: true,
+        message: "Booking status updated successfully",
+        booking_id: Number(bookingId),
+        status: data.status
+      });
+    }
+
+    // ================================
     // API: Get Menu
     // ================================
     if (
