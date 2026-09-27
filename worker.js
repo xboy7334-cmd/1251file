@@ -28,6 +28,86 @@ export default {
     // API: Create booking
     if (url.pathname === "/api/bookings" && request.method === "POST") {
       const data = await request.json();
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // API: Health check
+    if (url.pathname === "/api/health") {
+      return Response.json({
+        success: true,
+        message: "Restaurant API is working",
+        database: !!env.DB
+      });
+    }
+
+    // API: Admin orders
+    if (
+      url.pathname === "/api/admin/orders" &&
+      request.method === "GET"
+    ) {
+      const { results: orders } = await env.DB
+        .prepare(`
+          SELECT
+            id,
+            customer_name,
+            phone,
+            address,
+            total_amount,
+            payment_method,
+            status,
+            created_at
+          FROM orders
+          ORDER BY id DESC
+        `)
+        .all();
+
+      for (const order of orders) {
+        const { results: items } = await env.DB
+          .prepare(`
+            SELECT
+              item_name,
+              quantity,
+              price
+            FROM order_items
+            WHERE order_id = ?
+            ORDER BY id ASC
+          `)
+          .bind(order.id)
+          .all();
+
+        order.items = items;
+      }
+
+      return Response.json({
+        success: true,
+        orders: orders
+      });
+    }
+
+    // API: Get menu
+    if (
+      url.pathname === "/api/menu" &&
+      request.method === "GET"
+    ) {
+      const { results } = await env.DB
+        .prepare(
+          "SELECT id, name, category, description, price, image, available FROM menu_items WHERE available = 1 ORDER BY id DESC"
+        )
+        .all();
+
+      return Response.json({
+        success: true,
+        menu: results
+      });
+    }
+
+    // API: Create booking
+    if (
+      url.pathname === "/api/bookings" &&
+      request.method === "POST"
+    ) {
+      const data = await request.json();
 
       if (
         !data.customer_name ||
@@ -68,10 +148,17 @@ export default {
     }
 
     // API: Create order
-    if (url.pathname === "/api/orders" && request.method === "POST") {
+    if (
+      url.pathname === "/api/orders" &&
+      request.method === "POST"
+    ) {
       const data = await request.json();
 
-      if (!data.customer_name || !data.phone || !data.total_amount) {
+      if (
+        !data.customer_name ||
+        !data.phone ||
+        !data.total_amount
+      ) {
         return Response.json(
           {
             success: false,
