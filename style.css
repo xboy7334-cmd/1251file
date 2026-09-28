@@ -335,6 +335,10 @@ body {
   line-height: 1.7;
 }
 
+.store-content .actions {
+  margin-top: 20px;
+}
+
 .store-image {
   position: relative;
   z-index: 2;
@@ -360,7 +364,6 @@ body {
 
 /* =========================
    MENU CATEGORY BAR
-   Used on menu.html
 ========================= */
 
 .menu-categories {
@@ -462,7 +465,7 @@ body {
 }
 
 /* =========================
-   LIQUID GLASS FOOD CARDS
+   FOOD CARDS
 ========================= */
 
 .card {
@@ -566,6 +569,172 @@ body {
 
 .gallery img:first-child {
   grid-row: span 2;
+}
+
+.gallery-image {
+  cursor: zoom-in;
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.gallery-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 35px rgba(0,0,0,.18);
+}
+
+/* =========================
+   LIQUID GLASS GALLERY
+   LIGHTBOX
+========================= */
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 196, 120, .22),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(255, 150, 70, .18),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.18),
+      rgba(255,255,255,.06)
+    );
+
+  background-color: rgba(35, 24, 18, .48);
+
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .3s ease,
+    visibility .3s ease;
+}
+
+.image-lightbox.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* =========================
+   BIG IMAGE GLASS CARD
+========================= */
+
+.image-lightbox img {
+  max-width: 90vw;
+  max-height: 84vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  padding: 8px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.30),
+      rgba(255,255,255,.08)
+    );
+
+  border: 1px solid rgba(255,255,255,.45);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.65);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  transform: scale(.90);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.image-lightbox.active img {
+  transform: scale(1);
+}
+
+/* =========================
+   GLASS CLOSE BUTTON
+========================= */
+
+.lightbox-close {
+  position: absolute;
+
+  top: 20px;
+  right: 24px;
+
+  width: 52px;
+  height: 52px;
+
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.28),
+      rgba(255,255,255,.08)
+    );
+
+  color: #fff;
+
+  font-size: 34px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.5);
+
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.08);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.40),
+      rgba(255,255,255,.14)
+    );
 }
 
 /* =========================
@@ -821,6 +990,42 @@ body {
 }
 
 /* =========================
+   FOOTER
+========================= */
+
+.site-footer {
+  width: 100%;
+  padding: 22px 15px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(23,18,15,.92),
+      rgba(55,31,18,.86)
+    );
+
+  color: #fff;
+
+  border-top: 1px solid rgba(216,137,37,.35);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .4px;
+}
+
+.site-footer p::first-letter {
+  color: #e53935;
+}
+
+/* =========================
    MOBILE
 ========================= */
 
@@ -942,6 +1147,50 @@ body {
     width: 160px;
     height: 160px;
   }
+
+  /* =========================
+     MOBILE LIQUID GLASS
+  ========================= */
+
+  .image-lightbox {
+    padding: 14px;
+
+    background:
+      radial-gradient(
+        circle at 30% 20%,
+        rgba(255, 196, 120, .24),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 70%,
+        rgba(255, 150, 70, .18),
+        transparent 40%
+      );
+
+    background-color: rgba(35,24,18,.50);
+
+    backdrop-filter: blur(24px) saturate(155%);
+    -webkit-backdrop-filter: blur(24px) saturate(155%);
+  }
+
+  .image-lightbox img {
+    max-width: 94vw;
+    max-height: 80vh;
+
+    padding: 5px;
+
+    border-radius: 18px;
+  }
+
+  .lightbox-close {
+    top: 12px;
+    right: 12px;
+
+    width: 46px;
+    height: 46px;
+
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -977,172 +1226,4 @@ body {
   .cart-btn {
     padding: 9px 12px;
   }
-}
-
-/* =========================
-   GALLERY IMAGE CLICK
-========================= */
-
-.gallery-image {
-  cursor: zoom-in;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.gallery-image:hover {
-  transform: scale(1.02);
-  box-shadow: 0 15px 35px rgba(0,0,0,.18);
-}
-
-
-/* =========================
-   GALLERY LIGHTBOX
-========================= */
-
-.image-lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 30px;
-
-  background: rgba(0,0,0,.88);
-
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  transition: opacity .25s ease,
-              visibility .25s ease;
-}
-
-.image-lightbox.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.image-lightbox img {
-  max-width: 92vw;
-  max-height: 88vh;
-
-  width: auto;
-  height: auto;
-
-  object-fit: contain;
-
-  border-radius: 14px;
-
-  box-shadow:
-    0 20px 70px rgba(0,0,0,.55);
-
-  transform: scale(.92);
-  transition: transform .25s ease;
-}
-
-.image-lightbox.active img {
-  transform: scale(1);
-}
-
-
-/* =========================
-   LIGHTBOX CLOSE BUTTON
-========================= */
-
-.lightbox-close {
-  position: absolute;
-
-  top: 18px;
-  right: 22px;
-
-  width: 48px;
-  height: 48px;
-
-  border: 0;
-  border-radius: 50%;
-
-  background: rgba(255,255,255,.15);
-  color: #fff;
-
-  font-size: 34px;
-  line-height: 1;
-
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  transition: .2s ease;
-}
-
-.lightbox-close:hover {
-  background: rgba(255,255,255,.28);
-  transform: scale(1.05);
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-.site-footer {
-  width: 100%;
-
-  padding: 22px 15px;
-
-  text-align: center;
-
-  background: #17120f;
-  color: #fff;
-
-  border-top: 1px solid rgba(216,137,37,.35);
-}
-
-.site-footer p {
-  margin: 0;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  letter-spacing: .4px;
-}
-
-.site-footer p::first-letter {
-  color: #e53935;
-}
-
-
-/* =========================
-   MOBILE LIGHTBOX
-========================= */
-
-@media (max-width: 600px) {
-
-  .image-lightbox {
-    padding: 15px;
-  }
-
-  .image-lightbox img {
-    max-width: 96vw;
-    max-height: 82vh;
-    border-radius: 10px;
-  }
-
-  .lightbox-close {
-    top: 12px;
-    right: 12px;
-
-    width: 44px;
-    height: 44px;
-
-    font-size: 30px;
-  }
-
 }
