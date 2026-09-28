@@ -129,6 +129,42 @@ var worker_default = {
           .all();
 
 
+        // =================================================
+        // CONVERT ORDER TIME TO INDIA STANDARD TIME
+        // =================================================
+
+        let indiaTime = null;
+
+        if (order.created_at) {
+
+          try {
+
+            indiaTime =
+              new Date(
+                String(order.created_at).replace(" ", "T") + "Z"
+              ).toLocaleString(
+                "en-IN",
+                {
+                  timeZone: "Asia/Kolkata",
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true
+                }
+              );
+
+          } catch (timeError) {
+
+            indiaTime = order.created_at;
+
+          }
+
+        }
+
+
         return Response.json({
 
           success: true,
@@ -139,7 +175,10 @@ var worker_default = {
             total_amount: order.total_amount,
             payment_method: order.payment_method,
             status: order.status,
-            created_at: order.created_at,
+
+            // India Standard Time
+            created_at: indiaTime,
+
             items: items || []
           }
 
