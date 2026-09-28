@@ -2251,3 +2251,522 @@ body.menu-popup-open {
   }
 
 }
+
+/* =========================================================
+   EXTRA MOBILE FRIENDLY FIX
+   Desktop layout remains unchanged
+========================================================= */
+
+@media (max-width: 800px) {
+
+  /* Prevent horizontal overflow */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Main sections */
+  .section {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Header */
+  .topbar {
+    width: 100%;
+    padding: 9px 12px;
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .brand div {
+    min-width: 0;
+  }
+
+  .brand strong {
+    font-size: 14px;
+  }
+
+  .brand small {
+    font-size: 9px;
+  }
+
+  .brand img {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .cart-btn {
+    flex-shrink: 0;
+    padding: 8px 11px;
+    font-size: 13px;
+  }
+
+
+  /* Hero */
+  .hero {
+    width: 100%;
+    min-height: 620px;
+    padding: 55px 18px 45px;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 13vw, 65px);
+    word-break: normal;
+  }
+
+  .hero p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actions .btn {
+    flex: 1 1 auto;
+    min-width: 130px;
+  }
+
+
+  /* Features */
+  .features {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .features div {
+    min-width: 0;
+    padding: 18px 8px;
+  }
+
+  .features b {
+    font-size: 25px;
+  }
+
+
+  /* Store */
+  .store-section {
+    width: 100%;
+    padding: 45px 16px;
+  }
+
+  .store-card {
+    width: 100%;
+    padding: 25px 18px;
+    gap: 20px;
+  }
+
+  .store-content {
+    width: 100%;
+  }
+
+  .store-content h2 {
+    font-size: 30px;
+  }
+
+  .store-content p:not(.eyebrow) {
+    font-size: 15px;
+  }
+
+  .store-image img {
+    width: 145px;
+    height: 145px;
+  }
+
+
+  /* Section heading */
+  .section-head {
+    width: 100%;
+  }
+
+  .section-head input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+
+  /* Category buttons */
+  .menu-categories {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 12px;
+
+    scrollbar-width: none;
+  }
+
+  .menu-categories::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+
+  /* Menu */
+  #menuGrid {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .menu-category-section {
+    width: 100%;
+  }
+
+  .menu-category-title {
+    width: 100%;
+  }
+
+  .menu-category-title h3 {
+    max-width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-category-grid {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+
+  /* Food Card */
+  .card {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .food {
+    width: 100%;
+    height: 210px;
+    border-radius: 17px;
+  }
+
+  .card h3 {
+    font-size: 19px;
+    line-height: 1.3;
+  }
+
+  .card p {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .card-row {
+    width: 100%;
+  }
+
+  .add {
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+
+  /* =======================================================
+     MENU ITEM POPUP - MOBILE
+  ======================================================= */
+
+  .menu-item-popup {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 10px;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-popup-box {
+    width: 100%;
+    max-width: 480px;
+
+    max-height: calc(100vh - 20px);
+
+    margin: 0;
+
+    border-radius: 24px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu-popup-image-wrap {
+    width: 100%;
+    height: 240px;
+
+    padding: 9px;
+  }
+
+  .menu-popup-image-wrap img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 17px;
+  }
+
+  .menu-popup-content {
+    width: 100%;
+    padding: 18px 16px 20px;
+  }
+
+  .menu-popup-category {
+    max-width: 100%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-popup-content h2 {
+    font-size: 24px;
+    line-height: 1.25;
+
+    word-break: break-word;
+  }
+
+  .menu-popup-description {
+    font-size: 14px;
+    line-height: 1.6;
+
+    word-break: break-word;
+  }
+
+  .menu-popup-bottom {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+
+    margin-top: 20px;
+  }
+
+  .menu-popup-price {
+    font-size: 24px;
+  }
+
+  .menu-popup-add {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 13px 18px;
+
+    font-size: 15px;
+  }
+
+  .menu-popup-close {
+    top: 9px;
+    right: 9px;
+
+    width: 42px;
+    height: 42px;
+
+    font-size: 27px;
+
+    z-index: 10;
+  }
+
+
+  /* Gallery */
+  .gallery {
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 210px;
+  }
+
+  .gallery img {
+    width: 100%;
+  }
+
+
+  /* Booking */
+  .booking {
+    width: calc(100% - 20px);
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    padding: 24px 18px;
+
+    grid-template-columns: 1fr;
+
+    gap: 25px;
+  }
+
+  .booking form {
+    width: 100%;
+  }
+
+  .booking input {
+    width: 100%;
+  }
+
+
+  /* Tracking */
+  .tracking {
+    width: 100%;
+  }
+
+  .tracking-form {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-form input,
+  .tracking-form button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tracking-card {
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+
+  /* Contact */
+  .contact {
+    width: calc(100% - 20px);
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .contact-actions {
+    width: 100%;
+  }
+
+  .contact-actions .btn {
+    width: 100%;
+  }
+
+
+  /* Cart Drawer */
+  .drawer {
+    width: min(100%, 430px);
+
+    right: -100%;
+
+    padding: 18px;
+  }
+
+  .drawer.open {
+    right: 0;
+  }
+
+  .drawer input,
+  .drawer textarea,
+  .drawer select {
+    width: 100%;
+  }
+
+
+  /* Order Success Popup */
+  #orderSuccess {
+    padding: 12px !important;
+  }
+
+  #orderSuccess > div {
+    width: 100% !important;
+    max-width: 430px !important;
+
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+
+  /* Toast */
+  #toast {
+    width: max-content;
+    max-width: calc(100% - 30px);
+
+    text-align: center;
+
+    font-size: 13px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .topbar {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .brand img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand strong {
+    font-size: 12px;
+  }
+
+  .cart-btn {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  .hero {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .menu-popup-image-wrap {
+    height: 210px;
+  }
+
+  .menu-popup-content h2 {
+    font-size: 22px;
+  }
+
+  .menu-popup-description {
+    font-size: 13px;
+  }
+
+}
