@@ -1847,3 +1847,407 @@ body {
     padding: 22px 12px;
   }
 }
+
+/* =========================================================
+   MENU ITEM LIQUID GLASS POPUP
+========================================================= */
+
+body.menu-popup-open {
+  overflow: hidden;
+}
+
+.menu-item-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .25s ease,
+    visibility .25s ease;
+}
+
+.menu-item-popup.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+/* Background */
+
+.menu-popup-backdrop {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255,190,100,.25),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(216,137,37,.20),
+      transparent 35%
+    ),
+    rgba(20,12,8,.55);
+
+  backdrop-filter:
+    blur(20px)
+    saturate(160%);
+
+  -webkit-backdrop-filter:
+    blur(20px)
+    saturate(160%);
+}
+
+
+/* Main Popup */
+
+.menu-popup-box {
+  position: relative;
+  z-index: 2;
+
+  width: min(520px, 100%);
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.78),
+      rgba(255,245,231,.48)
+    );
+
+  border: 1px solid rgba(255,255,255,.78);
+
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.90);
+
+  backdrop-filter:
+    blur(35px)
+    saturate(170%);
+
+  -webkit-backdrop-filter:
+    blur(35px)
+    saturate(170%);
+
+  transform:
+    translateY(25px)
+    scale(.94);
+
+  transition:
+    transform .3s ease;
+}
+
+.menu-item-popup.active
+.menu-popup-box {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* Close Button */
+
+.menu-popup-close {
+  position: absolute;
+
+  top: 14px;
+  right: 14px;
+
+  z-index: 5;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,.65);
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.40);
+
+  color: #3a2518;
+
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px rgba(60,30,10,.15),
+    inset 0 1px 0 rgba(255,255,255,.80);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.menu-popup-close:hover {
+  transform: scale(1.08);
+
+  background:
+    rgba(255,255,255,.70);
+}
+
+
+/* Popup Image */
+
+.menu-popup-image-wrap {
+  width: 100%;
+
+  height: 310px;
+
+  padding: 14px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.35),
+      rgba(255,255,255,.10)
+    );
+}
+
+.menu-popup-image-wrap img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 22px;
+
+  border: 1px solid rgba(255,255,255,.65);
+
+  box-shadow:
+    0 15px 40px rgba(60,30,10,.16);
+
+  background:
+    rgba(235,215,190,.45);
+}
+
+
+/* Popup Content */
+
+.menu-popup-content {
+  padding: 24px 25px 26px;
+}
+
+.menu-popup-category {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 7px 13px;
+
+  margin-bottom: 10px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(216,137,37,.14);
+
+  border: 1px solid rgba(216,137,37,.25);
+
+  color: #a35c12;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: .5px;
+}
+
+.menu-popup-content h2 {
+  margin: 0 0 10px;
+
+  color: #241811;
+
+  font-size: 30px;
+
+  line-height: 1.15;
+}
+
+.menu-popup-description {
+  margin: 0;
+
+  color: #75675d;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+
+/* Price + Add Button */
+
+.menu-popup-bottom {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 24px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid rgba(130,90,55,.15);
+}
+
+.menu-popup-price {
+  color: #a95f12;
+
+  font-size: 26px;
+
+  font-weight: 900;
+}
+
+.menu-popup-add {
+  border: 1px solid rgba(255,255,255,.30);
+
+  border-radius: 999px;
+
+  padding: 12px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(216,137,37,.98),
+      rgba(181,102,20,.90)
+    );
+
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px rgba(150,75,10,.22);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.menu-popup-add:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(150,75,10,.30);
+}
+
+.menu-popup-add:active {
+  transform: scale(.97);
+}
+
+
+/* =========================================================
+   MENU CARD CLICK EFFECT
+========================================================= */
+
+.menu-item-card {
+  cursor: pointer;
+}
+
+.menu-item-card:active {
+  transform: scale(.985);
+}
+
+
+/* =========================================================
+   MOBILE POPUP
+========================================================= */
+
+@media (max-width: 620px) {
+
+  .menu-item-popup {
+    padding: 12px;
+  }
+
+  .menu-popup-box {
+    width: 100%;
+
+    max-height: 92vh;
+
+    border-radius: 24px;
+  }
+
+  .menu-popup-image-wrap {
+    height: 245px;
+
+    padding: 10px;
+  }
+
+  .menu-popup-image-wrap img {
+    border-radius: 18px;
+  }
+
+  .menu-popup-content {
+    padding: 20px 18px 22px;
+  }
+
+  .menu-popup-content h2 {
+    font-size: 25px;
+  }
+
+  .menu-popup-description {
+    font-size: 15px;
+  }
+
+  .menu-popup-bottom {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .menu-popup-price {
+    font-size: 24px;
+  }
+
+  .menu-popup-add {
+    width: 100%;
+
+    padding: 14px;
+  }
+
+  .menu-popup-close {
+    width: 42px;
+    height: 42px;
+
+    top: 10px;
+    right: 10px;
+
+    font-size: 27px;
+  }
+
+}
