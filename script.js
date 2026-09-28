@@ -1,7 +1,7 @@
 /* =========================================================
    YOUR CHOICE FAMILY RESTAURANT
-   Website Script
-   Category Menu + Orders + Booking + Order Tracking
+   Customer Website Script
+   Menu + Cart + Orders + Booking + Order Tracking
    Cloudflare Worker + D1
 ========================================================= */
 
@@ -13,10 +13,41 @@ let menu = [];
 let cart = [];
 let activeCategory = "all";
 
-const $ = s => document.querySelector(s);
+const $ = selector => document.querySelector(selector);
+
+/* =========================================================
+   SAFE HTML
+========================================================= */
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* =========================================================
+   MENU LOAD
+========================================================= */
 
 async function loadMenu() {
+  const menuGrid = $("#menuGrid");
+
   try {
+    if (menuGrid) {
+      menuGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          padding:30px;
+          text-align:center;
+        ">
+          <p>Loading menu...</p>
+        </div>
+      `;
+    }
+
     const response = await fetch(API + "/api/menu", {
       method: "GET",
       cache: "no-store"
@@ -49,22 +80,40 @@ async function loadMenu() {
   } catch (error) {
     console.error("Menu loading failed:", error);
 
-    const menuGrid = $("#menuGrid");
-
     if (menuGrid) {
       menuGrid.innerHTML = `
-        <div style="padding:20px;text-align:center;">
-          <p>Menu loading failed.</p>
-          <button onclick="loadMenu()">Try Again</button>
-        </div>`;
+        <div style="
+          grid-column:1/-1;
+          padding:30px;
+          text-align:center;
+          border-radius:20px;
+          background:rgba(255,255,255,.7);
+        ">
+          <h3>Menu loading failed</h3>
+          <p>Please try again.</p>
+
+          <button
+            type="button"
+            onclick="loadMenu()"
+            style="
+              padding:10px 18px;
+              border:0;
+              border-radius:20px;
+              background:#d88925;
+              color:#fff;
+              cursor:pointer;
+            "
+          >
+            Try Again
+          </button>
+        </div>
+      `;
     }
   }
 }
 
 /* =========================================================
-   CATEGORY NORMALIZATION
-   Keeps category buttons working even if D1 has small
-   naming differences such as "Biryani Mughlai Dish".
+   CATEGORY
 ========================================================= */
 
 function normalizeCategory(value) {
@@ -82,48 +131,89 @@ const CATEGORY_ALIASES = {
     "biryani and mughlai",
     "biryani mughlai",
     "biryani mughlai dish",
-    "biryani & mughlai",
-    "biryani & mughlai dish"
+    "biryani and mughlai dish"
   ],
-  "soups": ["soups", "soup"],
-  "chinese starter": ["chinese starter", "chinese starters"],
-  "chinese rice": ["chinese rice"],
-  "noodles": ["noodles"],
-  "chinese main course": ["chinese main course"],
+
+  "soups": [
+    "soups",
+    "soup"
+  ],
+
+  "chinese starter": [
+    "chinese starter",
+    "chinese starters"
+  ],
+
+  "chinese rice": [
+    "chinese rice"
+  ],
+
+  "noodles": [
+    "noodles",
+    "noodle"
+  ],
+
+  "chinese main course": [
+    "chinese main course"
+  ],
+
   "tandoor and starter": [
     "tandoor and starter",
-    "tandoor starter",
-    "tandoor & starter"
+    "tandoor starter"
   ],
+
   "salad and raita": [
     "salad and raita",
-    "salad raita",
-    "salad & raita"
+    "salad raita"
   ],
+
   "rice and pulao": [
     "rice and pulao",
-    "rice pulao",
-    "rice & pulao"
+    "rice pulao"
   ],
-  "roti": ["roti"],
-  "indian main course": ["indian main course"],
-  "dal": ["dal"],
-  "egg": ["egg"],
-  "chicken": ["chicken"],
-  "mutton": ["mutton"]
+
+  "roti": [
+    "roti"
+  ],
+
+  "indian main course": [
+    "indian main course"
+  ],
+
+  "dal": [
+    "dal"
+  ],
+
+  "egg": [
+    "egg"
+  ],
+
+  "chicken": [
+    "chicken"
+  ],
+
+  "mutton": [
+    "mutton"
+  ]
 };
 
 function categoryMatches(itemCategory, selectedCategory) {
-  if (selectedCategory === "all") return true;
+  if (selectedCategory === "all") {
+    return true;
+  }
 
   const item = normalizeCategory(itemCategory);
   const selected = normalizeCategory(selectedCategory);
 
-  if (item === selected) return true;
+  if (item === selected) {
+    return true;
+  }
 
   const aliases = CATEGORY_ALIASES[selected] || [];
 
-  return aliases.some(alias => normalizeCategory(alias) === item);
+  return aliases.some(
+    alias => normalizeCategory(alias) === item
+  );
 }
 
 function getCategoryLabel(category) {
@@ -152,20 +242,25 @@ function getCategoryLabel(category) {
 
 /* =========================================================
    MENU RENDER
-   Category-wise sections on All view.
-   Selected category shows only that category.
 ========================================================= */
 
-function renderMenu(list = null) {
+function renderMenu() {
   const menuGrid = $("#menuGrid");
-  if (!menuGrid) return;
 
-  const query = ($("#search")?.value || "").toLowerCase().trim();
+  if (!menuGrid) {
+    return;
+  }
 
-  let source = Array.isArray(list) ? list : menu;
+  const searchInput = $("#search");
 
-  source = source.filter(item => {
-    if (!item.available) return false;
+  const query = searchInput
+    ? searchInput.value.toLowerCase().trim()
+    : "";
+
+  let source = menu.filter(item => {
+    if (!item.available) {
+      return false;
+    }
 
     const searchable = (
       item.name + " " +
@@ -173,8 +268,14 @@ function renderMenu(list = null) {
       item.category
     ).toLowerCase();
 
-    const matchesSearch = !query || searchable.includes(query);
-    const matchesCategory = categoryMatches(item.category, activeCategory);
+    const matchesSearch =
+      !query || searchable.includes(query);
+
+    const matchesCategory =
+      categoryMatches(
+        item.category,
+        activeCategory
+      );
 
     return matchesSearch && matchesCategory;
   });
@@ -182,7 +283,7 @@ function renderMenu(list = null) {
   if (!source.length) {
     menuGrid.innerHTML = `
       <div style="
-        grid-column:1/-1;
+        width:100%;
         padding:30px;
         text-align:center;
         border-radius:22px;
@@ -193,19 +294,25 @@ function renderMenu(list = null) {
       ">
         <h3>No menu items found</h3>
         <p>Try another category or search term.</p>
-      </div>`;
+      </div>
+    `;
+
     return;
   }
 
   /*
-    When "All" is selected, group items by their D1 category.
-    This makes the customer menu visibly category-wise.
+    ALL category:
+    Group menu items according to D1 category.
   */
+
   if (activeCategory === "all" && !query) {
+
     const groups = {};
 
     source.forEach(item => {
-      const key = normalizeCategory(item.category) || "other";
+
+      const key =
+        normalizeCategory(item.category) || "other";
 
       if (!groups[key]) {
         groups[key] = {
@@ -236,65 +343,110 @@ function renderMenu(list = null) {
     ];
 
     const keys = [
-      ...orderedKeys.filter(key => groups[key]),
-      ...Object.keys(groups).filter(key => !orderedKeys.includes(key))
+      ...orderedKeys.filter(
+        key => groups[key]
+      ),
+
+      ...Object.keys(groups).filter(
+        key => !orderedKeys.includes(key)
+      )
     ];
 
     menuGrid.innerHTML = keys.map(key => {
+
       const group = groups[key];
 
       return `
         <section class="menu-category-section">
+
           <div class="menu-category-title">
             <span></span>
-            <h3>${escapeHTML(group.label)}</h3>
+
+            <h3>
+              ${escapeHTML(group.label)}
+            </h3>
+
             <span></span>
           </div>
 
           <div class="menu-category-grid">
-            ${group.items.map(renderMenuCard).join("")}
+            ${group.items
+              .map(renderMenuCard)
+              .join("")}
           </div>
+
         </section>
       `;
+
     }).join("");
 
     return;
   }
 
-  menuGrid.innerHTML = source.map(renderMenuCard).join("");
+  menuGrid.innerHTML =
+    source.map(renderMenuCard).join("");
 }
 
-function renderMenuCard(x) {
+/* =========================================================
+   MENU CARD
+========================================================= */
+
+function renderMenuCard(item) {
+
+  const imageHTML = item.image
+    ? `
+      <img
+        src="${escapeHTML(item.image)}"
+        alt="${escapeHTML(item.name)}"
+        loading="lazy"
+        onerror="this.style.display='none'"
+      >
+    `
+    : `
+      <div style="
+        width:100%;
+        height:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#8b735f;
+        font-weight:700;
+      ">
+        Food Image
+      </div>
+    `;
+
   return `
     <article class="card">
+
       <div class="food">
-        ${
-          x.image
-            ? `<img
-                src="${escapeHTML(x.image)}"
-                alt="${escapeHTML(x.name)}"
-                loading="lazy"
-                onerror="this.style.display='none'"
-              >`
-            : ""
-        }
+        ${imageHTML}
       </div>
 
-      <h3>${escapeHTML(x.name)}</h3>
+      <h3>
+        ${escapeHTML(item.name)}
+      </h3>
 
-      <p>${escapeHTML(x.desc)}</p>
+      <p>
+        ${escapeHTML(item.desc)}
+      </p>
 
       <div class="card-row">
-        <strong>₹${x.price}</strong>
+
+        <strong>
+          ₹${Number(item.price || 0)}
+        </strong>
 
         <button
           class="add"
           type="button"
-          onclick="add(${x.id})"
+          onclick="add(${Number(item.id)})"
         >
           Add to Cart
         </button>
+
       </div>
+
     </article>
   `;
 }
@@ -304,18 +456,42 @@ function renderMenuCard(x) {
 ========================================================= */
 
 function setupCategoryButtons() {
-  const buttons = document.querySelectorAll(".category-btn");
+
+  const buttons =
+    document.querySelectorAll(".category-btn");
 
   buttons.forEach(button => {
-    button.onclick = () => {
-      activeCategory = button.dataset.category || "all";
 
-      buttons.forEach(btn => btn.classList.remove("active"));
+    button.onclick = () => {
+
+      activeCategory =
+        button.dataset.category || "all";
+
+      buttons.forEach(btn => {
+        btn.classList.remove("active");
+      });
+
       button.classList.add("active");
 
       renderMenu();
     };
+
   });
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+const searchInput = $("#search");
+
+if (searchInput) {
+
+  searchInput.addEventListener(
+    "input",
+    renderMenu
+  );
+
 }
 
 /* =========================================================
@@ -323,113 +499,252 @@ function setupCategoryButtons() {
 ========================================================= */
 
 function add(id) {
-  const item = menu.find(i => Number(i.id) === Number(id));
+
+  const item = menu.find(
+    menuItem =>
+      Number(menuItem.id) === Number(id)
+  );
 
   if (!item) {
-    console.error("Menu item not found:", id);
+    console.error(
+      "Menu item not found:",
+      id
+    );
+
     return;
   }
 
   if (!item.available) {
-    toast("This item is currently unavailable");
+    toast(
+      "This item is currently unavailable"
+    );
+
     return;
   }
 
-  const x = cart.find(i => Number(i.id) === Number(id));
+  const existing = cart.find(
+    cartItem =>
+      Number(cartItem.id) === Number(id)
+  );
 
-  if (x) {
-    x.qty++;
+  if (existing) {
+    existing.qty++;
   } else {
-    cart.push({ ...item, qty: 1 });
+    cart.push({
+      ...item,
+      qty: 1
+    });
   }
 
   renderCart();
+
   toast("Added to cart");
 }
 
+function change(id, amount) {
+
+  const item = cart.find(
+    cartItem =>
+      Number(cartItem.id) === Number(id)
+  );
+
+  if (!item) {
+    return;
+  }
+
+  item.qty += amount;
+
+  if (item.qty <= 0) {
+
+    cart = cart.filter(
+      cartItem =>
+        Number(cartItem.id) !== Number(id)
+    );
+
+  }
+
+  renderCart();
+}
+
 function renderCart() {
+
   const cartCount = $("#cartCount");
   const total = $("#total");
   const cartItems = $("#cartItems");
 
-  if (!cartCount || !total || !cartItems) return;
-
-  const n = cart.reduce((a, b) => a + b.qty, 0);
-  const t = cart.reduce((a, b) => a + b.qty * b.price, 0);
-
-  cartCount.textContent = n;
-  total.textContent = t;
-
-  cartItems.innerHTML = cart.length
-    ? cart.map(x => `
-        <div class="drawer-item">
-          <span>
-            ${escapeHTML(x.name)}<br>
-            ₹${x.price} × ${x.qty}
-          </span>
-
-          <span>
-            <button type="button" onclick="change(${x.id},-1)">−</button>
-            <button type="button" onclick="change(${x.id},1)">+</button>
-          </span>
-        </div>
-      `).join("")
-    : "<p>Your cart is empty.</p>";
-}
-
-function change(id, d) {
-  const x = cart.find(i => Number(i.id) === Number(id));
-
-  if (!x) return;
-
-  x.qty += d;
-
-  if (x.qty <= 0) {
-    cart = cart.filter(i => Number(i.id) !== Number(id));
+  if (!cartCount || !total || !cartItems) {
+    return;
   }
 
-  renderCart();
+  const count = cart.reduce(
+    (sum, item) =>
+      sum + Number(item.qty || 0),
+    0
+  );
+
+  const amount = cart.reduce(
+    (sum, item) =>
+      sum +
+      Number(item.price || 0) *
+      Number(item.qty || 0),
+    0
+  );
+
+  cartCount.textContent = count;
+  total.textContent = amount;
+
+  if (!cart.length) {
+
+    cartItems.innerHTML = `
+      <p style="
+        text-align:center;
+        padding:25px 0;
+        color:#777;
+      ">
+        Your cart is empty.
+      </p>
+    `;
+
+    return;
+  }
+
+  cartItems.innerHTML =
+    cart.map(item => `
+      <div class="drawer-item">
+
+        <span>
+          <strong>
+            ${escapeHTML(item.name)}
+          </strong>
+
+          <br>
+
+          ₹${Number(item.price || 0)}
+          ×
+          ${Number(item.qty || 0)}
+        </span>
+
+        <span style="
+          display:flex;
+          gap:5px;
+          align-items:center;
+        ">
+
+          <button
+            type="button"
+            onclick="change(${item.id},-1)"
+            style="
+              width:30px;
+              height:30px;
+              border:0;
+              border-radius:50%;
+              cursor:pointer;
+            "
+          >
+            −
+          </button>
+
+          <button
+            type="button"
+            onclick="change(${item.id},1)"
+            style="
+              width:30px;
+              height:30px;
+              border:0;
+              border-radius:50%;
+              cursor:pointer;
+            "
+          >
+            +
+          </button>
+
+        </span>
+
+      </div>
+    `).join("");
 }
 
+/* =========================================================
+   CART OPEN / CLOSE
+========================================================= */
+
 function openCart() {
-  $("#cartPanel")?.classList.add("open");
-  $("#overlay")?.classList.add("show");
+
+  const panel = $("#cartPanel");
+  const overlay = $("#overlay");
+
+  if (panel) {
+    panel.classList.add("open");
+  }
+
+  if (overlay) {
+    overlay.classList.add("show");
+  }
 }
 
 function closeCart() {
-  $("#cartPanel")?.classList.remove("open");
-  $("#overlay")?.classList.remove("show");
-}
 
-function toast(t) {
-  const e = $("#toast");
+  const panel = $("#cartPanel");
+  const overlay = $("#overlay");
 
-  if (!e) return;
+  if (panel) {
+    panel.classList.remove("open");
+  }
 
-  e.textContent = t;
-  e.classList.add("show");
-
-  setTimeout(() => e.classList.remove("show"), 2200);
+  if (overlay) {
+    overlay.classList.remove("show");
+  }
 }
 
 const cartBtn = $("#cartBtn");
 const closeCartBtn = $("#closeCart");
 const overlay = $("#overlay");
 
-if (cartBtn) cartBtn.onclick = openCart;
-if (closeCartBtn) closeCartBtn.onclick = closeCart;
-if (overlay) overlay.onclick = closeCart;
+if (cartBtn) {
+  cartBtn.addEventListener(
+    "click",
+    openCart
+  );
+}
+
+if (closeCartBtn) {
+  closeCartBtn.addEventListener(
+    "click",
+    closeCart
+  );
+}
+
+if (overlay) {
+  overlay.addEventListener(
+    "click",
+    closeCart
+  );
+}
 
 /* =========================================================
-   SEARCH
+   TOAST
 ========================================================= */
 
-const search = $("#search");
+function toast(message) {
 
-if (search) {
-  search.oninput = () => {
-    renderMenu();
-  };
+  const element = $("#toast");
+
+  if (!element) {
+    return;
+  }
+
+  element.textContent = message;
+
+  element.classList.add("show");
+
+  clearTimeout(
+    window.__toastTimer
+  );
+
+  window.__toastTimer =
+    setTimeout(() => {
+      element.classList.remove("show");
+    }, 2200);
 }
 
 /* =========================================================
@@ -437,11 +752,18 @@ if (search) {
 ========================================================= */
 
 function showOrderSuccess(orderId) {
-  const existing = $("#orderSuccess");
 
-  if (existing) existing.remove();
+  const oldBox =
+    document.getElementById(
+      "orderSuccess"
+    );
 
-  const box = document.createElement("div");
+  if (oldBox) {
+    oldBox.remove();
+  }
+
+  const box =
+    document.createElement("div");
 
   box.id = "orderSuccess";
 
@@ -460,18 +782,29 @@ function showOrderSuccess(orderId) {
     <div style="
       width:min(430px,100%);
       background:#fff;
-      border-radius:20px;
+      border-radius:22px;
       padding:28px 22px;
       text-align:center;
       box-shadow:0 15px 50px rgba(0,0,0,.3);
     ">
-      <div style="font-size:48px;margin-bottom:8px;">✅</div>
 
-      <h2 style="margin:0 0 8px;">
+      <div style="
+        font-size:48px;
+        margin-bottom:8px;
+      ">
+        ✅
+      </div>
+
+      <h2 style="
+        margin:0 0 8px;
+      ">
         Order Confirmed
       </h2>
 
-      <p style="margin:0 0 18px;color:#666;">
+      <p style="
+        margin:0 0 18px;
+        color:#666;
+      ">
         Your order has been placed successfully.
       </p>
 
@@ -481,11 +814,15 @@ function showOrderSuccess(orderId) {
         padding:16px;
         margin-bottom:18px;
       ">
-        <div style="font-size:13px;color:#777;">
+
+        <div style="
+          font-size:13px;
+          color:#777;
+        ">
           YOUR ORDER ID
         </div>
 
-        <div id="successOrderId" style="
+        <div style="
           font-size:30px;
           font-weight:800;
           margin:5px 0 12px;
@@ -493,74 +830,145 @@ function showOrderSuccess(orderId) {
           #${escapeHTML(orderId)}
         </div>
 
-        <button id="copyOrderId" type="button" style="
-          border:0;
-          border-radius:10px;
-          padding:10px 16px;
-          font-weight:700;
-          cursor:pointer;
-        ">
+        <button
+          id="copyOrderId"
+          type="button"
+          style="
+            border:0;
+            border-radius:10px;
+            padding:10px 16px;
+            font-weight:700;
+            cursor:pointer;
+          "
+        >
           Copy Order ID
         </button>
+
       </div>
 
-      <button id="goTrackOrder" type="button" style="
-        width:100%;
-        border:0;
-        border-radius:12px;
-        padding:13px;
-        font-weight:800;
-        cursor:pointer;
-        margin-bottom:10px;
-      ">
+      <button
+        id="goTrackOrder"
+        type="button"
+        style="
+          width:100%;
+          border:0;
+          border-radius:12px;
+          padding:13px;
+          font-weight:800;
+          cursor:pointer;
+          margin-bottom:10px;
+          background:#d88925;
+          color:#fff;
+        "
+      >
         Track Order
       </button>
 
-      <button id="closeOrderSuccess" type="button" style="
-        width:100%;
-        border:1px solid #ddd;
-        background:#fff;
-        border-radius:12px;
-        padding:12px;
-        cursor:pointer;
-      ">
+      <button
+        id="closeOrderSuccess"
+        type="button"
+        style="
+          width:100%;
+          border:1px solid #ddd;
+          background:#fff;
+          border-radius:12px;
+          padding:12px;
+          cursor:pointer;
+        "
+      >
         Close
       </button>
 
-      <p style="font-size:12px;color:#777;margin:14px 0 0;">
+      <p style="
+        font-size:12px;
+        color:#777;
+        margin:14px 0 0;
+      ">
         Please save this Order ID for tracking your order.
       </p>
+
     </div>
   `;
 
   document.body.appendChild(box);
 
-  $("#copyOrderId").onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(String(orderId));
-      toast("Order ID copied");
-    } catch {
-      toast("Order ID: " + orderId);
-    }
-  };
+  const copyButton =
+    $("#copyOrderId");
 
-  $("#goTrackOrder").onclick = () => {
-    box.remove();
-    closeCart();
+  if (copyButton) {
 
-    const tracking = $("#tracking");
+    copyButton.onclick =
+      async () => {
 
-    if (tracking) {
-      tracking.scrollIntoView({ behavior: "smooth" });
-    }
+        try {
 
-    setTimeout(
-      () => $("#trackingForm")?.querySelector('[name="order_id"]')?.focus(),
-      500
-    );
-  };
+          await navigator.clipboard.writeText(
+            String(orderId)
+          );
 
-  $("#closeOrderSuccess").onclick = () => box.remove();
+          toast(
+            "Order ID copied"
+          );
+
+        } catch {
+
+          toast(
+            "Order ID: " + orderId
+          );
+
+        }
+
+      };
+  }
+
+  const trackButton =
+    $("#goTrackOrder");
+
+  if (trackButton) {
+
+    trackButton.onclick = () => {
+
+      box.remove();
+
+      closeCart();
+
+      const tracking =
+        $("#tracking");
+
+      if (tracking) {
+
+        tracking.scrollIntoView({
+          behavior: "smooth"
+        });
+
+      }
+
+      setTimeout(() => {
+
+        const input =
+          $("#trackingForm")
+            ?.querySelector(
+              '[name="order_id"]'
+            );
+
+        if (input) {
+          input.focus();
+        }
+
+      }, 500);
+    };
+  }
+
+  const closeButton =
+    $("#closeOrderSuccess");
+
+  if (closeButton) {
+
+    closeButton.onclick = () => {
+      box.remove();
+    };
+
+  }
 }
 
 /* =========================================================
@@ -570,430 +978,673 @@ function showOrderSuccess(orderId) {
 const orderForm = $("#orderForm");
 
 if (orderForm) {
-  orderForm.onsubmit = async e => {
-    e.preventDefault();
 
-    if (!cart.length) {
-      return toast("Add an item first");
-    }
+  orderForm.addEventListener(
+    "submit",
+    async event => {
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+      event.preventDefault();
 
-    const totalAmount = cart.reduce(
-      (total, item) => total + item.price * item.qty,
-      0
-    );
+      if (!cart.length) {
 
-    const orderData = {
-      customer_name:
-        data.customer_name ||
-        data.name ||
-        data.customerName ||
-        "",
+        toast(
+          "Add an item first"
+        );
 
-      phone:
-        data.phone ||
-        data.mobile ||
-        data.mobile_number ||
-        "",
-
-      address: data.address || "",
-
-      total_amount: totalAmount,
-
-      payment_method:
-        data.payment_method ||
-        data.payment ||
-        "COD",
-
-      items: cart.map(item => ({
-        menu_item_id: item.id,
-        item_name: item.name,
-        quantity: item.qty,
-        price: item.price
-      }))
-    };
-
-    if (!orderData.customer_name || !orderData.phone) {
-      toast("Please enter name and phone");
-      return;
-    }
-
-    try {
-      const response = await fetch(API + "/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(orderData)
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Order failed");
+        return;
       }
 
-      const orderId = result.order_id;
+      const formData =
+        new FormData(
+          orderForm
+        );
 
-      cart = [];
-      renderCart();
+      const data =
+        Object.fromEntries(
+          formData.entries()
+        );
 
-      e.target.reset();
+      const totalAmount =
+        cart.reduce(
+          (total, item) =>
+            total +
+            Number(item.price || 0) *
+            Number(item.qty || 0),
+          0
+        );
 
-      closeCart();
-      showOrderSuccess(orderId);
+      const orderData = {
 
-    } catch (error) {
-      console.error("Order error:", error);
-      toast("Order failed. Please try again.");
+        customer_name:
+          data.name ||
+          data.customer_name ||
+          "",
+
+        phone:
+          data.phone ||
+          "",
+
+        address:
+          data.address ||
+          "",
+
+        total_amount:
+          totalAmount,
+
+        payment_method:
+          data.payment ||
+          "Cash on Delivery",
+
+        items:
+          cart.map(item => ({
+            menu_item_id:
+              Number(item.id),
+
+            item_name:
+              item.name,
+
+            quantity:
+              Number(item.qty),
+
+            price:
+              Number(item.price)
+          }))
+      };
+
+      if (
+        !orderData.customer_name ||
+        !orderData.phone ||
+        !orderData.address
+      ) {
+
+        toast(
+          "Please fill all order details"
+        );
+
+        return;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            API + "/api/orders",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(
+                  orderData
+                )
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !result.success
+        ) {
+
+          throw new Error(
+            result.message ||
+            "Order failed"
+          );
+        }
+
+        const orderId =
+          result.order_id;
+
+        cart = [];
+
+        renderCart();
+
+        orderForm.reset();
+
+        closeCart();
+
+        showOrderSuccess(
+          orderId
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Order error:",
+          error
+        );
+
+        toast(
+          error.message ||
+          "Order failed. Please try again."
+        );
+      }
     }
-  };
+  );
 }
 
 /* =========================================================
    BOOKING
 ========================================================= */
 
-const bookingForm = $("#bookingForm");
+const bookingForm =
+  $("#bookingForm");
 
 if (bookingForm) {
-  bookingForm.onsubmit = async e => {
-    e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+  bookingForm.addEventListener(
+    "submit",
+    async event => {
 
-    const bookingData = {
-      customer_name:
-        data.customer_name ||
-        data.name ||
-        data.customerName ||
-        "",
+      event.preventDefault();
 
-      phone:
-        data.phone ||
-        data.mobile ||
-        data.mobile_number ||
-        "",
+      const formData =
+        new FormData(
+          bookingForm
+        );
 
-      booking_date:
-        data.booking_date ||
-        data.date ||
-        "",
+      const data =
+        Object.fromEntries(
+          formData.entries()
+        );
 
-      booking_time:
-        data.booking_time ||
-        data.time ||
-        "",
+      const bookingData = {
 
-      guests: Number(
-        data.guests ||
-        data.guest ||
-        1
-      )
-    };
+        customer_name:
+          data.name ||
+          "",
 
-    if (
-      !bookingData.customer_name ||
-      !bookingData.phone ||
-      !bookingData.booking_date ||
-      !bookingData.booking_time ||
-      !bookingData.guests
-    ) {
-      toast("Please fill all booking details");
-      return;
-    }
+        phone:
+          data.phone ||
+          "",
 
-    try {
-      const response = await fetch(API + "/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(bookingData)
-      });
+        booking_date:
+          data.date ||
+          "",
 
-      const result = await response.json();
+        booking_time:
+          data.time ||
+          "",
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Booking failed");
+        guests:
+          Number(
+            data.guests || 1
+          )
+      };
+
+      if (
+        !bookingData.customer_name ||
+        !bookingData.phone ||
+        !bookingData.booking_date ||
+        !bookingData.booking_time
+      ) {
+
+        toast(
+          "Please fill all booking details"
+        );
+
+        return;
       }
 
-      e.target.reset();
+      if (
+        bookingData.guests < 1 ||
+        bookingData.guests > 10
+      ) {
 
-      toast(
-        "Booking confirmed! Booking ID: " +
-        result.booking_id
-      );
+        toast(
+          "Guests must be between 1 and 10"
+        );
 
-    } catch (error) {
-      console.error("Booking error:", error);
-      toast("Booking failed. Please try again.");
+        return;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            API + "/api/bookings",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(
+                  bookingData
+                )
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !result.success
+        ) {
+
+          throw new Error(
+            result.message ||
+            "Booking failed"
+          );
+        }
+
+        bookingForm.reset();
+
+        toast(
+          "Booking confirmed! Booking ID: " +
+          result.booking_id
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Booking error:",
+          error
+        );
+
+        toast(
+          error.message ||
+          "Booking failed. Please try again."
+        );
+      }
     }
-  };
+  );
 }
 
 /* =========================================================
    ORDER TRACKING
 ========================================================= */
 
-const trackingForm = $("#trackingForm");
+const trackingForm =
+  $("#trackingForm");
 
 if (trackingForm) {
-  trackingForm.onsubmit = async e => {
-    e.preventDefault();
 
-    const trackingResult = $("#trackingResult");
+  trackingForm.addEventListener(
+    "submit",
+    async event => {
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+      event.preventDefault();
 
-    const orderId = String(
-      data.order_id || ""
-    ).trim();
+      const trackingResult =
+        $("#trackingResult");
 
-    const phone = String(
-      data.phone || ""
-    ).trim();
-
-    if (!orderId || !phone) {
-      toast("Please enter Order ID and mobile number");
-      return;
-    }
-
-    if (trackingResult) {
-      trackingResult.innerHTML = `
-        <div style="padding:20px;text-align:center;">
-          <p>Checking your order...</p>
-        </div>`;
-    }
-
-    try {
-      const response = await fetch(
-        API + "/api/track-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            order_id: Number(orderId),
-            phone
-          })
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || "Order not found"
+      const formData =
+        new FormData(
+          trackingForm
         );
+
+      const data =
+        Object.fromEntries(
+          formData.entries()
+        );
+
+      const orderId =
+        String(
+          data.order_id || ""
+        ).trim();
+
+      const phone =
+        String(
+          data.phone || ""
+        ).trim();
+
+      if (!orderId || !phone) {
+
+        toast(
+          "Please enter Order ID and mobile number"
+        );
+
+        return;
       }
 
-      const order = result.order;
-      const items = Array.isArray(order.items)
-        ? order.items
-        : [];
-
-      const itemsHTML = items.length
-        ? items.map(item => `
-            <div
-              class="tracking-item"
-              style="
-                display:flex;
-                justify-content:space-between;
-                gap:15px;
-                padding:10px 0;
-                border-bottom:1px solid #ddd;
-              "
-            >
-              <span>
-                ${escapeHTML(item.item_name || "")}
-                × ${Number(item.quantity || 0)}
-              </span>
-
-              <strong>
-                ₹${Number(item.price || 0)}
-              </strong>
-            </div>
-          `).join("")
-        : "<p>No items found.</p>";
-
       if (trackingResult) {
+
         trackingResult.innerHTML = `
-          <div
-            class="tracking-card"
-            style="
-              margin-top:25px;
-              padding:22px;
-              border-radius:16px;
-              background:#fff;
-              box-shadow:0 8px 25px rgba(0,0,0,.10);
-            "
-          >
-            <div
-              style="
+          <div style="
+            padding:20px;
+            text-align:center;
+          ">
+            <p>
+              Checking your order...
+            </p>
+          </div>
+        `;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            API + "/api/track-order",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  order_id:
+                    Number(orderId),
+
+                  phone:
+                    phone
+                })
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !result.success
+        ) {
+
+          throw new Error(
+            result.message ||
+            "Order not found"
+          );
+        }
+
+        const order =
+          result.order || {};
+
+        const items =
+          Array.isArray(order.items)
+            ? order.items
+            : [];
+
+        const itemsHTML =
+          items.length
+            ? items.map(item => `
+                <div
+                  class="tracking-item"
+                  style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                    padding:10px 0;
+                    border-bottom:1px solid #ddd;
+                  "
+                >
+
+                  <span>
+                    ${escapeHTML(
+                      item.item_name || ""
+                    )}
+                    ×
+                    ${Number(
+                      item.quantity || 0
+                    )}
+                  </span>
+
+                  <strong>
+                    ₹${Number(
+                      item.price || 0
+                    )}
+                  </strong>
+
+                </div>
+              `).join("")
+            : `
+              <p>
+                No items found.
+              </p>
+            `;
+
+        const status =
+          order.status ||
+          "Pending";
+
+        if (trackingResult) {
+
+          trackingResult.innerHTML = `
+            <div class="tracking-card">
+
+              <div style="
                 display:flex;
                 justify-content:space-between;
                 align-items:center;
                 gap:15px;
                 flex-wrap:wrap;
-              "
-            >
+              ">
+
+                <div>
+
+                  <p style="
+                    margin:0 0 5px;
+                    opacity:.7;
+                  ">
+                    Order ID
+                  </p>
+
+                  <h3 style="
+                    margin:0;
+                  ">
+                    #${escapeHTML(
+                      order.id ||
+                      orderId
+                    )}
+                  </h3>
+
+                </div>
+
+                <div
+                  class="
+                    tracking-status
+                    ${getStatusClass(status)}
+                  "
+                >
+                  ${escapeHTML(status)}
+                </div>
+
+              </div>
+
+              <hr style="
+                margin:20px 0;
+                border:0;
+                border-top:1px solid #ddd;
+              ">
+
+              <p>
+                <strong>
+                  Customer:
+                </strong>
+                ${escapeHTML(
+                  order.customer_name ||
+                  order.name ||
+                  ""
+                )}
+              </p>
+
+              <p>
+                <strong>
+                  Phone:
+                </strong>
+                ${escapeHTML(
+                  order.phone ||
+                  phone
+                )}
+              </p>
+
+              <p>
+                <strong>
+                  Payment:
+                </strong>
+                ${escapeHTML(
+                  order.payment_method ||
+                  order.payment ||
+                  "Cash on Delivery"
+                )}
+              </p>
+
+              <p>
+                <strong>
+                  Order Time:
+                </strong>
+                ${formatDateTime(
+                  order.created_at
+                )}
+              </p>
+
+              <h3>
+                Order Items
+              </h3>
+
               <div>
-                <p style="margin:0 0 5px;opacity:.7;">
-                  Order ID
-                </p>
-
-                <h3 style="margin:0;">
-                  #${order.id}
-                </h3>
+                ${itemsHTML}
               </div>
 
-              <div class="tracking-status ${getStatusClass(order.status)}">
-                ${escapeHTML(order.status || "Pending")}
+              <div style="
+                margin-top:18px;
+                padding-top:15px;
+                border-top:1px solid #ddd;
+                display:flex;
+                justify-content:space-between;
+                font-size:18px;
+                font-weight:800;
+              ">
+
+                <span>
+                  Total
+                </span>
+
+                <span>
+                  ₹${Number(
+                    order.total_amount || 0
+                  )}
+                </span>
+
               </div>
+
             </div>
+          `;
+        }
 
-            <hr style="
-              margin:20px 0;
-              border:0;
-              border-top:1px solid #eee
-            ">
+      } catch (error) {
 
-            <div>
-              <p>
-                <strong>Customer:</strong>
-                ${escapeHTML(order.customer_name || "")}
-              </p>
+        console.error(
+          "Tracking error:",
+          error
+        );
 
-              <p>
-                <strong>Payment:</strong>
-                ${escapeHTML(order.payment_method || "")}
-              </p>
+        if (trackingResult) {
 
-              <p>
-                <strong>Order Time:</strong>
-                ${formatDateTime(order.created_at)}
-              </p>
-            </div>
-
-            <h3 style="margin-top:25px;">
-              Order Items
-            </h3>
-
-            <div>${itemsHTML}</div>
-
+          trackingResult.innerHTML = `
             <div style="
-              display:flex;
-              justify-content:space-between;
-              margin-top:20px;
-              padding-top:15px;
-              border-top:2px solid #eee;
-              font-size:18px;
+              padding:20px;
+              border-radius:16px;
+              background:#fff0f0;
+              color:#842029;
             ">
-              <strong>Total</strong>
               <strong>
-                ₹${Number(order.total_amount || 0)}
+                Order not found
               </strong>
+
+              <p style="
+                margin-bottom:0;
+              ">
+                Please check your Order ID
+                and mobile number.
+              </p>
             </div>
-          </div>
-        `;
+          `;
+        }
       }
-
-      toast("Order details loaded");
-
-    } catch (error) {
-      console.error("Tracking error:", error);
-
-      if (trackingResult) {
-        trackingResult.innerHTML = `
-          <div style="
-            margin-top:20px;
-            padding:18px;
-            border-radius:12px;
-            background:#fff3f3;
-            color:#b00020;
-          ">
-            <strong>Order not found</strong>
-
-            <p>
-              ${escapeHTML(
-                error.message ||
-                "Please check your Order ID and mobile number."
-              )}
-            </p>
-          </div>`;
-      }
-
-      toast("Order not found");
     }
-  };
+  );
 }
 
 /* =========================================================
-   STATUS
+   STATUS CLASS
 ========================================================= */
 
 function getStatusClass(status) {
-  const s = String(
-    status || "Pending"
-  ).toLowerCase().trim();
 
-  if (s === "confirmed") return "status-confirmed";
-  if (s === "preparing") return "status-preparing";
-  if (s === "delivered") return "status-delivered";
-  if (
-    s === "cancelled" ||
-    s === "canceled"
-  ) {
-    return "status-cancelled";
+  const value =
+    String(status || "")
+      .toLowerCase()
+      .trim();
+
+  switch (value) {
+
+    case "confirmed":
+      return "status-confirmed";
+
+    case "preparing":
+      return "status-preparing";
+
+    case "delivered":
+      return "status-delivered";
+
+    case "cancelled":
+      return "status-cancelled";
+
+    case "pending":
+    default:
+      return "status-pending";
   }
-
-  return "status-pending";
 }
 
 /* =========================================================
-   HELPERS
+   DATE / TIME
 ========================================================= */
-
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
 
 function formatDateTime(value) {
-  if (!value) return "Not available";
+
+  if (!value) {
+    return "—";
+  }
 
   try {
-    const date = new Date(value);
 
-    if (Number.isNaN(date.getTime())) {
-      return escapeHTML(value);
+    const date =
+      new Date(value);
+
+    if (Number.isNaN(
+      date.getTime()
+    )) {
+      return String(value);
     }
 
-    return date.toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
+    return new Intl.DateTimeFormat(
+      "en-IN",
+      {
+        dateStyle: "medium",
+        timeStyle: "short",
+        timeZone: "Asia/Kolkata"
+      }
+    ).format(date);
 
   } catch {
-    return escapeHTML(value);
+
+    return String(value);
   }
 }
 
 /* =========================================================
-   START
+   INITIALIZE
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadMenu();
-  renderCart();
-});
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadMenu();
+
+  }
+);
