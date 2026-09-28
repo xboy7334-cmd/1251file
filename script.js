@@ -2410,8 +2410,8 @@ function getStatusClass(status) {
     case "confirmed":
       return "status-confirmed";
 
-    case "preparing":
-      return "status-preparing";
+    case " Out for Delivery":
+      return "status- Out for Delivery";
 
     case "delivered":
       return "status-delivered";
