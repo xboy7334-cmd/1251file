@@ -16,6 +16,7 @@ let activeCategory = "all";
 
 const $ = selector => document.querySelector(selector);
 
+
 /* =========================================================
    SAFE HTML
 ========================================================= */
@@ -28,6 +29,7 @@ function escapeHTML(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
 
 /* =========================================================
    MENU ITEM POPUP
@@ -42,9 +44,7 @@ function createMenuPopup() {
   const popup = document.createElement("div");
 
   popup.id = "menuItemPopup";
-
   popup.className = "menu-item-popup";
-
   popup.setAttribute("aria-hidden", "true");
 
   popup.innerHTML = `
@@ -98,8 +98,7 @@ function createMenuPopup() {
           <strong
             class="menu-popup-price"
             id="menuPopupPrice"
-          >
-          </strong>
+          ></strong>
 
           <button
             type="button"
@@ -158,39 +157,25 @@ function openMenuPopup(id) {
   createMenuPopup();
 
   const popup =
-    document.getElementById(
-      "menuItemPopup"
-    );
+    document.getElementById("menuItemPopup");
 
   const image =
-    document.getElementById(
-      "menuPopupImage"
-    );
+    document.getElementById("menuPopupImage");
 
   const title =
-    document.getElementById(
-      "menuPopupTitle"
-    );
+    document.getElementById("menuPopupTitle");
 
   const description =
-    document.getElementById(
-      "menuPopupDescription"
-    );
+    document.getElementById("menuPopupDescription");
 
   const category =
-    document.getElementById(
-      "menuPopupCategory"
-    );
+    document.getElementById("menuPopupCategory");
 
   const price =
-    document.getElementById(
-      "menuPopupPrice"
-    );
+    document.getElementById("menuPopupPrice");
 
   const addButton =
-    document.getElementById(
-      "menuPopupAdd"
-    );
+    document.getElementById("menuPopupAdd");
 
   if (!popup) {
     return;
@@ -201,17 +186,13 @@ function openMenuPopup(id) {
     if (item.image) {
 
       image.src = item.image;
-
       image.alt = item.name || "Food";
-
       image.style.display = "block";
 
     } else {
 
       image.removeAttribute("src");
-
       image.alt = "";
-
       image.style.display = "none";
 
     }
@@ -270,9 +251,7 @@ function openMenuPopup(id) {
 function closeMenuPopup() {
 
   const popup =
-    document.getElementById(
-      "menuItemPopup"
-    );
+    document.getElementById("menuItemPopup");
 
   if (!popup) {
     return;
@@ -299,14 +278,10 @@ document.addEventListener(
   "keydown",
   event => {
 
-    if (
-      event.key === "Escape"
-    ) {
+    if (event.key === "Escape") {
 
       const popup =
-        document.getElementById(
-          "menuItemPopup"
-        );
+        document.getElementById("menuItemPopup");
 
       if (
         popup &&
@@ -735,11 +710,6 @@ function renderMenu() {
   }
 
 
-  /*
-    ALL category:
-    Group menu items according to D1 category.
-  */
-
   if (
     activeCategory === "all" &&
     !query
@@ -898,12 +868,6 @@ function renderMenuCard(item) {
       `;
 
 
-  /*
-    IMPORTANT:
-    Card click opens popup.
-    Add button stops the card click.
-  */
-
   return `
 
     <article
@@ -962,11 +926,6 @@ document.addEventListener(
         "[data-add-id]"
       );
 
-    /*
-      Add to Cart button:
-      Do NOT open popup.
-    */
-
     if (addButton) {
 
       event.stopPropagation();
@@ -982,11 +941,6 @@ document.addEventListener(
 
     }
 
-
-    /*
-      Any other part of the card:
-      Open popup.
-    */
 
     const card =
       event.target.closest(
@@ -2187,6 +2141,13 @@ if (trackingForm) {
           order.status ||
           "Pending";
 
+        /*
+          Convert database status into
+          customer-friendly label.
+        */
+        const statusLabel =
+          getStatusLabel(status);
+
 
         if (trackingResult) {
 
@@ -2233,7 +2194,7 @@ if (trackingForm) {
                   "
                 >
 
-                  ${escapeHTML(status)}
+                  ${escapeHTML(statusLabel)}
 
                 </div>
 
@@ -2394,6 +2355,44 @@ if (trackingForm) {
 
 
 /* =========================================================
+   STATUS LABEL
+========================================================= */
+
+function getStatusLabel(status) {
+
+  const value =
+    String(status || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[_-]+/g, " ");
+
+
+  switch (value) {
+
+    case "confirmed":
+      return "Confirmed";
+
+    case "out for delivery":
+    case "preparing":
+      return "Out for Delivery";
+
+    case "delivered":
+      return "Delivered";
+
+    case "cancelled":
+    case "canceled":
+      return "Cancelled";
+
+    case "pending":
+    default:
+      return "Pending";
+
+  }
+
+}
+
+
+/* =========================================================
    STATUS CLASS
 ========================================================= */
 
@@ -2402,7 +2401,8 @@ function getStatusClass(status) {
   const value =
     String(status || "")
       .toLowerCase()
-      .trim();
+      .trim()
+      .replace(/[_-]+/g, " ");
 
 
   switch (value) {
@@ -2410,13 +2410,15 @@ function getStatusClass(status) {
     case "confirmed":
       return "status-confirmed";
 
-    case " Out for Delivery":
-      return "status- Out for Delivery";
+    case "out for delivery":
+    case "preparing":
+      return "status-preparing";
 
     case "delivered":
       return "status-delivered";
 
     case "cancelled":
+    case "canceled":
       return "status-cancelled";
 
     case "pending":
