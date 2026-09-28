@@ -16,6 +16,104 @@ export default {
       });
     }
 
+    // ==================================================
+    // API: CUSTOMER ORDER TRACKING
+    // POST /api/track-order
+    // Body:
+    // {
+    //   "order_id": 7,
+    //   "phone": "9876543210"
+    // }
+    // ==================================================
+    if (
+      url.pathname === "/api/track-order" &&
+      request.method === "POST"
+    ) {
+      try {
+        const data = await request.json();
+
+        const orderId = Number(data.order_id);
+        const phone = String(data.phone || "").trim();
+
+        if (!orderId || !phone) {
+          return Response.json(
+            {
+              success: false,
+              message: "Order ID and mobile number are required"
+            },
+            { status: 400 }
+          );
+        }
+
+        // Customer must provide BOTH order ID and phone
+        const order = await env.DB
+          .prepare(`
+            SELECT
+              id,
+              customer_name,
+              phone,
+              address,
+              total_amount,
+              payment_method,
+              status,
+              created_at
+            FROM orders
+            WHERE id = ?
+              AND phone = ?
+            LIMIT 1
+          `)
+          .bind(orderId, phone)
+          .first();
+
+        if (!order) {
+          return Response.json(
+            {
+              success: false,
+              message:
+                "Order not found. Please check your Order ID and mobile number."
+            },
+            { status: 404 }
+          );
+        }
+
+        // Get order items
+        const { results: items } = await env.DB
+          .prepare(`
+            SELECT
+              item_name,
+              quantity,
+              price
+            FROM order_items
+            WHERE order_id = ?
+            ORDER BY id ASC
+          `)
+          .bind(order.id)
+          .all();
+
+        return Response.json({
+          success: true,
+          order: {
+            id: order.id,
+            customer_name: order.customer_name,
+            total_amount: order.total_amount,
+            payment_method: order.payment_method,
+            status: order.status,
+            created_at: order.created_at,
+            items: items || []
+          }
+        });
+      } catch (error) {
+        return Response.json(
+          {
+            success: false,
+            message: "Unable to track order",
+            error: error.message
+          },
+          { status: 500 }
+        );
+      }
+    }
+
     // ================================
     // API: Admin Orders
     // GET /api/admin/orders
@@ -430,6 +528,7 @@ export default {
 
     // ================================
     // API: Create Booking
+    // POST /api/bookings
     // ================================
     if (
       url.pathname === "/api/bookings" &&
@@ -483,6 +582,7 @@ export default {
 
     // ================================
     // API: Create Order
+    // POST /api/orders
     // ================================
     if (
       url.pathname === "/api/orders" &&
