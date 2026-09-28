@@ -273,7 +273,7 @@ var worker_default = {
       const allowedStatuses = [
         "Pending",
         "Confirmed",
-        "Preparing",
+        "Out for Delivery",
         "Delivered",
         "Cancelled"
       ];
