@@ -743,3 +743,122 @@ body {
   }
 
   }
+
+/* =========================
+   TRACK ORDER
+========================= */
+
+.tracking {
+  background: #fffaf4;
+}
+
+.tracking-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.tracking-form input {
+  padding: 14px 16px;
+  border: 1px solid #d8c6b1;
+  border-radius: 12px;
+  font: inherit;
+  background: #fff;
+  color: #17120f;
+  outline: none;
+}
+
+.tracking-form input:focus {
+  border-color: #d88925;
+  box-shadow: 0 0 0 3px rgba(216, 137, 37, 0.15);
+}
+
+.tracking-form button {
+  background: #d88925;
+  color: #fff;
+  border: 1px solid #d88925;
+}
+
+/* Tracking result card */
+
+.tracking-result {
+  margin-top: 25px;
+}
+
+/* Order ID */
+
+.tracking-card h3 {
+  color: #17120f;
+}
+
+/* Status common */
+
+.tracking-status {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Pending */
+
+.status-pending {
+  background: #fff3cd !important;
+  color: #856404 !important;
+  border: 1px solid #ffe69c;
+}
+
+/* Confirmed */
+
+.status-confirmed {
+  background: #d1e7dd !important;
+  color: #0f5132 !important;
+  border: 1px solid #a3cfbb;
+}
+
+/* Preparing */
+
+.status-preparing {
+  background: #cff4fc !important;
+  color: #055160 !important;
+  border: 1px solid #9eeaf9;
+}
+
+/* Delivered */
+
+.status-delivered {
+  background: #d1e7dd !important;
+  color: #146c43 !important;
+  border: 1px solid #a3cfbb;
+}
+
+/* Cancelled */
+
+.status-cancelled {
+  background: #f8d7da !important;
+  color: #842029 !important;
+  border: 1px solid #f1aeb5;
+}
+
+/* Tracking items */
+
+.tracking-item {
+  background: #fffaf4;
+  border-radius: 10px;
+  padding: 12px !important;
+  margin-bottom: 6px;
+}
+
+/* Mobile */
+
+@media (max-width: 800px) {
+  .tracking-form {
+    grid-template-columns: 1fr;
+  }
+
+  .tracking-form button {
+    width: 100%;
+  }
+}
