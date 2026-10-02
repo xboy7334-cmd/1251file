@@ -2498,3 +2498,60 @@ document.addEventListener(
 
   }
 );
+
+/* =========================
+   MOBILE HAMBURGER MENU
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const closeBtn = document.getElementById("closeMobileMenu");
+  const overlay = document.getElementById("mobileMenuOverlay");
+
+  if (!menuBtn || !mobileMenu) {
+    console.log("Mobile menu elements not found");
+    return;
+  }
+
+  // Open menu
+  menuBtn.addEventListener("click", function () {
+    mobileMenu.classList.add("active");
+
+    if (overlay) {
+      overlay.classList.add("active");
+    }
+
+    document.body.style.overflow = "hidden";
+  });
+
+  // Close menu
+  function closeMobileMenu() {
+    mobileMenu.classList.remove("active");
+
+    if (overlay) {
+      overlay.classList.remove("active");
+    }
+
+    document.body.style.overflow = "";
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeMobileMenu);
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", closeMobileMenu);
+  }
+
+  // Menu option click করলে menu বন্ধ হবে
+  const mobileLinks = mobileMenu.querySelectorAll("a");
+
+  mobileLinks.forEach(function (link) {
+    link.addEventListener("click", function () {
+      closeMobileMenu();
+    });
+  });
+
+});
