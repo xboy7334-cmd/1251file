@@ -11,9 +11,12 @@
 
 <body>
 
-<!-- ================= MOBILE / DESKTOP HEADER ================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 <header class="topbar">
 
+  <!-- LOGO -->
   <a class="brand" href="#home">
     <img
       src="images/logo.png"
@@ -26,17 +29,28 @@
     </span>
   </a>
 
-  <!-- Desktop Menu -->
+
+  <!-- DESKTOP NAVIGATION
+       Desktop-এ এটি দেখা যাবে -->
   <nav class="desktop-nav">
+
     <a href="#home">Home</a>
+
     <a href="menu.html">Menu</a>
+
     <a href="#gallery">Gallery</a>
+
     <a href="#booking">Table Booking</a>
+
     <a href="#tracking">Track Order</a>
+
     <a href="#contact">Contact</a>
+
   </nav>
 
-  <!-- Mobile Hamburger -->
+
+  <!-- MOBILE HAMBURGER
+       Mobile-এ শুধু এটি দেখা যাবে -->
   <button
     class="mobile-menu-btn"
     id="mobileMenuBtn"
@@ -49,10 +63,16 @@
 </header>
 
 
-<!-- ================= MOBILE MENU ================= -->
-<div class="mobile-menu" id="mobileMenu">
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+<div
+  class="mobile-menu"
+  id="mobileMenu"
+>
 
   <div class="mobile-menu-head">
+
     <b>Menu</b>
 
     <button
@@ -62,476 +82,334 @@
     >
       ×
     </button>
+
   </div>
+
 
   <nav class="mobile-nav">
 
-    <a href="#home">🏠 Home</a>
+    <a href="#home">
+      🏠 Home
+    </a>
 
-    <a href="menu.html">🍽️ Menu</a>
+    <a href="menu.html">
+      🍽️ Menu
+    </a>
 
-    <a href="#gallery">🖼️ Gallery</a>
+    <a href="#gallery">
+      🖼️ Gallery
+    </a>
 
-    <a href="#booking">📅 Table Booking</a>
+    <a href="#booking">
+      📅 Table Booking
+    </a>
 
-    <a href="#tracking">📦 Track Order</a>
+    <a href="#tracking">
+      📦 Track Order
+    </a>
 
-    <a href="#contact">📞 Contact</a>
+    <a href="#contact">
+      📞 Contact
+    </a>
 
   </nav>
 
 </div>
 
+
+<!-- MOBILE MENU OVERLAY -->
 <div
   id="mobileMenuOverlay"
   class="mobile-menu-overlay"
 ></div>
 
-    <!-- ================= HOME ================= -->
-    <section id="home" class="hero">
 
-      <div class="hero-copy">
+<!-- =====================================================
+     MAIN
+===================================================== -->
+<main>
+
+
+  <!-- ===================================================
+       HOME
+  ==================================================== -->
+  <section
+    id="home"
+    class="hero"
+  >
+
+    <div class="hero-copy">
+
+      <p class="eyebrow">
+        HALDIA • FAMILY RESTAURANT
+      </p>
+
+      <h1>
+        Good Food.<br>
+        <span>Good Moments.</span>
+      </h1>
+
+      <p>
+        Welcome to Your Choice Family Restaurant.
+        Enjoy a comfortable family dining experience in Haldia.
+      </p>
+
+
+      <div class="actions">
+
+        <a
+          class="btn primary"
+          href="menu.html"
+        >
+          Order Now
+        </a>
+
+        <a
+          class="btn"
+          href="#booking"
+        >
+          Book a Table
+        </a>
+
+      </div>
+
+
+      <p class="hours">
+        Open daily:
+        <strong>11:00 AM – 11:00 PM</strong>
+      </p>
+
+    </div>
+
+
+    <div class="hero-art">
+
+      <div class="hero-logo">
+
+        <img
+          src="images/logo.png"
+          alt="Your Choice Family Restaurant"
+        >
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================
+       FEATURES
+  ==================================================== -->
+  <section class="features">
+
+    <div>
+      <b>🍽️</b>
+      <span>Family Dining</span>
+    </div>
+
+    <div>
+      <b>🛵</b>
+      <span>Cash on Delivery</span>
+    </div>
+
+    <div>
+      <b>📞</b>
+      <span>Easy Booking</span>
+    </div>
+
+    <div>
+      <b>🕚</b>
+      <span>11 AM – 11 PM</span>
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================
+       ONLINE ORDERING
+  ==================================================== -->
+  <section class="section store-section">
+
+    <div class="store-card">
+
+      <div class="store-content">
 
         <p class="eyebrow">
-          HALDIA • FAMILY RESTAURANT
+          YOUR CHOICE STORE
         </p>
 
-        <h1>
-          Good Food.<br>
-          <span>Good Moments.</span>
-        </h1>
+        <h2>
+          Order Your Favourite Food
+        </h2>
 
         <p>
-          Welcome to Your Choice Family Restaurant.
-          Enjoy a comfortable family dining experience in Haldia.
+          Explore our complete restaurant menu, choose your favourite
+          dishes, add them to your cart and place your order online.
         </p>
+
 
         <div class="actions">
 
-          <a class="btn primary" href="menu.html">
-            Order Now
+          <a
+            class="btn primary"
+            href="menu.html"
+          >
+            View Full Menu
           </a>
 
-          <a class="btn" href="#booking">
+          <a
+            class="btn"
+            href="#booking"
+          >
             Book a Table
           </a>
 
         </div>
 
-        <p class="hours">
-          Open daily:
-          <strong>11:00 AM – 11:00 PM</strong>
-        </p>
-
       </div>
 
 
-      <div class="hero-art">
+      <div class="store-image">
 
-        <div class="hero-logo">
-
-          <img
-            src="images/logo.png"
-            alt="Your Choice Family Restaurant"
-          >
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= FEATURES ================= -->
-    <section class="features">
-
-      <div>
-        <b>🍽️</b>
-        <span>Family Dining</span>
-      </div>
-
-      <div>
-        <b>🛵</b>
-        <span>Cash on Delivery</span>
-      </div>
-
-      <div>
-        <b>📞</b>
-        <span>Easy Booking</span>
-      </div>
-
-      <div>
-        <b>🕚</b>
-        <span>11 AM – 11 PM</span>
-      </div>
-
-    </section>
-
-
-    <!-- ================= STORE / ONLINE ORDERING ================= -->
-    <section class="section store-section">
-
-      <div class="store-card">
-
-        <div class="store-content">
-
-          <p class="eyebrow">
-            YOUR CHOICE STORE
-          </p>
-
-          <h2>
-            Order Your Favourite Food
-          </h2>
-
-          <p>
-            Explore our complete restaurant menu, choose your favourite
-            dishes, add them to your cart and place your order online.
-          </p>
-
-          <div class="actions">
-
-            <a class="btn primary" href="menu.html">
-              View Full Menu
-            </a>
-
-            <a class="btn" href="#booking">
-              Book a Table
-            </a>
-
-          </div>
-
-        </div>
-
-
-        <div class="store-image">
-
-          <img
-            src="images/logo.png"
-            alt="Your Choice Family Restaurant"
-          >
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================= GALLERY ================= -->
-    <section id="gallery" class="section">
-
-      <div class="section-head">
-
-        <div>
-
-          <p class="eyebrow">
-            OUR PLACE
-          </p>
-
-          <h2>
-            Restaurant Gallery
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div class="gallery">
-
-        <!-- Existing Image 1 -->
         <img
-          src="images/02-front.jpg"
-          alt="Your Choice Family Restaurant front"
-          class="gallery-image"
-        >
-
-        <!-- Existing Image 2 -->
-        <img
-          src="images/04-dining-1.jpg"
-          alt="Restaurant dining area"
-          class="gallery-image"
-        >
-
-        <!-- Existing Image 3 -->
-        <img
-          src="images/03-drinks.jpg"
-          alt="Restaurant drinks area"
-          class="gallery-image"
-        >
-
-        <!-- Existing Image 4 -->
-        <img
-          src="images/01-kitchen.jpg"
-          alt="Restaurant kitchen"
-          class="gallery-image"
-        >
-
-        <!-- NEW RESTAURANT IMAGE -->
-        <img
-          src="images/05-restaurant.jpg"
-          alt="Your Choice Family Restaurant interior"
-          class="gallery-image"
+          src="images/logo.png"
+          alt="Your Choice Family Restaurant"
         >
 
       </div>
-
-    </section>
-
-
-    <!-- ================= IMAGE LIGHTBOX ================= -->
-    <div
-      id="imageLightbox"
-      class="image-lightbox"
-      aria-hidden="true"
-    >
-
-      <button
-        id="closeLightbox"
-        class="lightbox-close"
-        type="button"
-        aria-label="Close image"
-      >
-        ×
-      </button>
-
-      <img
-        id="lightboxImage"
-        src=""
-        alt="Gallery image"
-      >
 
     </div>
 
+  </section>
 
-    <!-- ================= TABLE BOOKING ================= -->
-    <section id="booking" class="section booking">
+
+  <!-- ===================================================
+       GALLERY
+  ==================================================== -->
+  <section
+    id="gallery"
+    class="section"
+  >
+
+    <div class="section-head">
 
       <div>
 
         <p class="eyebrow">
-          TABLE BOOKING
+          OUR PLACE
         </p>
 
         <h2>
-          Reserve your table
+          Restaurant Gallery
         </h2>
 
-        <p>
-          Table booking is available for up to 10 guests.
-        </p>
-
-        <p>
-          <strong>Opening:</strong> 11:00 AM
-          &nbsp;
-          <strong>Closing:</strong> 11:00 PM
-        </p>
-
       </div>
 
-
-      <form id="bookingForm">
-
-        <input
-          required
-          name="name"
-          placeholder="Your name"
-        >
-
-        <input
-          required
-          name="phone"
-          type="tel"
-          placeholder="Mobile number"
-        >
-
-        <input
-          required
-          name="date"
-          type="date"
-        >
-
-        <input
-          required
-          name="time"
-          type="time"
-          min="11:00"
-          max="23:00"
-        >
-
-        <input
-          required
-          name="guests"
-          type="number"
-          min="1"
-          max="10"
-          placeholder="Guests (max 10)"
-        >
-
-        <button
-          class="btn primary"
-          type="submit"
-        >
-          Request Booking
-        </button>
-
-      </form>
-
-    </section>
+    </div>
 
 
-    <!-- ================= ORDER TRACKING ================= -->
-    <section id="tracking" class="section tracking">
+    <div class="gallery">
 
-      <div class="section-head">
-
-        <div>
-
-          <p class="eyebrow">
-            ORDER TRACKING
-          </p>
-
-          <h2>
-            Track your order
-          </h2>
-
-          <p>
-            Enter your Order ID and mobile number
-            to check your latest order status.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <form
-        id="trackingForm"
-        class="tracking-form"
+      <img
+        src="images/02-front.jpg"
+        alt="Your Choice Family Restaurant front"
+        class="gallery-image"
       >
 
-        <input
-          required
-          name="order_id"
-          type="number"
-          min="1"
-          placeholder="Enter Order ID"
-        >
+      <img
+        src="images/04-dining-1.jpg"
+        alt="Restaurant dining area"
+        class="gallery-image"
+      >
 
-        <input
-          required
-          name="phone"
-          type="tel"
-          placeholder="Enter mobile number"
-        >
+      <img
+        src="images/03-drinks.jpg"
+        alt="Restaurant drinks area"
+        class="gallery-image"
+      >
 
-        <button
-          class="btn primary"
-          type="submit"
-        >
-          Track Order
-        </button>
+      <img
+        src="images/01-kitchen.jpg"
+        alt="Restaurant kitchen"
+        class="gallery-image"
+      >
 
-      </form>
+      <img
+        src="images/05-restaurant.jpg"
+        alt="Your Choice Family Restaurant interior"
+        class="gallery-image"
+      >
 
+    </div>
 
-      <div
-        id="trackingResult"
-        class="tracking-result"
-      ></div>
-
-    </section>
+  </section>
 
 
-    <!-- ================= CONTACT ================= -->
-    <section id="contact" class="section contact">
-
-      <p class="eyebrow">
-        CONTACT
-      </p>
-
-      <h2>
-        Your Choice Family Restaurant
-      </h2>
-
-      <p>
-        Haldia, West Bengal
-      </p>
-
-      <p>
-        Open daily: 11:00 AM – 11:00 PM
-      </p>
-
-
-      <div class="contact-actions">
-
-        <a
-          class="btn primary"
-          href="tel:+917364989504"
-        >
-          📞 Call Now
-        </a>
-
-
-        <a
-          class="btn whatsapp"
-          target="_blank"
-          rel="noopener"
-          href="https://wa.me/917364989504"
-        >
-          💬 WhatsApp
-        </a>
-
-
-        <a
-          class="btn"
-          target="_blank"
-          rel="noopener"
-          href="https://maps.app.goo.gl/dpcUsCzb6NEvRCPr8?g_st=ac"
-        >
-          📍 Open in Google Maps
-        </a>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- ================= CART ================= -->
+  <!-- ===================================================
+       IMAGE LIGHTBOX
+  ==================================================== -->
   <div
-    id="cartPanel"
-    class="drawer"
+    id="imageLightbox"
+    class="image-lightbox"
+    aria-hidden="true"
   >
 
-    <div class="drawer-head">
+    <button
+      id="closeLightbox"
+      class="lightbox-close"
+      type="button"
+      aria-label="Close image"
+    >
+      ×
+    </button>
+
+    <img
+      id="lightboxImage"
+      src=""
+      alt="Gallery image"
+    >
+
+  </div>
+
+
+  <!-- ===================================================
+       TABLE BOOKING
+  ==================================================== -->
+  <section
+    id="booking"
+    class="section booking"
+  >
+
+    <div>
+
+      <p class="eyebrow">
+        TABLE BOOKING
+      </p>
 
       <h2>
-        Your Cart
+        Reserve your table
       </h2>
 
-      <button id="closeCart">
-        ×
-      </button>
+      <p>
+        Table booking is available for up to 10 guests.
+      </p>
+
+      <p>
+        <strong>Opening:</strong> 11:00 AM
+        &nbsp;
+        <strong>Closing:</strong> 11:00 PM
+      </p>
 
     </div>
 
 
-    <div id="cartItems"></div>
-
-
-    <div class="total">
-      Total: ₹<span id="total">0</span>
-    </div>
-
-
-    <form id="orderForm">
+    <form id="bookingForm">
 
       <input
         required
         name="name"
-        placeholder="Customer name"
+        placeholder="Your name"
       >
 
       <input
@@ -541,142 +419,372 @@
         placeholder="Mobile number"
       >
 
-      <textarea
+      <input
         required
-        name="address"
-        placeholder="Delivery address"
-      ></textarea>
+        name="date"
+        type="date"
+      >
 
-      <select name="payment">
+      <input
+        required
+        name="time"
+        type="time"
+        min="11:00"
+        max="23:00"
+      >
 
-        <option>
-          Cash on Delivery
-        </option>
-
-      </select>
-
+      <input
+        required
+        name="guests"
+        type="number"
+        min="1"
+        max="10"
+        placeholder="Guests (max 10)"
+      >
 
       <button
         class="btn primary"
         type="submit"
       >
-        Place Order
+        Request Booking
       </button>
 
     </form>
 
+  </section>
+
+
+  <!-- ===================================================
+       ORDER TRACKING
+  ==================================================== -->
+  <section
+    id="tracking"
+    class="section tracking"
+  >
+
+    <div class="section-head">
+
+      <div>
+
+        <p class="eyebrow">
+          ORDER TRACKING
+        </p>
+
+        <h2>
+          Track your order
+        </h2>
+
+        <p>
+          Enter your Order ID and mobile number
+          to check your latest order status.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <form
+      id="trackingForm"
+      class="tracking-form"
+    >
+
+      <input
+        required
+        name="order_id"
+        type="number"
+        min="1"
+        placeholder="Enter Order ID"
+      >
+
+      <input
+        required
+        name="phone"
+        type="tel"
+        placeholder="Enter mobile number"
+      >
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Track Order
+      </button>
+
+    </form>
+
+
+    <div
+      id="trackingResult"
+      class="tracking-result"
+    ></div>
+
+  </section>
+
+
+  <!-- ===================================================
+       CONTACT
+  ==================================================== -->
+  <section
+    id="contact"
+    class="section contact"
+  >
+
+    <p class="eyebrow">
+      CONTACT
+    </p>
+
+    <h2>
+      Your Choice Family Restaurant
+    </h2>
+
+    <p>
+      Haldia, West Bengal
+    </p>
+
+    <p>
+      Open daily: 11:00 AM – 11:00 PM
+    </p>
+
+
+    <div class="contact-actions">
+
+      <a
+        class="btn primary"
+        href="tel:+917364989504"
+      >
+        📞 Call Now
+      </a>
+
+
+      <a
+        class="btn whatsapp"
+        target="_blank"
+        rel="noopener"
+        href="https://wa.me/917364989504"
+      >
+        💬 WhatsApp
+      </a>
+
+
+      <a
+        class="btn"
+        target="_blank"
+        rel="noopener"
+        href="https://maps.app.goo.gl/dpcUsCzb6NEvRCPr8?g_st=ac"
+      >
+        📍 Open in Google Maps
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =====================================================
+     CART
+     Cart থাকবে Menu page-এ।
+     Home page header-এ Cart নেই।
+===================================================== -->
+<div
+  id="cartPanel"
+  class="drawer"
+>
+
+  <div class="drawer-head">
+
+    <h2>
+      Your Cart
+    </h2>
+
+    <button
+      id="closeCart"
+      type="button"
+    >
+      ×
+    </button>
+
   </div>
 
 
-  <!-- ================= OVERLAY ================= -->
-  <div id="overlay"></div>
+  <div id="cartItems"></div>
 
 
-  <!-- ================= TOAST ================= -->
-  <div id="toast"></div>
+  <div class="total">
+    Total: ₹<span id="total">0</span>
+  </div>
 
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="site-footer">
+  <form id="orderForm">
 
-    <p>
-      Made with ♥️ Harish
-    </p>
+    <input
+      required
+      name="name"
+      placeholder="Customer name"
+    >
 
-  </footer>
+    <input
+      required
+      name="phone"
+      type="tel"
+      placeholder="Mobile number"
+    >
 
-
-  <!-- ================= SCRIPT ================= -->
-  <script src="script.js"></script>
-
-
-  <!-- Gallery Lightbox Script -->
-  <script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-      const galleryImages =
-        document.querySelectorAll(".gallery-image");
-
-      const lightbox =
-        document.getElementById("imageLightbox");
-
-      const lightboxImage =
-        document.getElementById("lightboxImage");
-
-      const closeLightbox =
-        document.getElementById("closeLightbox");
+    <textarea
+      required
+      name="address"
+      placeholder="Delivery address"
+    ></textarea>
 
 
-      galleryImages.forEach(function (image) {
+    <select name="payment">
 
-        image.addEventListener("click", function () {
+      <option>
+        Cash on Delivery
+      </option>
 
-          lightboxImage.src = image.src;
-          lightboxImage.alt = image.alt;
-
-          lightbox.classList.add("active");
-
-          lightbox.setAttribute(
-            "aria-hidden",
-            "false"
-          );
-
-          document.body.style.overflow = "hidden";
-
-        });
-
-      });
+    </select>
 
 
-      function closeImage() {
+    <button
+      class="btn primary"
+      type="submit"
+    >
+      Place Order
+    </button>
 
-        lightbox.classList.remove("active");
+  </form>
 
-        lightbox.setAttribute(
-          "aria-hidden",
-          "true"
-        );
-
-        lightboxImage.src = "";
-
-        document.body.style.overflow = "";
-
-      }
+</div>
 
 
-      closeLightbox.addEventListener(
-        "click",
-        closeImage
+<!-- =====================================================
+     OVERLAY
+===================================================== -->
+<div id="overlay"></div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+<div id="toast"></div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+<footer class="site-footer">
+
+  <p>
+    Made with ♥️ Harish
+  </p>
+
+</footer>
+
+
+<!-- =====================================================
+     MAIN SCRIPT
+===================================================== -->
+<script src="script.js"></script>
+
+
+<!-- =====================================================
+     GALLERY LIGHTBOX SCRIPT
+===================================================== -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const galleryImages =
+    document.querySelectorAll(".gallery-image");
+
+  const lightbox =
+    document.getElementById("imageLightbox");
+
+  const lightboxImage =
+    document.getElementById("lightboxImage");
+
+  const closeLightbox =
+    document.getElementById("closeLightbox");
+
+
+  if (!lightbox || !lightboxImage || !closeLightbox) {
+    return;
+  }
+
+
+  galleryImages.forEach(function (image) {
+
+    image.addEventListener("click", function () {
+
+      lightboxImage.src = image.src;
+      lightboxImage.alt = image.alt;
+
+      lightbox.classList.add("active");
+
+      lightbox.setAttribute(
+        "aria-hidden",
+        "false"
       );
 
-
-      lightbox.addEventListener(
-        "click",
-        function (event) {
-
-          if (event.target === lightbox) {
-            closeImage();
-          }
-
-        }
-      );
-
-
-      document.addEventListener(
-        "keydown",
-        function (event) {
-
-          if (event.key === "Escape") {
-            closeImage();
-          }
-
-        }
-      );
+      document.body.style.overflow = "hidden";
 
     });
 
-  </script>
+  });
+
+
+  function closeImage() {
+
+    lightbox.classList.remove("active");
+
+    lightbox.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    lightboxImage.src = "";
+
+    document.body.style.overflow = "";
+
+  }
+
+
+  closeLightbox.addEventListener(
+    "click",
+    closeImage
+  );
+
+
+  lightbox.addEventListener(
+    "click",
+    function (event) {
+
+      if (event.target === lightbox) {
+        closeImage();
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (event.key === "Escape") {
+        closeImage();
+      }
+
+    }
+  );
+
+});
+
+</script>
+
 
 </body>
 </html>
