@@ -1,926 +1,2372 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Your Choice Admin</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
-header{background:#111827;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:20px}
-button{border:0;border-radius:7px;padding:9px 12px;font-weight:bold;cursor:pointer}
-.refresh{background:#2563eb;color:#fff}
-.container{max-width:1200px;margin:auto;padding:12px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:15px}
-.stat{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.stat-title{color:#666;font-size:13px}.stat-value{font-size:27px;font-weight:bold;margin-top:7px}
-.section{background:#fff;padding:15px;margin-bottom:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.section h2{margin-top:0;font-size:19px}.table-wrap{overflow-x:auto}
-table{width:100%;min-width:800px;border-collapse:collapse}
-th,td{padding:9px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}
-th{background:#f3f4f6}.loading{text-align:center;padding:20px;color:#666}
-.error{background:#fee2e2;color:#991b1b;padding:12px;border-radius:7px;margin-bottom:10px}
-.success{background:#dcfce7;color:#166534;padding:12px;border-radius:7px;margin-bottom:10px}
-select,input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:7px;font-size:15px}
-textarea{min-height:80px;resize:vertical}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.full{grid-column:1/-1}.add{background:#2563eb;color:#fff}.update{background:#16a34a;color:#fff;margin:2px}
-.edit{background:#f59e0b;color:#fff;margin:2px}.delete{background:#dc2626;color:#fff;margin:2px}
-.hide{background:#6366f1;color:#fff;margin:2px}.call{background:#2563eb;color:#fff;margin:2px}
-.whatsapp{background:#16a34a;color:#fff;margin:2px}.menu-image{width:70px;height:55px;object-fit:cover;border-radius:6px}
-.small-note{color:#666;font-size:12px}
-.report-summary{
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6f8;
+  color:#222;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+  border-radius:7px;
+  padding:9px 14px;
+  font-weight:600;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:7px;
+  margin-top:6px;
+  margin-bottom:12px;
+}
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  background:#f4f6f8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:99999;
+}
+
+.login-box{
+  width:100%;
+  max-width:390px;
+  background:white;
+  padding:30px 25px;
+  border-radius:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.12);
+  text-align:center;
+}
+
+.login-logo{
+  width:110px;
+  height:110px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 15px;
+}
+
+.login-box h2{
+  margin:5px 0;
+}
+
+.login-box p{
+  color:#777;
+  margin-bottom:25px;
+}
+
+.login-box input{
+  text-align:left;
+}
+
+.login-btn{
+  width:100%;
+  background:#111;
+  color:white;
+  padding:12px;
+  font-size:16px;
+}
+
+.login-btn:disabled{
+  opacity:.6;
+}
+
+.login-error{
+  color:#d00;
+  margin-top:12px;
+  min-height:20px;
+}
+
+#adminApp{
+  display:none;
+}
+
+header{
+  background:#111;
+  color:white;
+  padding:15px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header-logo{
+  width:45px;
+  height:45px;
+  object-fit:contain;
+  background:white;
+  border-radius:50%;
+}
+
+header h1{
+  margin:0;
+  font-size:20px;
+}
+
+.logout-btn{
+  background:#e53935;
+  color:white;
+}
+
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:20px;
+}
+
+.section{
+  background:white;
+  padding:18px;
+  margin-bottom:20px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.section h2{
+  margin-top:0;
+}
+
+.stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin:15px 0;
+  gap:15px;
 }
-.report-box{
-  background:#f8fafc;
-  border:1px solid #e5e7eb;
-  border-radius:9px;
-  padding:14px;
-}
-.report-box small{display:block;color:#666;margin-bottom:5px}
-.report-box b{font-size:22px}
-.report-table{width:100%;min-width:500px;border-collapse:collapse}
-.report-table th,.report-table td{padding:10px;border-bottom:1px solid #ddd;text-align:left}
-.report-table th{background:#f3f4f6}
-.report-total{font-weight:800;background:#ecfdf5}
-@media(max-width:700px){
-  .report-summary{grid-template-columns:1fr}
-}
-@media(max-width:700px){.stats{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}
-header{flex-direction:column;gap:10px;align-items:flex-start}}
 
-/* =========================
-   CATEGORY-WISE ADMIN MENU
-========================= */
-.menu-category-toolbar{
-  display:flex;
+.stat{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.stat-title{
+  color:#777;
+  font-size:14px;
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.report-row{
+  display:grid;
+  grid-template-columns:1fr 1fr auto auto;
   gap:10px;
-  flex-wrap:wrap;
-  margin:0 0 14px;
+  align-items:end;
 }
-.menu-category-btn{
-  border:1px solid #dbe3ec;
-  background:#f8fafc;
-  color:#334155;
-  border-radius:999px;
-  padding:8px 13px;
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
 }
-.menu-category-btn.active{
-  background:#2563eb;
-  color:#fff;
-  border-color:#2563eb;
-}
-.admin-menu-category{
-  margin:18px 0 8px;
-  padding:10px 12px;
-  border-radius:9px;
-  background:#eff6ff;
-  color:#1e3a8a;
-  font-size:16px;
-  border-left:4px solid #2563eb;
-}
-.admin-menu-table{
+
+table{
+  width:100%;
+  border-collapse:collapse;
   min-width:900px;
 }
 
+th,td{
+  border-bottom:1px solid #eee;
+  padding:10px;
+  text-align:left;
+  vertical-align:top;
+}
+
+th{
+  background:#fafafa;
+}
+
+.status{
+  padding:5px 8px;
+  border-radius:5px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.status-pending{
+  background:#fff3cd;
+}
+
+.status-confirmed{
+  background:#d1e7dd;
+}
+
+.status-cancelled{
+  background:#f8d7da;
+}
+
+.status-completed{
+  background:#cfe2ff;
+}
+
+.action-btn{
+  margin:2px;
+}
+
+.call{
+  background:#198754;
+  color:white;
+}
+
+.whatsapp{
+  background:#25d366;
+  color:white;
+}
+
+.edit{
+  background:#0d6efd;
+  color:white;
+}
+
+.delete{
+  background:#dc3545;
+  color:white;
+}
+
+.hide{
+  background:#6c757d;
+  color:white;
+}
+
+.save{
+  background:#111;
+  color:white;
+}
+
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:15px;
+}
+
+.menu-card{
+  border:1px solid #ddd;
+  border-radius:10px;
+  overflow:hidden;
+  background:white;
+}
+
+.menu-card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  background:#eee;
+}
+
+.menu-card-body{
+  padding:12px;
+}
+
+.menu-card h3{
+  margin:0 0 5px;
+}
+
+.menu-card p{
+  margin:5px 0;
+  color:#666;
+}
+
+.filter-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:15px;
+}
+
+.filter-buttons button{
+  background:#eee;
+}
+
+.filter-buttons button.active{
+  background:#111;
+  color:white;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:#777;
+}
+
+.loading{
+  text-align:center;
+  padding:20px;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#111;
+  color:white;
+  padding:13px 18px;
+  border-radius:8px;
+  display:none;
+  z-index:999999;
+}
+
+@media(max-width:700px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .report-row{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    padding:10px;
+  }
+
+  header{
+    padding:10px;
+  }
+
+  header h1{
+    font-size:16px;
+  }
+
+  .header-logo{
+    width:38px;
+    height:38px;
+  }
+
+  .login-box{
+    padding:25px 18px;
+  }
+}
 </style>
 </head>
 
 <body>
-<header>
-  <h1>Your Choice Admin</h1>
-  <button class="refresh" id="refreshButton">⟳ Refresh All</button>
-</header>
 
-<div class="container">
-  <div id="globalMessage"></div>
+<!-- ================= LOGIN ================= -->
 
-  <div class="stats">
-    <div class="stat"><div class="stat-title">Total Orders</div><div id="totalOrders" class="stat-value">0</div></div>
-    <div class="stat"><div class="stat-title">Pending Orders</div><div id="pendingOrders" class="stat-value">0</div></div>
-    <div class="stat"><div class="stat-title">Total Sales</div><div id="totalSales" class="stat-value">₹0</div></div>
+<div id="loginScreen" class="login-screen">
+
+  <div class="login-box">
+
+    <!-- WEBSITE LOGO -->
+    <img
+      src="/logo.png"
+      alt="Your Choice Family Restaurant"
+      class="login-logo"
+      onerror="this.style.display='none'"
+    >
+
+    <h2>Your Choice Admin</h2>
+    <p>Admin Login</p>
+
+    <input
+      type="text"
+      id="loginUser"
+      placeholder="User ID"
+      autocomplete="username"
+    >
+
+    <input
+      type="password"
+      id="loginPassword"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="loginButton"
+      class="login-btn"
+      onclick="login()"
+    >
+      LOGIN
+    </button>
+
+    <div id="loginError" class="login-error"></div>
+
   </div>
 
-  <div class="section">
-    <h2>📊 Date-wise Sales Report</h2>
-
-    <div class="form" style="margin-bottom:15px;">
-      <div>
-        <label><b>From Date</b></label>
-        <input type="date" id="reportFromDate">
-      </div>
-      <div>
-        <label><b>To Date</b></label>
-        <input type="date" id="reportToDate">
-      </div>
-      <div>
-        <button type="button" class="add" id="reportButton">📊 Generate Report</button>
-        <button type="button" id="reportResetButton" style="background:#6b7280;color:#fff;">Reset</button>
-      </div>
-    </div>
-
-    <div id="dateReportSummary"></div>
-    <div id="dateReportBody">
-      <div class="loading">Select dates and generate report.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>🛒 Customer Orders</h2>
-    <div id="ordersMessage"></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody id="ordersBody"><tr><td colspan="7" class="loading">Loading orders...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>📅 Table Bookings</h2>
-    <div id="bookingsMessage"></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Date</th><th>Time</th><th>Guests</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody id="bookingsBody"><tr><td colspan="8" class="loading">Loading bookings...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>🍽️ Menu Management</h2>
-    <div id="menuMessage"></div>
-    <form id="menuForm" class="form">
-      <input type="hidden" id="menuId">
-      <input type="text" id="menuName" placeholder="Menu Name" required>
-      <input type="text" id="menuCategory" placeholder="Category">
-      <input type="number" id="menuPrice" placeholder="Price" min="0" required>
-      <input type="text" id="menuImage" placeholder="images/chicken-biryani.jpg">
-      <textarea id="menuDescription" class="full" placeholder="Description"></textarea>
-      <select id="menuAvailable"><option value="1">Available</option><option value="0">Not Available</option></select>
-      <div>
-        <button type="submit" class="add" id="saveButton">➕ Add Menu</button>
-        <button type="button" id="cancelButton" style="display:none;background:#6b7280;color:#fff;">Cancel</button>
-      </div>
-    </form>
-  </div>
-
-  <div class="section">
-    <h2>📋 Current Menu</h2>
-    <div id="menuCategoryToolbar" class="menu-category-toolbar"></div>
-    <div id="currentMenu"><div class="loading">Loading menu...</div></div>
-  </div>
 </div>
 
+
+<!-- ================= ADMIN APP ================= -->
+
+<div id="adminApp">
+
+<header>
+
+  <div class="header-left">
+
+    <img
+      src="/logo.png"
+      class="header-logo"
+      alt="Logo"
+      onerror="this.style.display='none'"
+    >
+
+    <h1>Your Choice Admin</h1>
+
+  </div>
+
+  <button
+    class="logout-btn"
+    onclick="logout()"
+  >
+    Logout
+  </button>
+
+</header>
+
+
+<div class="container">
+
+<!-- ================= STATS ================= -->
+
+<div class="stats">
+
+  <div class="stat">
+    <div class="stat-title">Total Orders</div>
+    <div id="totalOrders" class="stat-value">0</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Pending Orders</div>
+    <div id="pendingOrders" class="stat-value">0</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Total Sales</div>
+    <div id="totalSales" class="stat-value">₹0</div>
+  </div>
+
+</div>
+
+
+<!-- ================= SALES REPORT ================= -->
+
+<div class="section">
+
+<h2>Sales Report</h2>
+
+<div class="report-row">
+
+  <div>
+    <label>From Date</label>
+    <input type="date" id="fromDate">
+  </div>
+
+  <div>
+    <label>To Date</label>
+    <input type="date" id="toDate">
+  </div>
+
+  <button
+    class="save"
+    onclick="loadReport()"
+  >
+    Search
+  </button>
+
+  <button
+    onclick="resetReport()"
+  >
+    Reset
+  </button>
+
+</div>
+
+<div id="reportResult">
+  Select dates to see report.
+</div>
+
+</div>
+
+
+<!-- ================= ORDERS ================= -->
+
+<div class="section">
+
+<h2>Customer Orders</h2>
+
+<div id="ordersLoading" class="loading">
+  Loading orders...
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Order ID</th>
+<th>Date / Time</th>
+<th>Customer</th>
+<th>Items</th>
+<th>Total</th>
+<th>Payment</th>
+<th>Status</th>
+<th>Update</th>
+<th>Call</th>
+<th>WhatsApp</th>
+</tr>
+
+</thead>
+
+<tbody id="ordersTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- ================= BOOKINGS ================= -->
+
+<div class="section">
+
+<h2>Table Bookings</h2>
+
+<div id="bookingsLoading" class="loading">
+  Loading bookings...
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Date</th>
+<th>Time</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Guests</th>
+<th>Status</th>
+<th>Update</th>
+<th>Call</th>
+<th>WhatsApp</th>
+</tr>
+
+</thead>
+
+<tbody id="bookingsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- ================= MENU FORM ================= -->
+
+<div class="section">
+
+<h2 id="menuFormTitle">
+Add Menu Item
+</h2>
+
+<input
+  type="hidden"
+  id="menuId"
+>
+
+<div class="form-grid">
+
+<div>
+<label>Name</label>
+<input
+  type="text"
+  id="menuName"
+  placeholder="Chicken Biryani"
+>
+</div>
+
+<div>
+<label>Price</label>
+<input
+  type="number"
+  id="menuPrice"
+  placeholder="180"
+>
+</div>
+
+<div>
+<label>Category</label>
+<input
+  type="text"
+  id="menuCategory"
+  placeholder="Biryani"
+>
+</div>
+
+<div>
+<label>Image URL</label>
+<input
+  type="text"
+  id="menuImage"
+  placeholder="https://..."
+>
+</div>
+
+<div class="full">
+<label>Description</label>
+<textarea
+  id="menuDescription"
+  rows="3"
+  placeholder="Food description"
+></textarea>
+</div>
+
+</div>
+
+<button
+  class="save"
+  onclick="saveMenu()"
+>
+Save Menu Item
+</button>
+
+<button
+  onclick="clearMenuForm()"
+>
+Clear
+</button>
+
+</div>
+
+
+<!-- ================= CURRENT MENU ================= -->
+
+<div class="section">
+
+<h2>Current Menu</h2>
+
+<div
+  id="categoryFilters"
+  class="filter-buttons"
+></div>
+
+<div
+  id="menuGrid"
+  class="menu-grid"
+></div>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
 <script>
+
 "use strict";
 
+/* ==========================================
+   API
+========================================== */
+
 const API = "https://1251file.xboy7334.workers.dev";
-let menuData = [];
+
+let adminAuth = null;
 let allOrders = [];
-let activeMenuCategory = "all";
+let allBookings = [];
+let menu = [];
+let activeCategory = "all";
 
-function $(id){return document.getElementById(id)}
 
-function getReportDate(value){
-  if(!value) return "";
+/* ==========================================
+   LOGIN
+========================================== */
+
+function getAuthHeaders(){
+
+  if(!adminAuth){
+    return {};
+  }
+
+  return {
+    "Authorization":
+      "Basic " +
+      btoa(
+        adminAuth.username +
+        ":" +
+        adminAuth.password
+      )
+  };
+}
+
+
+async function login(){
+
+  const username =
+    document.getElementById("loginUser").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  const error =
+    document.getElementById("loginError");
+
+  const button =
+    document.getElementById("loginButton");
+
+  error.textContent = "";
+
+  if(!username || !password){
+
+    error.textContent =
+      "User ID and Password required.";
+
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Checking...";
 
   try{
-    let dateString=String(value).trim();
 
-    if(
-      !dateString.endsWith("Z") &&
-      !/[+-]\\d{2}:\\d{2}$/.test(dateString)
-    ){
-      dateString=dateString.replace(" ","T")+"Z";
+    const response = await fetch(
+      API + "/api/admin/orders",
+      {
+        method:"GET",
+        headers:{
+          "Authorization":
+            "Basic " +
+            btoa(username + ":" + password)
+        }
+      }
+    );
+
+    if(!response.ok){
+
+      if(response.status === 401){
+
+        throw new Error(
+          "Wrong User ID or Password"
+        );
+
+      }
+
+      throw new Error(
+        "Login failed. HTTP " +
+        response.status
+      );
     }
 
-    const date=new Date(dateString);
-    if(Number.isNaN(date.getTime())) return "";
-
-    const parts=new Intl.DateTimeFormat("en-CA",{
-      timeZone:"Asia/Kolkata",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit"
-    }).formatToParts(date);
-
-    const get=function(type){
-      const part=parts.find(function(p){return p.type===type});
-      return part ? part.value : "";
+    adminAuth = {
+      username: username,
+      password: password
     };
 
-    return get("year")+"-"+get("month")+"-"+get("day");
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+      "adminApp"
+    ).style.display = "block";
+
+    await loadAll();
+
   }catch(error){
-    return "";
-  }
-}
 
-function renderDateWiseReport(){
-  const body=$("dateReportBody");
-  const summary=$("dateReportSummary");
+    console.error(error);
 
-  if(!body || !summary) return;
+    adminAuth = null;
 
-  const from=$("reportFromDate").value;
-  const to=$("reportToDate").value;
+    error.textContent =
+      error.message ||
+      "Login failed.";
 
-  if(from && to && from > to){
-    summary.innerHTML='<div class="error">From Date cannot be after To Date.</div>';
-    body.innerHTML="";
-    return;
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "LOGIN";
+
   }
 
-  const filtered=allOrders.filter(function(order){
-    const date=getReportDate(order.created_at);
-    if(!date) return false;
-    if(from && date < from) return false;
-    if(to && date > to) return false;
-    return true;
-  });
-
-  const grouped={};
-
-  filtered.forEach(function(order){
-    const date=getReportDate(order.created_at);
-    if(!grouped[date]){
-      grouped[date]={
-        orders:0,
-        sales:0
-      };
-    }
-
-    grouped[date].orders++;
-    grouped[date].sales+=Number(order.total_amount||0);
-  });
-
-  const dates=Object.keys(grouped).sort().reverse();
-
-  let totalOrders=0;
-  let totalSales=0;
-
-  dates.forEach(function(date){
-    totalOrders+=grouped[date].orders;
-    totalSales+=grouped[date].sales;
-  });
-
-  summary.innerHTML=
-    '<div class="report-summary">'+
-      '<div class="report-box"><small>Total Orders</small><b>'+totalOrders+'</b></div>'+
-      '<div class="report-box"><small>Total Sales</small><b>₹'+totalSales.toFixed(0)+'</b></div>'+
-      '<div class="report-box"><small>Days</small><b>'+dates.length+'</b></div>'+
-    '</div>';
-
-  if(!dates.length){
-    body.innerHTML='<div class="loading">এই date range-এ কোনো order নেই।</div>';
-    return;
-  }
-
-  let html='<div class="table-wrap"><table class="report-table">'+
-    '<thead><tr><th>Date</th><th>Orders</th><th>Sales</th></tr></thead><tbody>';
-
-  dates.forEach(function(date){
-    const d=grouped[date];
-    const displayDate=new Date(date+"T00:00:00").toLocaleDateString("en-IN",{
-      day:"2-digit",
-      month:"short",
-      year:"numeric"
-    });
-
-    html+=
-      '<tr>'+
-      '<td><b>'+escapeHtml(displayDate)+'</b></td>'+
-      '<td>'+d.orders+'</td>'+
-      '<td><b>₹'+d.sales.toFixed(0)+'</b></td>'+
-      '</tr>';
-  });
-
-  html+=
-    '<tr class="report-total">'+
-    '<td>Grand Total</td>'+
-    '<td>'+totalOrders+'</td>'+
-    '<td>₹'+totalSales.toFixed(0)+'</td>'+
-    '</tr></tbody></table></div>';
-
-  body.innerHTML=html;
 }
 
 
-function showMessage(id,message,type){
-  const box=$(id);
-  if(!box)return;
-  box.innerHTML='<div class="'+type+'">'+escapeHtml(message)+'</div>';
+/* ==========================================
+   LOGOUT
+========================================== */
+
+function logout(){
+
+  adminAuth = null;
+
+  document.getElementById(
+    "adminApp"
+  ).style.display = "none";
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "flex";
+
+  document.getElementById(
+    "loginUser"
+  ).value = "";
+
+  document.getElementById(
+    "loginPassword"
+  ).value = "";
+
+  document.getElementById(
+    "loginError"
+  ).textContent = "";
+
 }
 
-function escapeHtml(value){
-  return String(value ?? "")
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
 
-/* =========================================================
-   ADMIN ORDER TIME
-   Convert UTC / SQLite timestamp to India Standard Time
-========================================================= */
-function formatAdminDateTime(value){
-  if(!value)return "Time not available";
+/* ==========================================
+   API HELPER
+========================================== */
+
+async function api(path, options){
+
+  options = options || {};
+
+  options.headers = Object.assign(
+    {},
+    options.headers || {},
+    getAuthHeaders()
+  );
+
+  const response =
+    await fetch(
+      API + path,
+      options
+    );
+
+  const text =
+    await response.text();
+
+  let data = {};
 
   try{
-    let dateString=String(value).trim();
 
-    if(
-      !dateString.endsWith("Z") &&
-      !/[+-]\d{2}:\d{2}$/.test(dateString)
-    ){
-      dateString=dateString.replace(" ","T")+"Z";
-    }
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
 
-    const date=new Date(dateString);
+  }catch(e){
 
-    if(Number.isNaN(date.getTime())){
-      return escapeHtml(value);
-    }
+    throw new Error(
+      "Server returned invalid JSON. HTTP " +
+      response.status
+    );
 
-    return date.toLocaleString("en-IN",{
-      timeZone:"Asia/Kolkata",
-      day:"2-digit",
-      month:"short",
-      year:"numeric",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hour12:true
-    });
-  }catch(error){
-    return escapeHtml(value);
   }
-}
 
-async function api(path,options){
-  const response=await fetch(API+path,options||{});
-  const text=await response.text();
-  let data={};
 
-  try{data=text?JSON.parse(text):{}}
-  catch(e){throw new Error("Server returned invalid JSON. HTTP "+response.status)}
+  if(response.status === 401){
+
+    logout();
+
+    throw new Error(
+      "Admin authentication required."
+    );
+
+  }
+
 
   if(!response.ok){
-    throw new Error(data.message||data.error||("HTTP "+response.status));
+
+    throw new Error(
+      data.message ||
+      data.error ||
+      "HTTP " + response.status
+    );
+
   }
 
   return data;
+
 }
 
-function option(value,selected){
-  return '<option value="'+escapeHtml(value)+'"'+
-    (String(value)===String(selected)?" selected":"")+">"+
-    escapeHtml(value)+"</option>";
-}
 
-function callCustomer(phone){
-  if(!phone){alert("Phone number নেই");return}
-  window.location.href="tel:"+String(phone).replace(/[^\d+]/g,"");
-}
-
-function whatsapp(phone,name){
-  if(!phone){alert("Phone number নেই");return}
-  let number=String(phone).replace(/\D/g,"");
-  if(number.length===10)number="91"+number;
-  const message=encodeURIComponent(
-    "Hello "+(name||"Customer")+", Your Choice Family Restaurant থেকে যোগাযোগ করছি।"
-  );
-  window.open("https://wa.me/"+number+"?text="+message,"_blank");
-}
+/* ==========================================
+   LOAD ALL
+========================================== */
 
 async function loadAll(){
-  $("ordersBody").innerHTML='<tr><td colspan="7" class="loading">Loading orders...</td></tr>';
-  $("bookingsBody").innerHTML='<tr><td colspan="8" class="loading">Loading bookings...</td></tr>';
-  $("currentMenu").innerHTML='<div class="loading">Loading menu...</div>';
 
-  await Promise.allSettled([loadOrders(),loadBookings(),loadMenu()]);
+  try{
+
+    await Promise.all([
+      loadOrders(),
+      loadBookings(),
+      loadMenu()
+    ]);
+
+    calculateStats();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Failed to load data."
+    );
+
+  }
+
 }
+
+
+/* ==========================================
+   ORDERS
+========================================== */
 
 async function loadOrders(){
-  const body=$("ordersBody");
+
+  const loading =
+    document.getElementById(
+      "ordersLoading"
+    );
+
+  loading.style.display = "block";
 
   try{
-    const data=await api("/api/admin/orders");
-    const orders=Array.isArray(data.orders)?data.orders:[];
-    allOrders=orders;
 
-    $("totalOrders").textContent=orders.length;
+    const data =
+      await api("/api/admin/orders");
 
-    let pending=0;
-    let sales=0;
+    allOrders =
+      data.orders ||
+      data.data ||
+      [];
 
-    orders.forEach(function(order){
-      if(String(order.status)==="Pending")pending++;
-      sales+=Number(order.total_amount||0);
-    });
+    renderOrders();
 
-    $("pendingOrders").textContent=pending;
-    $("totalSales").textContent="₹"+sales.toFixed(0);
+    calculateStats();
 
-    renderDateWiseReport();
+  }catch(error){
 
-    if(!orders.length){
-      body.innerHTML='<tr><td colspan="7" class="loading">কোনো Order নেই</td></tr>';
-      return;
-    }
+    console.error(error);
 
-    body.innerHTML="";
+    document.getElementById(
+      "ordersTable"
+    ).innerHTML =
+      `<tr>
+        <td colspan="10">
+          ${escapeHtml(error.message)}
+        </td>
+      </tr>`;
 
-    orders.forEach(function(order){
-      const row=document.createElement("tr");
+  }finally{
 
-      let items="—";
-      if(Array.isArray(order.items)&&order.items.length){
-        items=order.items.map(function(item){
-          return escapeHtml(item.item_name)+" × "+escapeHtml(item.quantity)+" — ₹"+escapeHtml(item.price);
-        }).join("<br>");
+    loading.style.display = "none";
+
+  }
+
+}
+
+
+function renderOrders(){
+
+  const tbody =
+    document.getElementById(
+      "ordersTable"
+    );
+
+  if(!allOrders.length){
+
+    tbody.innerHTML =
+      `<tr>
+        <td colspan="10" class="empty">
+          No orders found.
+        </td>
+      </tr>`;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    allOrders.map(order => {
+
+      const id =
+        order.id ??
+        order.order_id ??
+        "";
+
+      const name =
+        order.customer_name ??
+        order.name ??
+        "Customer";
+
+      const phone =
+        order.phone ??
+        order.customer_phone ??
+        "";
+
+      const total =
+        Number(
+          order.total ??
+          order.amount ??
+          0
+        );
+
+      const status =
+        order.status ??
+        "pending";
+
+      const payment =
+        order.payment_method ??
+        order.payment ??
+        "-";
+
+      const date =
+        order.created_at ??
+        order.date ??
+        "";
+
+      let items = "";
+
+      if(Array.isArray(order.items)){
+
+        items =
+          order.items.map(item =>
+            `${escapeHtml(
+              item.name || "Item"
+            )} × ${
+              item.quantity || 1
+            }`
+          ).join("<br>");
+
+      }else{
+
+        items =
+          escapeHtml(
+            order.items ||
+            order.order_items ||
+            "-"
+          );
+
       }
 
-      row.innerHTML=
-        "<td><b>#"+escapeHtml(order.id)+"</b><br>"+
-        "<small>"+formatAdminDateTime(order.created_at)+"</small></td>"+
 
-        "<td><b>"+escapeHtml(order.customer_name||"")+"</b><br>"+
-        escapeHtml(order.phone||"")+"<br>"+
-        escapeHtml(order.address||"")+"<br>"+
-        '<button type="button" class="call">📞 Call</button>'+
-        '<button type="button" class="whatsapp">WhatsApp</button></td>'+
+      return `
+      <tr>
 
-        "<td>"+items+"</td>"+
-        "<td><b>₹"+Number(order.total_amount||0).toFixed(0)+"</b></td>"+
-        "<td>"+escapeHtml(order.payment_method||"COD")+"</td>"+
+        <td>
+          <strong>#${escapeHtml(id)}</strong>
+        </td>
 
-        "<td><select class=\"orderStatus\">"+
-        option("Pending",order.status)+
-        option("Confirmed",order.status)+
-        option("Out for Delivery",order.status)+
-        option("Delivered",order.status)+
-        option("Cancelled",order.status)+
-        "</select></td>"+
+        <td>
+          ${escapeHtml(
+            formatDate(date)
+          )}
+        </td>
 
-        '<td><button type="button" class="update">Update</button></td>';
+        <td>
+          <strong>
+            ${escapeHtml(name)}
+          </strong>
+          <br>
+          ${escapeHtml(phone)}
+        </td>
 
-      row.querySelector(".update").addEventListener("click",function(){
-        const status=row.querySelector(".orderStatus").value;
-        updateOrder(order.id,status);
-      });
+        <td>
+          ${items}
+        </td>
 
-      row.querySelector(".call").addEventListener("click",function(){
-        callCustomer(order.phone);
-      });
+        <td>
+          ₹${total.toFixed(2)}
+        </td>
 
-      row.querySelector(".whatsapp").addEventListener("click",function(){
-        whatsapp(order.phone,order.customer_name);
-      });
+        <td>
+          ${escapeHtml(payment)}
+        </td>
 
-      body.appendChild(row);
-    });
+        <td>
 
-  }catch(error){
-    $("totalOrders").textContent="0";
-    $("pendingOrders").textContent="0";
-    $("totalSales").textContent="₹0";
+          <span class="status">
+            ${escapeHtml(status)}
+          </span>
 
-    body.innerHTML='<tr><td colspan="7" class="error">Order Error: '+escapeHtml(error.message)+"</td></tr>";
-  }
+        </td>
+
+        <td>
+
+          <select
+            onchange="updateOrderStatus('${escapeAttr(id)}',this.value)"
+          >
+
+            ${statusOptions(status)}
+
+          </select>
+
+        </td>
+
+        <td>
+
+          ${
+            phone
+            ?
+            `<a
+              href="tel:${escapeAttr(phone)}"
+            >
+              <button class="action-btn call">
+                Call
+              </button>
+            </a>`
+            :
+            "-"
+          }
+
+        </td>
+
+        <td>
+
+          ${
+            phone
+            ?
+            `<a
+              target="_blank"
+              href="https://wa.me/${cleanPhone(phone)}"
+            >
+              <button class="action-btn whatsapp">
+                WhatsApp
+              </button>
+            </a>`
+            :
+            "-"
+          }
+
+        </td>
+
+      </tr>
+      `;
+
+    }).join("");
+
 }
 
-async function updateOrder(id,status){
+
+function statusOptions(current){
+
+  const statuses = [
+    "pending",
+    "confirmed",
+    "preparing",
+    "out_for_delivery",
+    "completed",
+    "cancelled"
+  ];
+
+  return statuses.map(status =>
+    `<option
+      value="${status}"
+      ${status === current ? "selected" : ""}
+    >
+      ${status}
+    </option>`
+  ).join("");
+
+}
+
+
+async function updateOrderStatus(id,status){
+
   try{
-    await api("/api/admin/orders/"+encodeURIComponent(id),{
-      method:"PATCH",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({status:status})
-    });
 
-    alert("Order status updated.");
+    await api(
+      "/api/admin/orders/" +
+      encodeURIComponent(id),
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+        body:JSON.stringify({
+          status:status
+        })
+      }
+    );
+
+    showToast(
+      "Order status updated."
+    );
+
     await loadOrders();
+
   }catch(error){
-    alert("Order update failed: "+error.message);
+
+    showToast(
+      error.message
+    );
+
   }
+
 }
+
+
+/* ==========================================
+   BOOKINGS
+========================================== */
 
 async function loadBookings(){
-  const body=$("bookingsBody");
+
+  const loading =
+    document.getElementById(
+      "bookingsLoading"
+    );
+
+  loading.style.display = "block";
 
   try{
-    const data=await api("/api/admin/bookings");
-    const bookings=Array.isArray(data.bookings)?data.bookings:[];
 
-    if(!bookings.length){
-      body.innerHTML='<tr><td colspan="8" class="loading">কোনো Table Booking নেই</td></tr>';
-      return;
-    }
+    const data =
+      await api(
+        "/api/admin/bookings"
+      );
 
-    body.innerHTML="";
+    allBookings =
+      data.bookings ||
+      data.data ||
+      [];
 
-    bookings.forEach(function(booking){
-      const row=document.createElement("tr");
-
-      row.innerHTML=
-        "<td>#"+escapeHtml(booking.id)+"</td>"+
-        "<td>"+escapeHtml(booking.customer_name||"")+"</td>"+
-        "<td>"+escapeHtml(booking.phone||"")+"<br>"+
-        '<button type="button" class="call">📞 Call</button>'+
-        '<button type="button" class="whatsapp">WhatsApp</button></td>'+
-        "<td>"+escapeHtml(booking.booking_date||"")+"</td>"+
-        "<td>"+escapeHtml(booking.booking_time||"")+"</td>"+
-        "<td>"+escapeHtml(booking.guests||"")+"</td>"+
-        "<td><select class=\"bookingStatus\">"+
-        option("Pending",booking.status)+
-        option("Confirmed",booking.status)+
-        option("Completed",booking.status)+
-        option("Cancelled",booking.status)+
-        "</select></td>"+
-        '<td><button type="button" class="update">Update</button></td>';
-
-      row.querySelector(".update").addEventListener("click",function(){
-        const status=row.querySelector(".bookingStatus").value;
-        updateBooking(booking.id,status);
-      });
-
-      row.querySelector(".call").addEventListener("click",function(){
-        callCustomer(booking.phone);
-      });
-
-      row.querySelector(".whatsapp").addEventListener("click",function(){
-        whatsapp(booking.phone,booking.customer_name);
-      });
-
-      body.appendChild(row);
-    });
+    renderBookings();
 
   }catch(error){
-    body.innerHTML='<tr><td colspan="8" class="error">Booking Error: '+escapeHtml(error.message)+"</td></tr>";
+
+    console.error(error);
+
+    document.getElementById(
+      "bookingsTable"
+    ).innerHTML =
+      `<tr>
+        <td colspan="10">
+          ${escapeHtml(error.message)}
+        </td>
+      </tr>`;
+
+  }finally{
+
+    loading.style.display = "none";
+
   }
+
 }
 
-async function updateBooking(id,status){
-  try{
-    await api("/api/admin/bookings/"+encodeURIComponent(id),{
-      method:"PATCH",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({status:status})
-    });
 
-    alert("Booking status updated.");
+function renderBookings(){
+
+  const tbody =
+    document.getElementById(
+      "bookingsTable"
+    );
+
+  if(!allBookings.length){
+
+    tbody.innerHTML =
+      `<tr>
+        <td colspan="10" class="empty">
+          No bookings found.
+        </td>
+      </tr>`;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+    allBookings.map(booking => {
+
+      const id =
+        booking.id ??
+        booking.booking_id ??
+        "";
+
+      const name =
+        booking.name ??
+        booking.customer_name ??
+        "";
+
+      const phone =
+        booking.phone ??
+        booking.customer_phone ??
+        "";
+
+      const date =
+        booking.date ??
+        booking.booking_date ??
+        "";
+
+      const time =
+        booking.time ??
+        booking.booking_time ??
+        "";
+
+      const guests =
+        booking.guests ??
+        booking.guest_count ??
+        0;
+
+      const status =
+        booking.status ??
+        "pending";
+
+
+      return `
+      <tr>
+
+        <td>
+          #${escapeHtml(id)}
+        </td>
+
+        <td>
+          ${escapeHtml(date)}
+        </td>
+
+        <td>
+          ${escapeHtml(time)}
+        </td>
+
+        <td>
+          ${escapeHtml(name)}
+        </td>
+
+        <td>
+          ${escapeHtml(phone)}
+        </td>
+
+        <td>
+          ${escapeHtml(guests)}
+        </td>
+
+        <td>
+          ${escapeHtml(status)}
+        </td>
+
+        <td>
+
+          <select
+            onchange="updateBookingStatus('${escapeAttr(id)}',this.value)"
+          >
+
+            ${bookingStatusOptions(status)}
+
+          </select>
+
+        </td>
+
+        <td>
+
+          ${
+            phone
+            ?
+            `<a href="tel:${escapeAttr(phone)}">
+              <button class="action-btn call">
+                Call
+              </button>
+            </a>`
+            :
+            "-"
+          }
+
+        </td>
+
+        <td>
+
+          ${
+            phone
+            ?
+            `<a
+              target="_blank"
+              href="https://wa.me/${cleanPhone(phone)}"
+            >
+              <button class="action-btn whatsapp">
+                WhatsApp
+              </button>
+            </a>`
+            :
+            "-"
+          }
+
+        </td>
+
+      </tr>
+      `;
+
+    }).join("");
+
+}
+
+
+function bookingStatusOptions(current){
+
+  const statuses = [
+    "pending",
+    "confirmed",
+    "completed",
+    "cancelled"
+  ];
+
+  return statuses.map(status =>
+    `<option
+      value="${status}"
+      ${status === current ? "selected" : ""}
+    >
+      ${status}
+    </option>`
+  ).join("");
+
+}
+
+
+async function updateBookingStatus(
+  id,
+  status
+){
+
+  try{
+
+    await api(
+      "/api/admin/bookings/" +
+      encodeURIComponent(id),
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+        body:JSON.stringify({
+          status:status
+        })
+      }
+    );
+
+    showToast(
+      "Booking status updated."
+    );
+
     await loadBookings();
+
   }catch(error){
-    alert("Booking update failed: "+error.message);
-  }
-}
 
+    showToast(
+      error.message
+    );
 
-function normalizeMenuCategory(value){
-  return String(value || "")
-    .toLowerCase()
-    .replace(/&/g,"and")
-    .replace(/[–—-]/g," ")
-    .replace(/[.,()]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
-}
-
-function getMenuCategoryLabel(value){
-  const key=normalizeMenuCategory(value);
-  const labels={
-    "biryani and mughlai":"Biryani & Mughlai",
-    "biryani mughlai":"Biryani & Mughlai",
-    "biryani mughlai dish":"Biryani & Mughlai",
-    "soups":"Soups",
-    "soup":"Soups",
-    "chinese starter":"Chinese Starter",
-    "chinese starters":"Chinese Starter",
-    "chinese rice":"Chinese Rice",
-    "noodles":"Noodles",
-    "chinese main course":"Chinese Main Course",
-    "tandoor and starter":"Tandoor & Starter",
-    "tandoor starter":"Tandoor & Starter",
-    "salad and raita":"Salad & Raita",
-    "salad raita":"Salad & Raita",
-    "rice and pulao":"Rice & Pulao",
-    "rice pulao":"Rice & Pulao",
-    "roti":"Roti",
-    "indian main course":"Indian Main Course",
-    "dal":"Dal",
-    "egg":"Egg",
-    "chicken":"Chicken",
-    "mutton":"Mutton"
-  };
-  return labels[key] || String(value || "Other");
-}
-
-const MENU_CATEGORY_ORDER=[
-  "biryani and mughlai",
-  "soups",
-  "chinese starter",
-  "chinese rice",
-  "noodles",
-  "chinese main course",
-  "tandoor and starter",
-  "salad and raita",
-  "rice and pulao",
-  "roti",
-  "indian main course",
-  "dal",
-  "egg",
-  "chicken",
-  "mutton"
-];
-
-function renderMenuCategoryToolbar(){
-  const toolbar=$("menuCategoryToolbar");
-  if(!toolbar)return;
-
-  const groups={};
-  menuData.forEach(function(item){
-    const key=normalizeMenuCategory(item.category)||"other";
-    groups[key]=true;
-  });
-
-  const keys=Object.keys(groups);
-  const ordered=[
-    ...MENU_CATEGORY_ORDER.filter(function(key){return groups[key]}),
-    ...keys.filter(function(key){return !MENU_CATEGORY_ORDER.includes(key)})
-  ];
-
-  let html=
-    '<button type="button" class="menu-category-btn'+
-    (activeMenuCategory==="all"?" active":"")+
-    '" data-category="all">All</button>';
-
-  ordered.forEach(function(key){
-    html+=
-      '<button type="button" class="menu-category-btn'+
-      (activeMenuCategory===key?" active":"")+
-      '" data-category="'+escapeHtml(key)+'">'+
-      escapeHtml(getMenuCategoryLabel(key))+
-      '</button>';
-  });
-
-  toolbar.innerHTML=html;
-
-  toolbar.querySelectorAll(".menu-category-btn").forEach(function(btn){
-    btn.addEventListener("click",function(){
-      activeMenuCategory=btn.dataset.category||"all";
-      renderMenuCategoryToolbar();
-      renderCurrentMenu();
-    });
-  });
-}
-
-function renderCurrentMenu(){
-  const box=$("currentMenu");
-  if(!box)return;
-
-  if(!menuData.length){
-    box.innerHTML='<div class="loading">কোনো Menu নেই</div>';
-    return;
   }
 
-  const filtered=menuData.filter(function(item){
-    if(activeMenuCategory==="all")return true;
-    return normalizeMenuCategory(item.category)===activeMenuCategory;
-  });
-
-  if(!filtered.length){
-    box.innerHTML='<div class="loading">এই category-তে কোনো Menu নেই।</div>';
-    return;
-  }
-
-  const groups={};
-
-  filtered.forEach(function(item){
-    const key=normalizeMenuCategory(item.category)||"other";
-    if(!groups[key]){
-      groups[key]={
-        label:getMenuCategoryLabel(item.category),
-        items:[]
-      };
-    }
-    groups[key].items.push(item);
-  });
-
-  const keys=Object.keys(groups);
-  const ordered=[
-    ...MENU_CATEGORY_ORDER.filter(function(key){return groups[key]}),
-    ...keys.filter(function(key){return !MENU_CATEGORY_ORDER.includes(key)})
-  ];
-
-  let html="";
-
-  ordered.forEach(function(key){
-    const group=groups[key];
-
-    html+='<div class="admin-menu-category">'+
-      '🍽️ '+escapeHtml(group.label)+
-      ' <span style="font-size:12px;color:#64748b;">('+group.items.length+' items)</span>'+
-      '</div>';
-
-    html+='<div class="table-wrap"><table class="admin-menu-table"><thead><tr>'+
-      "<th>ID</th><th>Image</th><th>Name</th><th>Category</th>"+
-      "<th>Price</th><th>Available</th><th>Action</th>"+
-      "</tr></thead><tbody>";
-
-    group.items.forEach(function(item){
-      const image=item.image
-        ? '<img class="menu-image" src="'+escapeHtml(item.image)+
-          '" alt="'+escapeHtml(item.name)+'" onerror="this.style.display=\'none\'">'
-        :"No Image";
-
-      html+="<tr>"+
-        "<td>#"+escapeHtml(item.id)+"</td>"+
-        "<td>"+image+"</td>"+
-        "<td><b>"+escapeHtml(item.name)+"</b><br><small>"+escapeHtml(item.description||"")+"</small></td>"+
-        "<td>"+escapeHtml(item.category||"")+"</td>"+
-        "<td><b>₹"+Number(item.price||0).toFixed(0)+"</b></td>"+
-        "<td>"+(Number(item.available)===1?"✅ Available":"❌ Hidden")+"</td>"+
-        "<td><button type=\"button\" class=\"edit\">Edit</button>"+
-        "<button type=\"button\" class=\"hide\">"+(Number(item.available)===1?"Hide":"Show")+"</button>"+
-        "<button type=\"button\" class=\"delete\">Delete</button></td>"+
-        "</tr>";
-    });
-
-    html+="</tbody></table></div>";
-  });
-
-  box.innerHTML=html;
-
-  box.querySelectorAll("tbody tr").forEach(function(row){
-    const idText=row.children[0].textContent.replace("#","");
-    const item=menuData.find(function(x){return String(x.id)===String(idText)});
-    if(!item)return;
-
-    row.querySelector(".edit").addEventListener("click",function(){
-      editMenu(item.id);
-    });
-    row.querySelector(".hide").addEventListener("click",function(){
-      toggleMenu(item.id);
-    });
-    row.querySelector(".delete").addEventListener("click",function(){
-      deleteMenu(item.id);
-    });
-  });
 }
+
+
+/* ==========================================
+   MENU
+========================================== */
 
 async function loadMenu(){
-  const box=$("currentMenu");
 
   try{
-    const data=await api("/api/admin/menu");
-    menuData=Array.isArray(data.menu)?data.menu:[];
 
-    renderMenuCategoryToolbar();
-    renderCurrentMenu();
+    const data =
+      await api(
+        "/api/admin/menu"
+      );
+
+    menu =
+      data.menu ||
+      data.items ||
+      data.data ||
+      [];
+
+    renderMenu();
 
   }catch(error){
-    box.innerHTML='<div class="error">Menu Error: '+escapeHtml(error.message)+"</div>";
+
+    console.error(error);
+
+    document.getElementById(
+      "menuGrid"
+    ).innerHTML =
+      `<div class="empty">
+        ${escapeHtml(error.message)}
+      </div>`;
+
   }
+
 }
 
-function resetMenuForm(){
-  $("menuId").value="";
-  $("menuName").value="";
-  $("menuCategory").value="";
-  $("menuPrice").value="";
-  $("menuImage").value="";
-  $("menuDescription").value="";
-  $("menuAvailable").value="1";
-  $("saveButton").textContent="➕ Add Menu";
-  $("cancelButton").style.display="none";
+
+function renderMenu(){
+
+  const grid =
+    document.getElementById(
+      "menuGrid"
+    );
+
+  const filterBox =
+    document.getElementById(
+      "categoryFilters"
+    );
+
+
+  const categories =
+    [
+      "all",
+      ...new Set(
+        menu
+          .map(item =>
+            item.category
+          )
+          .filter(Boolean)
+      )
+    ];
+
+
+  filterBox.innerHTML =
+    categories.map(category =>
+      `<button
+        class="${
+          category === activeCategory
+          ? "active"
+          : ""
+        }"
+        onclick="filterMenu('${escapeAttr(category)}')"
+      >
+        ${escapeHtml(category)}
+      </button>`
+    ).join("");
+
+
+  const filtered =
+    activeCategory === "all"
+    ?
+    menu
+    :
+    menu.filter(
+      item =>
+        item.category ===
+        activeCategory
+    );
+
+
+  if(!filtered.length){
+
+    grid.innerHTML =
+      `<div class="empty">
+        No menu items found.
+      </div>`;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    filtered.map(item => {
+
+      const id =
+        item.id ?? "";
+
+      const name =
+        item.name ?? "";
+
+      const price =
+        Number(item.price ?? 0);
+
+      const category =
+        item.category ?? "";
+
+      const image =
+        item.image ??
+        item.image_url ??
+        "";
+
+      const description =
+        item.description ?? "";
+
+      const available =
+        item.available !== false &&
+        item.available !== 0;
+
+
+      return `
+      <div class="menu-card">
+
+        ${
+          image
+          ?
+          `<img
+            src="${escapeAttr(image)}"
+            alt="${escapeAttr(name)}"
+          >`
+          :
+          `<div
+            style="
+              height:160px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              background:#eee;
+            "
+          >
+            No Image
+          </div>`
+        }
+
+        <div class="menu-card-body">
+
+          <h3>
+            ${escapeHtml(name)}
+          </h3>
+
+          <p>
+            ₹${price.toFixed(2)}
+          </p>
+
+          <p>
+            ${escapeHtml(category)}
+          </p>
+
+          <p>
+            ${escapeHtml(description)}
+          </p>
+
+          <p>
+            Status:
+            <strong>
+              ${
+                available
+                ? "Available"
+                : "Hidden"
+              }
+            </strong>
+          </p>
+
+          <button
+            class="edit"
+            onclick="editMenu('${escapeAttr(id)}')"
+          >
+            Edit
+          </button>
+
+          <button
+            class="hide"
+            onclick="toggleMenu('${escapeAttr(id)}',${available})"
+          >
+            ${available ? "Hide" : "Show"}
+          </button>
+
+          <button
+            class="delete"
+            onclick="deleteMenu('${escapeAttr(id)}')"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+      `;
+
+    }).join("");
+
 }
+
+
+function filterMenu(category){
+
+  activeCategory = category;
+
+  renderMenu();
+
+}
+
 
 function editMenu(id){
-  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
-  if(!item){alert("Menu item পাওয়া যায়নি।");return}
 
-  $("menuId").value=item.id;
-  $("menuName").value=item.name||"";
-  $("menuCategory").value=item.category||"";
-  $("menuPrice").value=item.price??"";
-  $("menuImage").value=item.image||"";
-  $("menuDescription").value=item.description||"";
-  $("menuAvailable").value=Number(item.available)===1?"1":"0";
-  $("saveButton").textContent="💾 Update Menu";
-  $("cancelButton").style.display="inline-block";
+  const item =
+    menu.find(
+      x => String(x.id) === String(id)
+    );
 
-  window.scrollTo({top:$("menuForm").getBoundingClientRect().top+window.scrollY-20,behavior:"smooth"});
-}
+  if(!item){
 
-async function toggleMenu(id){
-  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
-  if(!item)return;
+    showToast(
+      "Menu item not found."
+    );
 
-  const newAvailable=Number(item.available)===1?0:1;
+    return;
 
-  try{
-    await api("/api/admin/menu/"+encodeURIComponent(id),{
-      method:"PATCH",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({available:newAvailable})
-    });
-    await loadMenu();
-  }catch(error){
-    alert("Menu status update failed: "+error.message);
   }
+
+
+  document.getElementById(
+    "menuId"
+  ).value =
+    item.id ?? "";
+
+  document.getElementById(
+    "menuName"
+  ).value =
+    item.name ?? "";
+
+  document.getElementById(
+    "menuPrice"
+  ).value =
+    item.price ?? "";
+
+  document.getElementById(
+    "menuCategory"
+  ).value =
+    item.category ?? "";
+
+  document.getElementById(
+    "menuImage"
+  ).value =
+    item.image ??
+    item.image_url ??
+    "";
+
+  document.getElementById(
+    "menuDescription"
+  ).value =
+    item.description ?? "";
+
+  document.getElementById(
+    "menuFormTitle"
+  ).textContent =
+    "Edit Menu Item";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
 }
 
-async function deleteMenu(id){
-  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
-  if(!item)return;
-  if(!confirm('Delete "'+item.name+'"?'))return;
 
-  try{
-    await api("/api/admin/menu/"+encodeURIComponent(id),{method:"DELETE"});
-    await loadMenu();
-  }catch(error){
-    alert("Menu delete failed: "+error.message);
+function clearMenuForm(){
+
+  document.getElementById(
+    "menuId"
+  ).value = "";
+
+  document.getElementById(
+    "menuName"
+  ).value = "";
+
+  document.getElementById(
+    "menuPrice"
+  ).value = "";
+
+  document.getElementById(
+    "menuCategory"
+  ).value = "";
+
+  document.getElementById(
+    "menuImage"
+  ).value = "";
+
+  document.getElementById(
+    "menuDescription"
+  ).value = "";
+
+  document.getElementById(
+    "menuFormTitle"
+  ).textContent =
+    "Add Menu Item";
+
+}
+
+
+async function saveMenu(){
+
+  const id =
+    document.getElementById(
+      "menuId"
+    ).value.trim();
+
+  const name =
+    document.getElementById(
+      "menuName"
+    ).value.trim();
+
+  const price =
+    Number(
+      document.getElementById(
+        "menuPrice"
+      ).value
+    );
+
+  const category =
+    document.getElementById(
+      "menuCategory"
+    ).value.trim();
+
+  const image =
+    document.getElementById(
+      "menuImage"
+    ).value.trim();
+
+  const description =
+    document.getElementById(
+      "menuDescription"
+    ).value.trim();
+
+
+  if(!name){
+
+    showToast(
+      "Menu name required."
+    );
+
+    return;
+
   }
-}
 
-$("menuForm").addEventListener("submit",async function(event){
-  event.preventDefault();
 
-  const id=$("menuId").value.trim();
+  if(!Number.isFinite(price)){
 
-  const data={
-    name:$("menuName").value.trim(),
-    category:$("menuCategory").value.trim(),
-    description:$("menuDescription").value.trim(),
-    price:Number($("menuPrice").value),
-    image:$("menuImage").value.trim(),
-    available:Number($("menuAvailable").value)
+    showToast(
+      "Valid price required."
+    );
+
+    return;
+
+  }
+
+
+  const body = {
+
+    name:name,
+
+    price:price,
+
+    category:category,
+
+    image:image,
+
+    description:description,
+
+    available:true
+
   };
 
-  if(!data.name){alert("Menu Name দিন।");return}
-  if(!Number.isFinite(data.price)||data.price<0){alert("সঠিক Price দিন।");return}
-
-  const saveButton=$("saveButton");
-  saveButton.disabled=true;
 
   try{
+
     if(id){
-      await api("/api/admin/menu/"+encodeURIComponent(id),{
-        method:"PATCH",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(data)
-      });
-      alert("Menu updated successfully.");
+
+      await api(
+        "/api/admin/menu/" +
+        encodeURIComponent(id),
+        {
+          method:"PATCH",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify(body)
+        }
+      );
+
+      showToast(
+        "Menu updated."
+      );
+
     }else{
-      await api("/api/admin/menu",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(data)
-      });
-      alert("Menu added successfully.");
+
+      await api(
+        "/api/admin/menu",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify(body)
+        }
+      );
+
+      showToast(
+        "Menu added."
+      );
+
     }
 
-    resetMenuForm();
+
+    clearMenuForm();
+
     await loadMenu();
+
   }catch(error){
-    alert("Menu save failed: "+error.message);
-  }finally{
-    saveButton.disabled=false;
+
+    showToast(
+      error.message
+    );
+
   }
-});
 
-$("cancelButton").addEventListener("click",function(){resetMenuForm()});
-$("refreshButton").addEventListener("click",function(){loadAll()});
+}
 
-$("reportButton").addEventListener("click",function(){
-  renderDateWiseReport();
-});
 
-$("reportResetButton").addEventListener("click",function(){
-  $("reportFromDate").value="";
-  $("reportToDate").value="";
-  renderDateWiseReport();
-});
+async function toggleMenu(
+  id,
+  currentAvailable
+){
 
-window.addEventListener("error",function(event){
-  const box=$("globalMessage");
-  if(box)box.innerHTML='<div class="error">JavaScript Error: '+escapeHtml(event.message||"Unknown error")+"</div>";
-});
+  const item =
+    menu.find(
+      x => String(x.id) === String(id)
+    );
 
-window.addEventListener("unhandledrejection",function(event){
-  const box=$("globalMessage");
-  if(box){
-    const message=event.reason&&event.reason.message?event.reason.message:String(event.reason||"Unknown Promise Error");
-    box.innerHTML='<div class="error">Promise Error: '+escapeHtml(message)+"</div>";
+  if(!item){
+
+    showToast(
+      "Menu item not found."
+    );
+
+    return;
+
   }
-});
 
-document.addEventListener("DOMContentLoaded",function(){loadAll()});
+
+  try{
+
+    await api(
+      "/api/admin/menu/" +
+      encodeURIComponent(id),
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+        body:JSON.stringify({
+
+          name:
+            item.name ?? "",
+
+          price:
+            Number(item.price ?? 0),
+
+          category:
+            item.category ?? "",
+
+          image:
+            item.image ??
+            item.image_url ??
+            "",
+
+          description:
+            item.description ?? "",
+
+          available:
+            !currentAvailable
+
+        })
+      }
+    );
+
+
+    showToast(
+      currentAvailable
+      ? "Menu hidden."
+      : "Menu shown."
+    );
+
+    await loadMenu();
+
+  }catch(error){
+
+    showToast(
+      error.message
+    );
+
+  }
+
+}
+
+
+async function deleteMenu(id){
+
+  if(
+    !confirm(
+      "Delete this menu item?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+      "/api/admin/menu/" +
+      encodeURIComponent(id),
+      {
+        method:"DELETE"
+      }
+    );
+
+    showToast(
+      "Menu deleted."
+    );
+
+    await loadMenu();
+
+  }catch(error){
+
+    showToast(
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   STATS
+========================================== */
+
+function calculateStats(){
+
+  const total =
+    allOrders.length;
+
+  const pending =
+    allOrders.filter(
+      order =>
+        String(
+          order.status ??
+          ""
+        ).toLowerCase() ===
+        "pending"
+    ).length;
+
+
+  const sales =
+    allOrders.reduce(
+      (sum,order) => {
+
+        const status =
+          String(
+            order.status ??
+            ""
+          ).toLowerCase();
+
+        if(
+          status === "cancelled"
+        ){
+
+          return sum;
+
+        }
+
+        return sum +
+          Number(
+            order.total ??
+            order.amount ??
+            0
+          );
+
+      },
+      0
+    );
+
+
+  document.getElementById(
+    "totalOrders"
+  ).textContent =
+    total;
+
+  document.getElementById(
+    "pendingOrders"
+  ).textContent =
+    pending;
+
+  document.getElementById(
+    "totalSales"
+  ).textContent =
+    "₹" +
+    sales.toFixed(2);
+
+}
+
+
+/* ==========================================
+   REPORT
+========================================== */
+
+function loadReport(){
+
+  const from =
+    document.getElementById(
+      "fromDate"
+    ).value;
+
+  const to =
+    document.getElementById(
+      "toDate"
+    ).value;
+
+
+  if(!from && !to){
+
+    document.getElementById(
+      "reportResult"
+    ).textContent =
+      "Select dates to see report.";
+
+    return;
+
+  }
+
+
+  const filtered =
+    allOrders.filter(order => {
+
+      const date =
+        String(
+          order.created_at ??
+          order.date ??
+          ""
+        ).slice(0,10);
+
+      if(from && date < from)
+        return false;
+
+      if(to && date > to)
+        return false;
+
+      return true;
+
+    });
+
+
+  const sales =
+    filtered.reduce(
+      (sum,order) =>
+        sum +
+        Number(
+          order.total ??
+          order.amount ??
+          0
+        ),
+      0
+    );
+
+
+  document.getElementById(
+    "reportResult"
+  ).innerHTML = `
+
+    <p>
+      Orders:
+      <strong>
+        ${filtered.length}
+      </strong>
+    </p>
+
+    <p>
+      Sales:
+      <strong>
+        ₹${sales.toFixed(2)}
+      </strong>
+    </p>
+
+  `;
+
+}
+
+
+function resetReport(){
+
+  document.getElementById(
+    "fromDate"
+  ).value = "";
+
+  document.getElementById(
+    "toDate"
+  ).value = "";
+
+  document.getElementById(
+    "reportResult"
+  ).textContent =
+    "Select dates to see report.";
+
+}
+
+
+/* ==========================================
+   HELPERS
+========================================== */
+
+function formatDate(value){
+
+  if(!value)
+    return "-";
+
+  const d =
+    new Date(value);
+
+  if(Number.isNaN(d.getTime()))
+    return value;
+
+  return d.toLocaleString(
+    "en-IN"
+  );
+
+}
+
+
+function cleanPhone(phone){
+
+  let p =
+    String(phone)
+      .replace(/\D/g,"");
+
+  if(
+    p.length === 10
+  ){
+
+    p =
+      "91" + p;
+
+  }
+
+  return p;
+
+}
+
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
+
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.style.display =
+    "block";
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+        toast.style.display =
+          "none";
+      },
+      3000
+    );
+
+}
+
+
+/* ==========================================
+   ENTER KEY LOGIN
+========================================== */
+
+document.getElementById(
+  "loginPassword"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter"
+    ){
+
+      login();
+
+    }
+
+  }
+);
+
 </script>
+
 </body>
 </html>
