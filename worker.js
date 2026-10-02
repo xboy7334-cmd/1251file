@@ -2,6 +2,9 @@
 // YOUR CHOICE FAMILY RESTAURANT
 // CLOUDFLARE WORKER + D1
 //
+// ADMIN AUTHENTICATION:
+// ADMIN_USER + ADMIN_PASSWORD
+//
 // APIs:
 // /api/health
 // /api/track-order
@@ -17,8 +20,88 @@
 //
 // AUTO CLEANUP:
 // Orders older than 90 days are deleted automatically.
-// Related order_items are deleted first.
 // =========================================================
+
+
+// =========================================================
+// ADMIN AUTHENTICATION
+// =========================================================
+
+function isAdminAuthorized(request, env) {
+
+  const authorization =
+    request.headers.get("Authorization");
+
+  if (!authorization) {
+    return false;
+  }
+
+  if (!authorization.startsWith("Basic ")) {
+    return false;
+  }
+
+  try {
+
+    const encoded =
+      authorization.slice(6).trim();
+
+    const decoded =
+      atob(encoded);
+
+    const separator =
+      decoded.indexOf(":");
+
+    if (separator === -1) {
+      return false;
+    }
+
+    const username =
+      decoded.slice(0, separator);
+
+    const password =
+      decoded.slice(separator + 1);
+
+    if (!env.ADMIN_USER || !env.ADMIN_PASSWORD) {
+      return false;
+    }
+
+    return (
+      username === env.ADMIN_USER &&
+      password === env.ADMIN_PASSWORD
+    );
+
+  } catch (error) {
+
+    return false;
+
+  }
+
+}
+
+
+// =========================================================
+// ADMIN UNAUTHORIZED RESPONSE
+// =========================================================
+
+function unauthorizedResponse() {
+
+  return new Response(
+    JSON.stringify({
+      success: false,
+      message: "Admin authentication required"
+    }),
+    {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+        "WWW-Authenticate":
+          'Basic realm="Your Choice Admin"'
+      }
+    }
+  );
+
+}
+
 
 var worker_default = {
 
@@ -29,6 +112,28 @@ var worker_default = {
   async fetch(request, env) {
 
     const url = new URL(request.url);
+
+
+    // =====================================================
+    // ADMIN API SECURITY
+    //
+    // Protect every /api/admin/... endpoint
+    // =====================================================
+
+    if (
+      url.pathname.startsWith("/api/admin/")
+    ) {
+
+      if (
+        !isAdminAuthorized(request, env)
+      ) {
+
+        return unauthorizedResponse();
+
+      }
+
+    }
+
 
     // =====================================================
     // API: HEALTH CHECK
@@ -59,47 +164,58 @@ var worker_default = {
 
       try {
 
-        const data = await request.json();
+        const data =
+          await request.json();
 
-        const orderId = Number(data.order_id);
+        const orderId =
+          Number(data.order_id);
 
-        const phone = String(
-          data.phone || ""
-        ).trim();
+        const phone =
+          String(
+            data.phone || ""
+          ).trim();
 
-        if (!orderId || !phone) {
+
+        if (
+          !orderId ||
+          !phone
+        ) {
 
           return Response.json(
             {
               success: false,
-              message: "Order ID and mobile number are required"
+              message:
+                "Order ID and mobile number are required"
             },
-            { status: 400 }
+            {
+              status: 400
+            }
           );
 
         }
 
 
-        const order = await env.DB.prepare(`
-          SELECT
-            id,
-            customer_name,
-            phone,
-            address,
-            total_amount,
-            payment_method,
-            status,
-            created_at
-          FROM orders
-          WHERE id = ?
-          AND phone = ?
-          LIMIT 1
-        `)
-        .bind(
-          orderId,
-          phone
-        )
-        .first();
+        const order =
+          await env.DB.prepare(`
+            SELECT
+              id,
+              customer_name,
+              phone,
+              address,
+              total_amount,
+              payment_method,
+              status,
+              created_at
+            FROM orders
+            WHERE id = ?
+            AND phone = ?
+            LIMIT 1
+          `)
+          .bind(
+            orderId,
+            phone
+          )
+          .first();
 
 
         if (!order) {
@@ -107,9 +223,12 @@ var worker_default = {
           return Response.json(
             {
               success: false,
-              message: "Order not found. Please check Order ID and mobile number."
+              message:
+                "Order not found. Please check Order ID and mobile number."
             },
-            { status: 404 }
+            {
+              status: 404
+            }
           );
 
         }
@@ -135,30 +254,49 @@ var worker_default = {
 
         let indiaTime = null;
 
+
         if (order.created_at) {
 
           try {
 
             indiaTime =
               new Date(
-                String(order.created_at).replace(" ", "T") + "Z"
-              ).toLocaleString(
+                String(order.created_at)
+                  .replace(" ", "T") + "Z"
+              )
+              .toLocaleString(
                 "en-IN",
                 {
-                  timeZone: "Asia/Kolkata",
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true
+                  timeZone:
+                    "Asia/Kolkata",
+
+                  day:
+                    "2-digit",
+
+                  month:
+                    "2-digit",
+
+                  year:
+                    "numeric",
+
+                  hour:
+                    "2-digit",
+
+                  minute:
+                    "2-digit",
+
+                  second:
+                    "2-digit",
+
+                  hour12:
+                    true
                 }
               );
 
           } catch (timeError) {
 
-            indiaTime = order.created_at;
+            indiaTime =
+              order.created_at;
 
           }
 
@@ -170,29 +308,46 @@ var worker_default = {
           success: true,
 
           order: {
-            id: order.id,
-            customer_name: order.customer_name,
-            total_amount: order.total_amount,
-            payment_method: order.payment_method,
-            status: order.status,
 
-            // India Standard Time
-            created_at: indiaTime,
+            id:
+              order.id,
 
-            items: items || []
+            customer_name:
+              order.customer_name,
+
+            total_amount:
+              order.total_amount,
+
+            payment_method:
+              order.payment_method,
+
+            status:
+              order.status,
+
+            created_at:
+              indiaTime,
+
+            items:
+              items || []
+
           }
 
         });
+
 
       } catch (error) {
 
         return Response.json(
           {
             success: false,
-            message: "Unable to track order",
-            error: error.message
+            message:
+              "Unable to track order",
+            error:
+              error.message
           },
-          { status: 500 }
+          {
+            status: 500
+          }
         );
 
       }
@@ -226,7 +381,9 @@ var worker_default = {
         .all();
 
 
-      for (const order of orders) {
+      for (
+        const order of orders
+      ) {
 
         const { results: items } =
           await env.DB.prepare(`
@@ -241,7 +398,9 @@ var worker_default = {
           .bind(order.id)
           .all();
 
-        order.items = items;
+
+        order.items =
+          items;
 
       }
 
@@ -259,12 +418,17 @@ var worker_default = {
     // =====================================================
 
     if (
-      url.pathname.startsWith("/api/admin/orders/") &&
+      url.pathname.startsWith(
+        "/api/admin/orders/"
+      ) &&
       request.method === "PATCH"
     ) {
 
       const orderId =
-        url.pathname.split("/").pop();
+        url.pathname
+          .split("/")
+          .pop();
+
 
       const data =
         await request.json();
@@ -280,15 +444,20 @@ var worker_default = {
 
 
       if (
-        !allowedStatuses.includes(data.status)
+        !allowedStatuses.includes(
+          data.status
+        )
       ) {
 
         return Response.json(
           {
             success: false,
-            message: "Invalid order status"
+            message:
+              "Invalid order status"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -307,14 +476,19 @@ var worker_default = {
         .run();
 
 
-      if (!result.meta.changes) {
+      if (
+        !result.meta.changes
+      ) {
 
         return Response.json(
           {
             success: false,
-            message: "Order not found"
+            message:
+              "Order not found"
           },
-          { status: 404 }
+          {
+            status: 404
+          }
         );
 
       }
@@ -377,12 +551,17 @@ var worker_default = {
     // =====================================================
 
     if (
-      url.pathname.startsWith("/api/admin/bookings/") &&
+      url.pathname.startsWith(
+        "/api/admin/bookings/"
+      ) &&
       request.method === "PATCH"
     ) {
 
       const bookingId =
-        url.pathname.split("/").pop();
+        url.pathname
+          .split("/")
+          .pop();
+
 
       const data =
         await request.json();
@@ -397,15 +576,20 @@ var worker_default = {
 
 
       if (
-        !allowedStatuses.includes(data.status)
+        !allowedStatuses.includes(
+          data.status
+        )
       ) {
 
         return Response.json(
           {
             success: false,
-            message: "Invalid booking status"
+            message:
+              "Invalid booking status"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -424,14 +608,19 @@ var worker_default = {
         .run();
 
 
-      if (!result.meta.changes) {
+      if (
+        !result.meta.changes
+      ) {
 
         return Response.json(
           {
             success: false,
-            message: "Booking not found"
+            message:
+              "Booking not found"
           },
-          { status: 404 }
+          {
+            status: 404
+          }
         );
 
       }
@@ -512,9 +701,12 @@ var worker_default = {
         return Response.json(
           {
             success: false,
-            message: "Menu name and price are required"
+            message:
+              "Menu name and price are required"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -566,12 +758,17 @@ var worker_default = {
     // =====================================================
 
     if (
-      url.pathname.startsWith("/api/admin/menu/") &&
+      url.pathname.startsWith(
+        "/api/admin/menu/"
+      ) &&
       request.method === "PATCH"
     ) {
 
       const menuId =
-        url.pathname.split("/").pop();
+        url.pathname
+          .split("/")
+          .pop();
+
 
       const data =
         await request.json();
@@ -587,9 +784,12 @@ var worker_default = {
         return Response.json(
           {
             success: false,
-            message: "Menu name and price are required"
+            message:
+              "Menu name and price are required"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -619,14 +819,19 @@ var worker_default = {
         .run();
 
 
-      if (!result.meta.changes) {
+      if (
+        !result.meta.changes
+      ) {
 
         return Response.json(
           {
             success: false,
-            message: "Menu item not found"
+            message:
+              "Menu item not found"
           },
-          { status: 404 }
+          {
+            status: 404
+          }
         );
 
       }
@@ -652,12 +857,16 @@ var worker_default = {
     // =====================================================
 
     if (
-      url.pathname.startsWith("/api/admin/menu/") &&
+      url.pathname.startsWith(
+        "/api/admin/menu/"
+      ) &&
       request.method === "DELETE"
     ) {
 
       const menuId =
-        url.pathname.split("/").pop();
+        url.pathname
+          .split("/")
+          .pop();
 
 
       const result =
@@ -671,14 +880,19 @@ var worker_default = {
         .run();
 
 
-      if (!result.meta.changes) {
+      if (
+        !result.meta.changes
+      ) {
 
         return Response.json(
           {
             success: false,
-            message: "Menu item not found"
+            message:
+              "Menu item not found"
           },
-          { status: 404 }
+          {
+            status: 404
+          }
         );
 
       }
@@ -729,7 +943,8 @@ var worker_default = {
 
         success: true,
 
-        menu: results
+        menu:
+          results
 
       });
 
@@ -760,9 +975,12 @@ var worker_default = {
         return Response.json(
           {
             success: false,
-            message: "All booking fields are required"
+            message:
+              "All booking fields are required"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -830,7 +1048,9 @@ var worker_default = {
             message:
               "Customer and order details are required"
           },
-          { status: 400 }
+          {
+            status: 400
+          }
         );
 
       }
@@ -918,9 +1138,13 @@ var worker_default = {
     // WEBSITE ASSETS
     // =====================================================
 
-    if (env.ASSETS) {
+    if (
+      env.ASSETS
+    ) {
 
-      return env.ASSETS.fetch(request);
+      return env.ASSETS.fetch(
+        request
+      );
 
     }
 
@@ -933,10 +1157,12 @@ var worker_default = {
       "Worker is working!",
       {
         status: 200,
+
         headers: {
           "Content-Type":
             "text/plain"
         }
+
       }
     );
 
@@ -947,7 +1173,11 @@ var worker_default = {
   // AUTOMATIC 90-DAY ORDER CLEANUP
   // =======================================================
 
-  async scheduled(controller, env, ctx) {
+  async scheduled(
+    controller,
+    env,
+    ctx
+  ) {
 
     try {
 
@@ -958,8 +1188,7 @@ var worker_default = {
 
 
       // ---------------------------------------------------
-      // First delete order_items belonging to orders
-      // older than 90 days.
+      // Delete order_items first
       // ---------------------------------------------------
 
       const deleteItems =
@@ -975,7 +1204,7 @@ var worker_default = {
 
 
       // ---------------------------------------------------
-      // Then delete the old orders themselves.
+      // Delete old orders
       // ---------------------------------------------------
 
       const deleteOrders =
@@ -987,8 +1216,7 @@ var worker_default = {
 
 
       // ---------------------------------------------------
-      // Run both as one D1 batch.
-      // Child rows are deleted first.
+      // Run both as one D1 batch
       // ---------------------------------------------------
 
       const result =
@@ -1025,7 +1253,5 @@ var worker_default = {
 // =========================================================
 
 export {
-
   worker_default as default
-
 };
