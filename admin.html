@@ -10,89 +10,207 @@
   box-sizing:border-box;
 }
 
-body{
+html,body{
   margin:0;
+  padding:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#f4f6f8;
+  background:#f4f5f7;
   color:#222;
 }
 
 button{
   cursor:pointer;
   border:0;
-  border-radius:7px;
+  border-radius:8px;
   padding:9px 14px;
   font-weight:600;
 }
 
 input,select,textarea{
   width:100%;
-  padding:10px;
-  border:1px solid #ccc;
-  border-radius:7px;
-  margin-top:6px;
-  margin-bottom:12px;
+  padding:11px;
+  border:1px solid #d5d5d5;
+  border-radius:8px;
+  outline:none;
 }
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#d9932e;
+  box-shadow:0 0 0 3px rgba(217,147,46,.10);
+}
+
+/* =====================================================
+   PREMIUM LOGIN
+===================================================== */
 
 .login-screen{
   position:fixed;
   inset:0;
-  background:#f4f6f8;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:20px;
+  padding:18px;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(255,169,54,.16),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #050505 0%,
+      #121212 48%,
+      #050505 100%
+    );
   z-index:99999;
 }
 
+.login-screen::before{
+  content:"";
+  position:absolute;
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  background:rgba(255,153,0,.07);
+  filter:blur(80px);
+  top:-150px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
 .login-box{
+  position:relative;
   width:100%;
-  max-width:390px;
-  background:white;
-  padding:30px 25px;
-  border-radius:16px;
-  box-shadow:0 8px 30px rgba(0,0,0,.12);
+  max-width:410px;
+  padding:38px 30px 28px;
+  border-radius:25px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(35,35,35,.98),
+      rgba(10,10,10,.98)
+    );
+  border:1px solid rgba(255,177,72,.28);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.7),
+    0 0 50px rgba(255,153,0,.08);
   text-align:center;
 }
 
 .login-logo{
-  width:110px;
-  height:110px;
+  width:125px;
+  height:125px;
   object-fit:contain;
   display:block;
-  margin:0 auto 15px;
+  margin:0 auto 18px;
+  border-radius:50%;
+  background:#050505;
+  padding:5px;
+  border:2px solid rgba(255,177,72,.8);
+  box-shadow:
+    0 0 0 5px rgba(255,170,60,.06),
+    0 0 30px rgba(255,153,0,.25);
 }
 
 .login-box h2{
-  margin:5px 0;
+  margin:0;
+  color:#fff;
+  font-size:25px;
+  font-weight:800;
 }
 
-.login-box p{
+.login-subtitle{
+  margin:7px 0 28px;
+  color:#aaa;
+  font-size:12px;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+}
+
+.login-input{
+  position:relative;
+  margin-bottom:15px;
+}
+
+.login-input-icon{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:17px;
+  opacity:.8;
+}
+
+.login-input input{
+  height:52px;
+  margin:0;
+  padding:0 15px 0 45px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#181818;
+  color:#fff;
+  font-size:15px;
+}
+
+.login-input input::placeholder{
   color:#777;
-  margin-bottom:25px;
 }
 
-.login-box input{
-  text-align:left;
+.login-input input:focus{
+  border-color:#e4a13d;
+  background:#202020;
 }
 
 .login-btn{
   width:100%;
-  background:#111;
-  color:white;
-  padding:12px;
-  font-size:16px;
+  height:53px;
+  margin-top:7px;
+  border-radius:12px;
+  border:1px solid #f1b24d;
+  background:
+    linear-gradient(
+      135deg,
+      #f6bd5c,
+      #d88719
+    );
+  color:#111;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:1px;
+  box-shadow:0 8px 25px rgba(217,137,25,.25);
+  transition:.2s;
+}
+
+.login-btn:hover{
+  transform:translateY(-2px);
 }
 
 .login-btn:disabled{
   opacity:.6;
+  transform:none;
 }
 
 .login-error{
-  color:#d00;
-  margin-top:12px;
   min-height:20px;
+  margin-top:14px;
+  color:#ff6868;
+  font-size:13px;
 }
+
+.login-security{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid #292929;
+  color:#666;
+  font-size:11px;
+}
+
+/* =====================================================
+   ADMIN HEADER
+===================================================== */
 
 #adminApp{
   display:none;
@@ -100,15 +218,16 @@ input,select,textarea{
 
 header{
   background:#111;
-  color:white;
-  padding:15px 20px;
+  color:#fff;
+  padding:13px 20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
+  gap:15px;
   position:sticky;
   top:0;
   z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.25);
 }
 
 .header-left{
@@ -118,11 +237,12 @@ header{
 }
 
 .header-logo{
-  width:45px;
-  height:45px;
+  width:46px;
+  height:46px;
   object-fit:contain;
-  background:white;
   border-radius:50%;
+  background:#fff;
+  padding:2px;
 }
 
 header h1{
@@ -132,38 +252,48 @@ header h1{
 
 .logout-btn{
   background:#e53935;
-  color:white;
+  color:#fff;
 }
 
+/* =====================================================
+   MAIN
+===================================================== */
+
 .container{
-  max-width:1400px;
+  max-width:1450px;
   margin:auto;
   padding:20px;
 }
 
 .section{
-  background:white;
-  padding:18px;
+  background:#fff;
+  padding:20px;
   margin-bottom:20px;
-  border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  border-radius:13px;
+  box-shadow:0 2px 9px rgba(0,0,0,.06);
 }
 
 .section h2{
-  margin-top:0;
+  margin:0 0 18px;
 }
+
+/* =====================================================
+   STATS
+===================================================== */
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:15px;
+  margin-bottom:20px;
 }
 
 .stat{
   background:#fff;
-  border-radius:12px;
+  border-radius:13px;
   padding:20px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  box-shadow:0 2px 9px rgba(0,0,0,.06);
+  border-left:4px solid #d9912e;
 }
 
 .stat-title{
@@ -177,12 +307,24 @@ header h1{
   margin-top:8px;
 }
 
+/* =====================================================
+   REPORT
+===================================================== */
+
 .report-row{
   display:grid;
   grid-template-columns:1fr 1fr auto auto;
   gap:10px;
   align-items:end;
 }
+
+.report-row button{
+  height:42px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
 
 .table-wrap{
   width:100%;
@@ -192,42 +334,28 @@ header h1{
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:900px;
+  min-width:950px;
 }
 
 th,td{
   border-bottom:1px solid #eee;
-  padding:10px;
+  padding:11px;
   text-align:left;
   vertical-align:top;
 }
 
 th{
   background:#fafafa;
+  font-size:13px;
 }
 
-.status{
-  padding:5px 8px;
-  border-radius:5px;
-  font-size:12px;
-  font-weight:bold;
+td{
+  font-size:13px;
 }
 
-.status-pending{
-  background:#fff3cd;
-}
-
-.status-confirmed{
-  background:#d1e7dd;
-}
-
-.status-cancelled{
-  background:#f8d7da;
-}
-
-.status-completed{
-  background:#cfe2ff;
-}
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 .action-btn{
   margin:2px;
@@ -235,65 +363,78 @@ th{
 
 .call{
   background:#198754;
-  color:white;
+  color:#fff;
 }
 
 .whatsapp{
   background:#25d366;
-  color:white;
+  color:#fff;
 }
 
 .edit{
   background:#0d6efd;
-  color:white;
+  color:#fff;
 }
 
 .delete{
   background:#dc3545;
-  color:white;
+  color:#fff;
 }
 
 .hide{
   background:#6c757d;
-  color:white;
+  color:#fff;
 }
 
 .save{
   background:#111;
-  color:white;
+  color:#fff;
 }
+
+.status{
+  padding:5px 8px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* =====================================================
+   MENU
+===================================================== */
 
 .menu-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  grid-template-columns:
+    repeat(auto-fill,minmax(235px,1fr));
   gap:15px;
 }
 
 .menu-card{
   border:1px solid #ddd;
-  border-radius:10px;
+  border-radius:11px;
   overflow:hidden;
-  background:white;
+  background:#fff;
 }
 
 .menu-card img{
   width:100%;
-  height:160px;
+  height:165px;
   object-fit:cover;
   background:#eee;
 }
 
 .menu-card-body{
-  padding:12px;
+  padding:13px;
 }
 
 .menu-card h3{
-  margin:0 0 5px;
+  margin:0 0 6px;
 }
 
 .menu-card p{
-  margin:5px 0;
+  margin:6px 0;
   color:#666;
+  font-size:13px;
 }
 
 .filter-buttons{
@@ -309,8 +450,12 @@ th{
 
 .filter-buttons button.active{
   background:#111;
-  color:white;
+  color:#fff;
 }
+
+/* =====================================================
+   MENU FORM
+===================================================== */
 
 .form-grid{
   display:grid;
@@ -322,15 +467,20 @@ th{
   grid-column:1/-1;
 }
 
-.empty{
-  text-align:center;
-  padding:25px;
-  color:#777;
-}
+/* =====================================================
+   OTHER
+===================================================== */
 
 .loading{
   text-align:center;
   padding:20px;
+  color:#777;
+}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:#777;
 }
 
 .toast{
@@ -338,14 +488,22 @@ th{
   right:20px;
   bottom:20px;
   background:#111;
-  color:white;
+  color:#fff;
   padding:13px 18px;
   border-radius:8px;
   display:none;
   z-index:999999;
 }
 
+/* =====================================================
+   MOBILE
+===================================================== */
+
 @media(max-width:700px){
+
+  .container{
+    padding:10px;
+  }
 
   .stats{
     grid-template-columns:1fr;
@@ -359,12 +517,12 @@ th{
     grid-template-columns:1fr;
   }
 
-  .container{
-    padding:10px;
+  .full{
+    grid-column:auto;
   }
 
   header{
-    padding:10px;
+    padding:10px 12px;
   }
 
   header h1{
@@ -372,12 +530,26 @@ th{
   }
 
   .header-logo{
-    width:38px;
-    height:38px;
+    width:40px;
+    height:40px;
+  }
+
+  .section{
+    padding:15px;
   }
 
   .login-box{
-    padding:25px 18px;
+    max-width:370px;
+    padding:32px 22px 25px;
+  }
+
+  .login-logo{
+    width:115px;
+    height:115px;
+  }
+
+  .login-box h2{
+    font-size:23px;
   }
 }
 </style>
@@ -385,13 +557,14 @@ th{
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
 
 <div id="loginScreen" class="login-screen">
 
   <div class="login-box">
 
-    <!-- WEBSITE LOGO -->
     <img
       src="/logo.png"
       alt="Your Choice Family Restaurant"
@@ -400,38 +573,62 @@ th{
     >
 
     <h2>Your Choice Admin</h2>
-    <p>Admin Login</p>
 
-    <input
-      type="text"
-      id="loginUser"
-      placeholder="User ID"
-      autocomplete="username"
-    >
+    <div class="login-subtitle">
+      Family Restaurant · Admin Panel
+    </div>
 
-    <input
-      type="password"
-      id="loginPassword"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
+    <div class="login-input">
+
+      <span class="login-input-icon">👤</span>
+
+      <input
+        type="text"
+        id="loginUser"
+        placeholder="User ID"
+        autocomplete="username"
+      >
+
+    </div>
+
+    <div class="login-input">
+
+      <span class="login-input-icon">🔒</span>
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+    </div>
 
     <button
       id="loginButton"
       class="login-btn"
       onclick="login()"
     >
-      LOGIN
+      LOGIN TO ADMIN
     </button>
 
-    <div id="loginError" class="login-error"></div>
+    <div
+      id="loginError"
+      class="login-error"
+    ></div>
+
+    <div class="login-security">
+      🔐 Secure Administrator Access
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- ================= ADMIN APP ================= -->
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
 
 <div id="adminApp">
 
@@ -441,8 +638,8 @@ th{
 
     <img
       src="/logo.png"
-      class="header-logo"
       alt="Logo"
+      class="header-logo"
       onerror="this.style.display='none'"
     >
 
@@ -462,29 +659,65 @@ th{
 
 <div class="container">
 
-<!-- ================= STATS ================= -->
+<!-- =====================================================
+     STATS
+===================================================== -->
 
 <div class="stats">
 
   <div class="stat">
-    <div class="stat-title">Total Orders</div>
-    <div id="totalOrders" class="stat-value">0</div>
+
+    <div class="stat-title">
+      Total Orders
+    </div>
+
+    <div
+      id="totalOrders"
+      class="stat-value"
+    >
+      0
+    </div>
+
   </div>
 
-  <div class="stat">
-    <div class="stat-title">Pending Orders</div>
-    <div id="pendingOrders" class="stat-value">0</div>
-  </div>
 
   <div class="stat">
-    <div class="stat-title">Total Sales</div>
-    <div id="totalSales" class="stat-value">₹0</div>
+
+    <div class="stat-title">
+      Pending Orders
+    </div>
+
+    <div
+      id="pendingOrders"
+      class="stat-value"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-title">
+      Total Sales
+    </div>
+
+    <div
+      id="totalSales"
+      class="stat-value"
+    >
+      ₹0
+    </div>
+
   </div>
 
 </div>
 
 
-<!-- ================= SALES REPORT ================= -->
+<!-- =====================================================
+     SALES REPORT
+===================================================== -->
 
 <div class="section">
 
@@ -494,12 +727,18 @@ th{
 
   <div>
     <label>From Date</label>
-    <input type="date" id="fromDate">
+    <input
+      type="date"
+      id="fromDate"
+    >
   </div>
 
   <div>
     <label>To Date</label>
-    <input type="date" id="toDate">
+    <input
+      type="date"
+      id="toDate"
+    >
   </div>
 
   <button
@@ -524,13 +763,18 @@ th{
 </div>
 
 
-<!-- ================= ORDERS ================= -->
+<!-- =====================================================
+     ORDERS
+===================================================== -->
 
 <div class="section">
 
 <h2>Customer Orders</h2>
 
-<div id="ordersLoading" class="loading">
+<div
+  id="ordersLoading"
+  class="loading"
+>
   Loading orders...
 </div>
 
@@ -564,13 +808,18 @@ th{
 </div>
 
 
-<!-- ================= BOOKINGS ================= -->
+<!-- =====================================================
+     BOOKINGS
+===================================================== -->
 
 <div class="section">
 
 <h2>Table Bookings</h2>
 
-<div id="bookingsLoading" class="loading">
+<div
+  id="bookingsLoading"
+  class="loading"
+>
   Loading bookings...
 </div>
 
@@ -604,7 +853,9 @@ th{
 </div>
 
 
-<!-- ================= MENU FORM ================= -->
+<!-- =====================================================
+     MENU FORM
+===================================================== -->
 
 <div class="section">
 
@@ -620,51 +871,71 @@ Add Menu Item
 <div class="form-grid">
 
 <div>
+
 <label>Name</label>
+
 <input
   type="text"
   id="menuName"
   placeholder="Chicken Biryani"
 >
+
 </div>
 
+
 <div>
+
 <label>Price</label>
+
 <input
   type="number"
   id="menuPrice"
   placeholder="180"
 >
+
 </div>
 
+
 <div>
+
 <label>Category</label>
+
 <input
   type="text"
   id="menuCategory"
   placeholder="Biryani"
 >
+
 </div>
 
+
 <div>
+
 <label>Image URL</label>
+
 <input
   type="text"
   id="menuImage"
   placeholder="https://..."
 >
+
 </div>
 
+
 <div class="full">
+
 <label>Description</label>
+
 <textarea
   id="menuDescription"
   rows="3"
   placeholder="Food description"
 ></textarea>
+
 </div>
 
 </div>
+
 
 <button
   class="save"
@@ -682,7 +953,9 @@ Clear
 </div>
 
 
-<!-- ================= CURRENT MENU ================= -->
+<!-- =====================================================
+     CURRENT MENU
+===================================================== -->
 
 <div class="section">
 
@@ -704,29 +977,37 @@ Clear
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div
+  id="toast"
+  class="toast"
+></div>
 
 
 <script>
 
 "use strict";
 
-/* ==========================================
+/* =====================================================
    API
-========================================== */
+===================================================== */
 
-const API = "https://1251file.xboy7334.workers.dev";
+const API =
+  "https://1251file.xboy7334.workers.dev";
 
 let adminAuth = null;
+
 let allOrders = [];
+
 let allBookings = [];
+
 let menu = [];
+
 let activeCategory = "all";
 
 
-/* ==========================================
-   LOGIN
-========================================== */
+/* =====================================================
+   AUTH HEADERS
+===================================================== */
 
 function getAuthHeaders(){
 
@@ -735,7 +1016,7 @@ function getAuthHeaders(){
   }
 
   return {
-    "Authorization":
+    Authorization:
       "Basic " +
       btoa(
         adminAuth.username +
@@ -746,21 +1027,36 @@ function getAuthHeaders(){
 }
 
 
+/* =====================================================
+   LOGIN
+===================================================== */
+
 async function login(){
 
   const username =
-    document.getElementById("loginUser").value.trim();
+    document
+      .getElementById("loginUser")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+      .getElementById("loginPassword")
+      .value;
 
   const error =
-    document.getElementById("loginError");
+    document.getElementById(
+      "loginError"
+    );
 
   const button =
-    document.getElementById("loginButton");
+    document.getElementById(
+      "loginButton"
+    );
+
 
   error.textContent = "";
+
 
   if(!username || !password){
 
@@ -768,24 +1064,35 @@ async function login(){
       "User ID and Password required.";
 
     return;
+
   }
 
+
   button.disabled = true;
-  button.textContent = "Checking...";
+
+  button.textContent =
+    "CHECKING...";
+
 
   try{
 
-    const response = await fetch(
-      API + "/api/admin/orders",
-      {
-        method:"GET",
-        headers:{
-          "Authorization":
-            "Basic " +
-            btoa(username + ":" + password)
+    const response =
+      await fetch(
+        API + "/api/admin/orders",
+        {
+          method:"GET",
+          headers:{
+            Authorization:
+              "Basic " +
+              btoa(
+                username +
+                ":" +
+                password
+              )
+          }
         }
-      }
-    );
+      );
+
 
     if(!response.ok){
 
@@ -801,46 +1108,55 @@ async function login(){
         "Login failed. HTTP " +
         response.status
       );
+
     }
 
+
     adminAuth = {
-      username: username,
-      password: password
+      username:username,
+      password:password
     };
+
 
     document.getElementById(
       "loginScreen"
     ).style.display = "none";
 
+
     document.getElementById(
       "adminApp"
     ).style.display = "block";
 
+
     await loadAll();
 
-  }catch(error){
 
-    console.error(error);
+  }catch(err){
+
+    console.error(err);
 
     adminAuth = null;
 
     error.textContent =
-      error.message ||
+      err.message ||
       "Login failed.";
+
 
   }finally{
 
     button.disabled = false;
-    button.textContent = "LOGIN";
+
+    button.textContent =
+      "LOGIN TO ADMIN";
 
   }
 
 }
 
 
-/* ==========================================
+/* =====================================================
    LOGOUT
-========================================== */
+===================================================== */
 
 function logout(){
 
@@ -869,11 +1185,11 @@ function logout(){
 }
 
 
-/* ==========================================
+/* =====================================================
    API HELPER
-========================================== */
+===================================================== */
 
-async function api(path, options){
+async function api(path,options){
 
   options = options || {};
 
@@ -883,23 +1199,27 @@ async function api(path, options){
     getAuthHeaders()
   );
 
+
   const response =
     await fetch(
       API + path,
       options
     );
 
+
   const text =
     await response.text();
 
+
   let data = {};
+
 
   try{
 
     data =
       text
-        ? JSON.parse(text)
-        : {};
+      ? JSON.parse(text)
+      : {};
 
   }catch(e){
 
@@ -927,19 +1247,21 @@ async function api(path, options){
     throw new Error(
       data.message ||
       data.error ||
-      "HTTP " + response.status
+      "HTTP " +
+      response.status
     );
 
   }
+
 
   return data;
 
 }
 
 
-/* ==========================================
+/* =====================================================
    LOAD ALL
-========================================== */
+===================================================== */
 
 async function loadAll(){
 
@@ -958,8 +1280,7 @@ async function loadAll(){
     console.error(error);
 
     showToast(
-      error.message ||
-      "Failed to load data."
+      error.message
     );
 
   }
@@ -967,9 +1288,9 @@ async function loadAll(){
 }
 
 
-/* ==========================================
+/* =====================================================
    ORDERS
-========================================== */
+===================================================== */
 
 async function loadOrders(){
 
@@ -978,21 +1299,28 @@ async function loadOrders(){
       "ordersLoading"
     );
 
-  loading.style.display = "block";
+  loading.style.display =
+    "block";
+
 
   try{
 
     const data =
-      await api("/api/admin/orders");
+      await api(
+        "/api/admin/orders"
+      );
+
 
     allOrders =
       data.orders ||
       data.data ||
       [];
 
+
     renderOrders();
 
     calculateStats();
+
 
   }catch(error){
 
@@ -1001,15 +1329,19 @@ async function loadOrders(){
     document.getElementById(
       "ordersTable"
     ).innerHTML =
-      `<tr>
+      `
+      <tr>
         <td colspan="10">
           ${escapeHtml(error.message)}
         </td>
-      </tr>`;
+      </tr>
+      `;
+
 
   }finally{
 
-    loading.style.display = "none";
+    loading.style.display =
+      "none";
 
   }
 
@@ -1023,16 +1355,20 @@ function renderOrders(){
       "ordersTable"
     );
 
+
   if(!allOrders.length){
 
     tbody.innerHTML =
-      `<tr>
+      `
+      <tr>
         <td colspan="10" class="empty">
           No orders found.
         </td>
-      </tr>`;
+      </tr>
+      `;
 
     return;
+
   }
 
 
@@ -1075,18 +1411,23 @@ function renderOrders(){
         order.date ??
         "";
 
+
       let items = "";
+
 
       if(Array.isArray(order.items)){
 
         items =
-          order.items.map(item =>
+          order.items
+          .map(item =>
             `${escapeHtml(
-              item.name || "Item"
+              item.name ||
+              "Item"
             )} × ${
               item.quantity || 1
             }`
-          ).join("<br>");
+          )
+          .join("<br>");
 
       }else{
 
@@ -1104,7 +1445,9 @@ function renderOrders(){
       <tr>
 
         <td>
-          <strong>#${escapeHtml(id)}</strong>
+          <strong>
+            #${escapeHtml(id)}
+          </strong>
         </td>
 
         <td>
@@ -1134,17 +1477,20 @@ function renderOrders(){
         </td>
 
         <td>
-
           <span class="status">
             ${escapeHtml(status)}
           </span>
-
         </td>
 
         <td>
 
           <select
-            onchange="updateOrderStatus('${escapeAttr(id)}',this.value)"
+            onchange="
+              updateOrderStatus(
+                '${escapeAttr(id)}',
+                this.value
+              )
+            "
           >
 
             ${statusOptions(status)}
@@ -1158,13 +1504,15 @@ function renderOrders(){
           ${
             phone
             ?
-            `<a
+            `
+            <a
               href="tel:${escapeAttr(phone)}"
             >
               <button class="action-btn call">
                 Call
               </button>
-            </a>`
+            </a>
+            `
             :
             "-"
           }
@@ -1176,14 +1524,16 @@ function renderOrders(){
           ${
             phone
             ?
-            `<a
+            `
+            <a
               target="_blank"
               href="https://wa.me/${cleanPhone(phone)}"
             >
               <button class="action-btn whatsapp">
                 WhatsApp
               </button>
-            </a>`
+            </a>
+            `
             :
             "-"
           }
@@ -1209,19 +1559,31 @@ function statusOptions(current){
     "cancelled"
   ];
 
+
   return statuses.map(status =>
-    `<option
+
+    `
+    <option
       value="${status}"
-      ${status === current ? "selected" : ""}
+      ${
+        status === current
+        ? "selected"
+        : ""
+      }
     >
       ${status}
-    </option>`
+    </option>
+    `
+
   ).join("");
 
 }
 
 
-async function updateOrderStatus(id,status){
+async function updateOrderStatus(
+  id,
+  status
+){
 
   try{
 
@@ -1230,21 +1592,27 @@ async function updateOrderStatus(id,status){
       encodeURIComponent(id),
       {
         method:"PATCH",
+
         headers:{
           "Content-Type":
             "application/json"
         },
-        body:JSON.stringify({
-          status:status
-        })
+
+        body:
+          JSON.stringify({
+            status:status
+          })
       }
     );
+
 
     showToast(
       "Order status updated."
     );
 
+
     await loadOrders();
+
 
   }catch(error){
 
@@ -1257,9 +1625,9 @@ async function updateOrderStatus(id,status){
 }
 
 
-/* ==========================================
+/* =====================================================
    BOOKINGS
-========================================== */
+===================================================== */
 
 async function loadBookings(){
 
@@ -1268,7 +1636,10 @@ async function loadBookings(){
       "bookingsLoading"
     );
 
-  loading.style.display = "block";
+
+  loading.style.display =
+    "block";
+
 
   try{
 
@@ -1277,12 +1648,15 @@ async function loadBookings(){
         "/api/admin/bookings"
       );
 
+
     allBookings =
       data.bookings ||
       data.data ||
       [];
 
+
     renderBookings();
+
 
   }catch(error){
 
@@ -1291,15 +1665,19 @@ async function loadBookings(){
     document.getElementById(
       "bookingsTable"
     ).innerHTML =
-      `<tr>
+      `
+      <tr>
         <td colspan="10">
           ${escapeHtml(error.message)}
         </td>
-      </tr>`;
+      </tr>
+      `;
+
 
   }finally{
 
-    loading.style.display = "none";
+    loading.style.display =
+      "none";
 
   }
 
@@ -1313,14 +1691,17 @@ function renderBookings(){
       "bookingsTable"
     );
 
+
   if(!allBookings.length){
 
     tbody.innerHTML =
-      `<tr>
+      `
+      <tr>
         <td colspan="10" class="empty">
           No bookings found.
         </td>
-      </tr>`;
+      </tr>
+      `;
 
     return;
 
@@ -1399,7 +1780,12 @@ function renderBookings(){
         <td>
 
           <select
-            onchange="updateBookingStatus('${escapeAttr(id)}',this.value)"
+            onchange="
+              updateBookingStatus(
+                '${escapeAttr(id)}',
+                this.value
+              )
+            "
           >
 
             ${bookingStatusOptions(status)}
@@ -1413,11 +1799,13 @@ function renderBookings(){
           ${
             phone
             ?
-            `<a href="tel:${escapeAttr(phone)}">
+            `
+            <a href="tel:${escapeAttr(phone)}">
               <button class="action-btn call">
                 Call
               </button>
-            </a>`
+            </a>
+            `
             :
             "-"
           }
@@ -1429,14 +1817,16 @@ function renderBookings(){
           ${
             phone
             ?
-            `<a
+            `
+            <a
               target="_blank"
               href="https://wa.me/${cleanPhone(phone)}"
             >
               <button class="action-btn whatsapp">
                 WhatsApp
               </button>
-            </a>`
+            </a>
+            `
             :
             "-"
           }
@@ -1460,13 +1850,22 @@ function bookingStatusOptions(current){
     "cancelled"
   ];
 
+
   return statuses.map(status =>
-    `<option
+
+    `
+    <option
       value="${status}"
-      ${status === current ? "selected" : ""}
+      ${
+        status === current
+        ? "selected"
+        : ""
+      }
     >
       ${status}
-    </option>`
+    </option>
+    `
+
   ).join("");
 
 }
@@ -1484,21 +1883,27 @@ async function updateBookingStatus(
       encodeURIComponent(id),
       {
         method:"PATCH",
+
         headers:{
           "Content-Type":
             "application/json"
         },
-        body:JSON.stringify({
-          status:status
-        })
+
+        body:
+          JSON.stringify({
+            status:status
+          })
       }
     );
+
 
     showToast(
       "Booking status updated."
     );
 
+
     await loadBookings();
+
 
   }catch(error){
 
@@ -1511,9 +1916,9 @@ async function updateBookingStatus(
 }
 
 
-/* ==========================================
+/* =====================================================
    MENU
-========================================== */
+===================================================== */
 
 async function loadMenu(){
 
@@ -1524,13 +1929,16 @@ async function loadMenu(){
         "/api/admin/menu"
       );
 
+
     menu =
       data.menu ||
       data.items ||
       data.data ||
       [];
 
+
     renderMenu();
+
 
   }catch(error){
 
@@ -1539,9 +1947,11 @@ async function loadMenu(){
     document.getElementById(
       "menuGrid"
     ).innerHTML =
-      `<div class="empty">
+      `
+      <div class="empty">
         ${escapeHtml(error.message)}
-      </div>`;
+      </div>
+      `;
 
   }
 
@@ -1561,31 +1971,36 @@ function renderMenu(){
     );
 
 
-  const categories =
-    [
-      "all",
-      ...new Set(
-        menu
-          .map(item =>
-            item.category
-          )
-          .filter(Boolean)
-      )
-    ];
+  const categories = [
+    "all",
+    ...new Set(
+      menu
+      .map(item => item.category)
+      .filter(Boolean)
+    )
+  ];
 
 
   filterBox.innerHTML =
     categories.map(category =>
-      `<button
+
+      `
+      <button
         class="${
           category === activeCategory
           ? "active"
           : ""
         }"
-        onclick="filterMenu('${escapeAttr(category)}')"
+        onclick="
+          filterMenu(
+            '${escapeAttr(category)}'
+          )
+        "
       >
         ${escapeHtml(category)}
-      </button>`
+      </button>
+      `
+
     ).join("");
 
 
@@ -1604,9 +2019,11 @@ function renderMenu(){
   if(!filtered.length){
 
     grid.innerHTML =
-      `<div class="empty">
+      `
+      <div class="empty">
         No menu items found.
-      </div>`;
+      </div>
+      `;
 
     return;
 
@@ -1623,7 +2040,9 @@ function renderMenu(){
         item.name ?? "";
 
       const price =
-        Number(item.price ?? 0);
+        Number(
+          item.price ?? 0
+        );
 
       const category =
         item.category ?? "";
@@ -1647,14 +2066,17 @@ function renderMenu(){
         ${
           image
           ?
-          `<img
+          `
+          <img
             src="${escapeAttr(image)}"
             alt="${escapeAttr(name)}"
-          >`
+          >
+          `
           :
-          `<div
+          `
+          <div
             style="
-              height:160px;
+              height:165px;
               display:flex;
               align-items:center;
               justify-content:center;
@@ -1662,7 +2084,8 @@ function renderMenu(){
             "
           >
             No Image
-          </div>`
+          </div>
+          `
         }
 
         <div class="menu-card-body">
@@ -1696,21 +2119,38 @@ function renderMenu(){
 
           <button
             class="edit"
-            onclick="editMenu('${escapeAttr(id)}')"
+            onclick="
+              editMenu(
+                '${escapeAttr(id)}'
+              )
+            "
           >
             Edit
           </button>
 
           <button
             class="hide"
-            onclick="toggleMenu('${escapeAttr(id)}',${available})"
+            onclick="
+              toggleMenu(
+                '${escapeAttr(id)}',
+                ${available}
+              )
+            "
           >
-            ${available ? "Hide" : "Show"}
+            ${
+              available
+              ? "Hide"
+              : "Show"
+            }
           </button>
 
           <button
             class="delete"
-            onclick="deleteMenu('${escapeAttr(id)}')"
+            onclick="
+              deleteMenu(
+                '${escapeAttr(id)}'
+              )
+            "
           >
             Delete
           </button>
@@ -1727,7 +2167,8 @@ function renderMenu(){
 
 function filterMenu(category){
 
-  activeCategory = category;
+  activeCategory =
+    category;
 
   renderMenu();
 
@@ -1738,8 +2179,11 @@ function editMenu(id){
 
   const item =
     menu.find(
-      x => String(x.id) === String(id)
+      x =>
+        String(x.id) ===
+        String(id)
     );
+
 
   if(!item){
 
@@ -1757,20 +2201,24 @@ function editMenu(id){
   ).value =
     item.id ?? "";
 
+
   document.getElementById(
     "menuName"
   ).value =
     item.name ?? "";
+
 
   document.getElementById(
     "menuPrice"
   ).value =
     item.price ?? "";
 
+
   document.getElementById(
     "menuCategory"
   ).value =
     item.category ?? "";
+
 
   document.getElementById(
     "menuImage"
@@ -1779,15 +2227,18 @@ function editMenu(id){
     item.image_url ??
     "";
 
+
   document.getElementById(
     "menuDescription"
   ).value =
     item.description ?? "";
 
+
   document.getElementById(
     "menuFormTitle"
   ).textContent =
     "Edit Menu Item";
+
 
   window.scrollTo({
     top:0,
@@ -1914,13 +2365,17 @@ async function saveMenu(){
         encodeURIComponent(id),
         {
           method:"PATCH",
+
           headers:{
             "Content-Type":
               "application/json"
           },
-          body:JSON.stringify(body)
+
+          body:
+            JSON.stringify(body)
         }
       );
+
 
       showToast(
         "Menu updated."
@@ -1932,13 +2387,17 @@ async function saveMenu(){
         "/api/admin/menu",
         {
           method:"POST",
+
           headers:{
             "Content-Type":
               "application/json"
           },
-          body:JSON.stringify(body)
+
+          body:
+            JSON.stringify(body)
         }
       );
+
 
       showToast(
         "Menu added."
@@ -1950,6 +2409,7 @@ async function saveMenu(){
     clearMenuForm();
 
     await loadMenu();
+
 
   }catch(error){
 
@@ -1969,8 +2429,11 @@ async function toggleMenu(
 
   const item =
     menu.find(
-      x => String(x.id) === String(id)
+      x =>
+        String(x.id) ===
+        String(id)
     );
+
 
   if(!item){
 
@@ -1990,33 +2453,38 @@ async function toggleMenu(
       encodeURIComponent(id),
       {
         method:"PATCH",
+
         headers:{
           "Content-Type":
             "application/json"
         },
-        body:JSON.stringify({
 
-          name:
-            item.name ?? "",
+        body:
+          JSON.stringify({
 
-          price:
-            Number(item.price ?? 0),
+            name:
+              item.name ?? "",
 
-          category:
-            item.category ?? "",
+            price:
+              Number(
+                item.price ?? 0
+              ),
 
-          image:
-            item.image ??
-            item.image_url ??
-            "",
+            category:
+              item.category ?? "",
 
-          description:
-            item.description ?? "",
+            image:
+              item.image ??
+              item.image_url ??
+              "",
 
-          available:
-            !currentAvailable
+            description:
+              item.description ?? "",
 
-        })
+            available:
+              !currentAvailable
+
+          })
       }
     );
 
@@ -2027,7 +2495,9 @@ async function toggleMenu(
       : "Menu shown."
     );
 
+
     await loadMenu();
+
 
   }catch(error){
 
@@ -2063,11 +2533,14 @@ async function deleteMenu(id){
       }
     );
 
+
     showToast(
       "Menu deleted."
     );
 
+
     await loadMenu();
+
 
   }catch(error){
 
@@ -2080,21 +2553,21 @@ async function deleteMenu(id){
 }
 
 
-/* ==========================================
+/* =====================================================
    STATS
-========================================== */
+===================================================== */
 
 function calculateStats(){
 
   const total =
     allOrders.length;
 
+
   const pending =
     allOrders.filter(
       order =>
         String(
-          order.status ??
-          ""
+          order.status ?? ""
         ).toLowerCase() ===
         "pending"
     ).length;
@@ -2106,9 +2579,9 @@ function calculateStats(){
 
         const status =
           String(
-            order.status ??
-            ""
+            order.status ?? ""
           ).toLowerCase();
+
 
         if(
           status === "cancelled"
@@ -2117,6 +2590,7 @@ function calculateStats(){
           return sum;
 
         }
+
 
         return sum +
           Number(
@@ -2135,10 +2609,12 @@ function calculateStats(){
   ).textContent =
     total;
 
+
   document.getElementById(
     "pendingOrders"
   ).textContent =
     pending;
+
 
   document.getElementById(
     "totalSales"
@@ -2149,9 +2625,9 @@ function calculateStats(){
 }
 
 
-/* ==========================================
-   REPORT
-========================================== */
+/* =====================================================
+   SALES REPORT
+===================================================== */
 
 function loadReport(){
 
@@ -2188,11 +2664,26 @@ function loadReport(){
           ""
         ).slice(0,10);
 
-      if(from && date < from)
+
+      if(
+        from &&
+        date < from
+      ){
+
         return false;
 
-      if(to && date > to)
+      }
+
+
+      if(
+        to &&
+        date > to
+      ){
+
         return false;
+
+      }
+
 
       return true;
 
@@ -2214,8 +2705,9 @@ function loadReport(){
 
   document.getElementById(
     "reportResult"
-  ).innerHTML = `
+  ).innerHTML =
 
+    `
     <p>
       Orders:
       <strong>
@@ -2229,8 +2721,7 @@ function loadReport(){
         ₹${sales.toFixed(2)}
       </strong>
     </p>
-
-  `;
+    `;
 
 }
 
@@ -2253,20 +2744,30 @@ function resetReport(){
 }
 
 
-/* ==========================================
+/* =====================================================
    HELPERS
-========================================== */
+===================================================== */
 
 function formatDate(value){
 
   if(!value)
     return "-";
 
+
   const d =
     new Date(value);
 
-  if(Number.isNaN(d.getTime()))
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+
     return value;
+
+  }
+
 
   return d.toLocaleString(
     "en-IN"
@@ -2281,6 +2782,7 @@ function cleanPhone(phone){
     String(phone)
       .replace(/\D/g,"");
 
+
   if(
     p.length === 10
   ){
@@ -2289,6 +2791,7 @@ function cleanPhone(phone){
       "91" + p;
 
   }
+
 
   return p;
 
@@ -2323,21 +2826,27 @@ function showToast(message){
       "toast"
     );
 
+
   toast.textContent =
     message;
 
+
   toast.style.display =
     "block";
+
 
   clearTimeout(
     window.toastTimer
   );
 
+
   window.toastTimer =
     setTimeout(
       () => {
+
         toast.style.display =
           "none";
+
       },
       3000
     );
@@ -2345,9 +2854,9 @@ function showToast(message){
 }
 
 
-/* ==========================================
-   ENTER KEY LOGIN
-========================================== */
+/* =====================================================
+   ENTER KEY
+===================================================== */
 
 document.getElementById(
   "loginPassword"
