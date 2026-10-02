@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Login</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f6f8;font-family:Arial,sans-serif}
+.login{width:min(92%,380px);background:#fff;padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+h1{margin:0 0 20px;text-align:center;font-size:24px}
+label{display:block;margin:14px 0 6px;font-weight:600}
+input{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:16px}
+button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:8px;background:#111;color:#fff;font-size:16px;cursor:pointer}
+#error{color:#c00;text-align:center;margin-top:12px;min-height:20px}
+</style>
+</head>
+<body>
+<div class="login">
+  <h1>Admin Login</h1>
+  <form id="loginForm">
+    <label for="username">Username</label>
+    <input id="username" name="username" autocomplete="username" required>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Login</button>
+    <div id="error"></div>
+  </form>
+</div>
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  document.getElementById("error").textContent =
+    "Login API is not connected yet. Worker authentication must be added next.";
+});
+</script>
+</body>
+</html>
