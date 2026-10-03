@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Choice Admin</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
+header{background:#111827;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:20px}
+button{border:0;border-radius:7px;padding:9px 12px;font-weight:bold;cursor:pointer}
+.refresh{background:#2563eb;color:#fff}
+.container{max-width:1200px;margin:auto;padding:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:15px}
+.stat{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.stat-title{color:#666;font-size:13px}.stat-value{font-size:27px;font-weight:bold;margin-top:7px}
+.section{background:#fff;padding:15px;margin-bottom:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.section h2{margin-top:0;font-size:19px}.table-wrap{overflow-x:auto}
+table{width:100%;min-width:800px;border-collapse:collapse}
+th,td{padding:9px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}
+th{background:#f3f4f6}.loading{text-align:center;padding:20px;color:#666}
+.error{background:#fee2e2;color:#991b1b;padding:12px;border-radius:7px;margin-bottom:10px}
+.success{background:#dcfce7;color:#166534;padding:12px;border-radius:7px;margin-bottom:10px}
+select,input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:7px;font-size:15px}
+textarea{min-height:80px;resize:vertical}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.full{grid-column:1/-1}.add{background:#2563eb;color:#fff}.update{background:#16a34a;color:#fff;margin:2px}
+.edit{background:#f59e0b;color:#fff;margin:2px}.delete{background:#dc2626;color:#fff;margin:2px}
+.hide{background:#6366f1;color:#fff;margin:2px}.call{background:#2563eb;color:#fff;margin:2px}
+.whatsapp{background:#16a34a;color:#fff;margin:2px}.menu-image{width:70px;height:55px;object-fit:cover;border-radius:6px}
+.small-note{color:#666;font-size:12px}
+.report-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:15px 0;
+}
+.report-box{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:9px;
+  padding:14px;
+}
+.report-box small{display:block;color:#666;margin-bottom:5px}
+.report-box b{font-size:22px}
+.report-table{width:100%;min-width:500px;border-collapse:collapse}
+.report-table th,.report-table td{padding:10px;border-bottom:1px solid #ddd;text-align:left}
+.report-table th{background:#f3f4f6}
+.report-total{font-weight:800;background:#ecfdf5}
+@media(max-width:700px){
+  .report-summary{grid-template-columns:1fr}
+}
+@media(max-width:700px){.stats{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}
+header{flex-direction:column;gap:10px;align-items:flex-start}}
+
+/* =========================
+   CATEGORY-WISE ADMIN MENU
+========================= */
+.menu-category-toolbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:0 0 14px;
+}
+.menu-category-btn{
+  border:1px solid #dbe3ec;
+  background:#f8fafc;
+  color:#334155;
+  border-radius:999px;
+  padding:8px 13px;
+}
+.menu-category-btn.active{
+  background:#2563eb;
+  color:#fff;
+  border-color:#2563eb;
+}
+.admin-menu-category{
+  margin:18px 0 8px;
+  padding:10px 12px;
+  border-radius:9px;
+  background:#eff6ff;
+  color:#1e3a8a;
+  font-size:16px;
+  border-left:4px solid #2563eb;
+}
+.admin-menu-table{
+  min-width:900px;
+}
+
+
+/* =========================
+   PREMIUM ADMIN LOGIN
+========================= */
+.login-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(245,158,11,.18), transparent 30%),
+    radial-gradient(circle at 85% 85%, rgba(37,99,235,.18), transparent 32%),
+    linear-gradient(135deg,#0b1220,#111827 55%,#172554);
+}
+.login-card{
+  width:min(430px,100%);
+  background:rgba(255,255,255,.97);
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:24px;
+  padding:34px;
+  box-shadow:0 24px 70px rgba(0,0,0,.32);
+  position:relative;
+  overflow:hidden;
+}
+.login-card:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,#f59e0b,#ef4444,#2563eb);
+}
+.brand-logo{width:92px;height:92px;margin:0 auto 16px;display:block}
+.login-brand{text-align:center;margin-bottom:26px}
+.login-brand h1{margin:0;color:#111827;font-size:25px;font-weight:800}
+.login-brand p{margin:7px 0 0;color:#64748b;font-size:13px}
+.login-field{margin-bottom:15px}
+.login-field label{display:block;font-size:13px;font-weight:700;color:#334155;margin:0 0 7px}
+.login-input-wrap{position:relative}
+.login-input{width:100%;height:50px;padding:0 46px 0 15px;border:1px solid #dbe3ec;border-radius:12px;background:#f8fafc;color:#111827;font-size:15px;outline:none;transition:.2s}
+.login-input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10);background:#fff}
+.login-icon{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#64748b;font-size:18px;pointer-events:none}
+.login-submit{width:100%;height:50px;margin-top:7px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-size:15px;font-weight:800;box-shadow:0 10px 24px rgba(37,99,235,.25);transition:.2s}
+.login-submit:hover{transform:translateY(-1px);box-shadow:0 13px 28px rgba(37,99,235,.30)}
+.login-submit:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.login-error{display:none;margin:0 0 14px;padding:11px 12px;border-radius:10px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;font-size:13px;line-height:1.4}
+.login-footer{text-align:center;margin-top:18px;color:#94a3b8;font-size:11px}
+.password-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#64748b;padding:4px;cursor:pointer;font-size:16px}
+.admin-app{display:none}
+body.logged-in .login-screen{display:none}
+body.logged-in .admin-app{display:block}
+@media(max-width:520px){.login-card{padding:28px 20px;border-radius:20px}.login-screen{padding:14px}}
+
+/* Admin header upgrade */
+header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:12px 18px;min-height:66px}
+.header-brand{display:flex;align-items:center;gap:11px}
+.header-logo{width:42px;height:42px;flex:none}
+.header-title-wrap h1{font-size:18px;margin:0}
+.header-title-wrap span{display:block;font-size:11px;color:#94a3b8;margin-top:2px}
+.header-actions{display:flex;align-items:center;gap:8px}
+.logout{background:#dc2626;color:#fff}
+@media(max-width:700px){header{flex-direction:row;align-items:center;justify-content:space-between}.header-title-wrap span{display:none}.header-title-wrap h1{font-size:15px}.header-logo{width:38px;height:38px}.header-actions button{padding:8px 9px;font-size:12px}}
+
+</style>
+</head>
+
+<body>
+<!-- =========================
+     ADMIN LOGIN SCREEN
+========================= -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">
+      <svg class="brand-logo" viewBox="0 0 120 120" role="img" aria-label="Your Choice logo">
+        <defs>
+          <linearGradient id="logoBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f59e0b"/>
+            <stop offset=".5" stop-color="#ef4444"/>
+            <stop offset="1" stop-color="#b91c1c"/>
+          </linearGradient>
+          <filter id="logoShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".25"/>
+          </filter>
+        </defs>
+        <circle cx="60" cy="60" r="55" fill="url(#logoBg)" filter="url(#logoShadow)"/>
+        <circle cx="60" cy="60" r="47" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+        <path d="M38 52c0-10 9-18 22-18s22 8 22 18v24c0 5-4 9-9 9H47c-5 0-9-4-9-9V52Z" fill="#fff" opacity=".97"/>
+        <path d="M43 53h34M48 45c3 5 7 7 12 7s9-2 12-7" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="51" cy="63" r="3" fill="#b91c1c"/><circle cx="69" cy="63" r="3" fill="#b91c1c"/>
+        <path d="M50 73c6 4 14 4 20 0" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+        <path d="M27 31c6-7 14-11 22-13M93 31c-6-7-14-11-22-13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+      </svg>
+      <h1>Your Choice Admin</h1>
+      <p>Family Restaurant · Management Panel</p>
+    </div>
+
+    <div id="loginError" class="login-error"></div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <div class="login-input-wrap">
+          <input class="login-input" id="loginUser" name="username" type="text" placeholder="Enter username" autocomplete="username" required>
+          <span class="login-icon">👤</span>
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="loginPassword">Password</label>
+        <div class="login-input-wrap">
+          <input class="login-input" id="loginPassword" name="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+          <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">👁</button>
+        </div>
+      </div>
+
+      <button class="login-submit" id="loginButton" type="submit">🔐 Sign in to Admin</button>
+    </form>
+
+    <div class="login-footer">Authorized access only · Your Choice Family Restaurant</div>
+  </div>
+</div>
+
+<!-- =========================
+     ADMIN APPLICATION
+========================= -->
+<div class="admin-app" id="adminApp">
+<header>
+  <div class="header-brand">
+    <svg class="header-logo" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="55" fill="url(#headerLogoBg)"/>
+      <defs><linearGradient id="headerLogoBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#dc2626"/></linearGradient></defs>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+      <path d="M38 52c0-10 9-18 22-18s22 8 22 18v24c0 5-4 9-9 9H47c-5 0-9-4-9-9V52Z" fill="#fff"/>
+      <path d="M43 53h34M48 45c3 5 7 7 12 7s9-2 12-7" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="51" cy="63" r="3" fill="#b91c1c"/><circle cx="69" cy="63" r="3" fill="#b91c1c"/>
+      <path d="M50 73c6 4 14 4 20 0" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="header-title-wrap">
+      <h1>Your Choice Admin</h1>
+      <span>Family Restaurant · Management Panel</span>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="refresh" id="refreshButton">⟳ Refresh All</button>
+    <button class="logout" id="logoutButton">↪ Logout</button>
+  </div>
+</header>
+
+<div class="container">
+  <div id="globalMessage"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-title">Total Orders</div><div id="totalOrders" class="stat-value">0</div></div>
+    <div class="stat"><div class="stat-title">Pending Orders</div><div id="pendingOrders" class="stat-value">0</div></div>
+    <div class="stat"><div class="stat-title">Total Sales</div><div id="totalSales" class="stat-value">₹0</div></div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Date-wise Sales Report</h2>
+
+    <div class="form" style="margin-bottom:15px;">
+      <div>
+        <label><b>From Date</b></label>
+        <input type="date" id="reportFromDate">
+      </div>
+      <div>
+        <label><b>To Date</b></label>
+        <input type="date" id="reportToDate">
+      </div>
+      <div>
+        <button type="button" class="add" id="reportButton">📊 Generate Report</button>
+        <button type="button" id="reportResetButton" style="background:#6b7280;color:#fff;">Reset</button>
+      </div>
+    </div>
+
+    <div id="dateReportSummary"></div>
+    <div id="dateReportBody">
+      <div class="loading">Select dates and generate report.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🛒 Customer Orders</h2>
+    <div id="ordersMessage"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="ordersBody"><tr><td colspan="7" class="loading">Loading orders...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📅 Table Bookings</h2>
+    <div id="bookingsMessage"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Date</th><th>Time</th><th>Guests</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="bookingsBody"><tr><td colspan="8" class="loading">Loading bookings...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🍽️ Menu Management</h2>
+    <div id="menuMessage"></div>
+    <form id="menuForm" class="form">
+      <input type="hidden" id="menuId">
+      <input type="text" id="menuName" placeholder="Menu Name" required>
+      <input type="text" id="menuCategory" placeholder="Category">
+      <input type="number" id="menuPrice" placeholder="Price" min="0" required>
+      <input type="text" id="menuImage" placeholder="images/chicken-biryani.jpg">
+      <textarea id="menuDescription" class="full" placeholder="Description"></textarea>
+      <select id="menuAvailable"><option value="1">Available</option><option value="0">Not Available</option></select>
+      <div>
+        <button type="submit" class="add" id="saveButton">➕ Add Menu</button>
+        <button type="button" id="cancelButton" style="display:none;background:#6b7280;color:#fff;">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>📋 Current Menu</h2>
+    <div id="menuCategoryToolbar" class="menu-category-toolbar"></div>
+    <div id="currentMenu"><div class="loading">Loading menu...</div></div>
+  </div>
+</div>
+</div><!-- /admin-app -->
+
+<script>
+"use strict";
+
+const API = "https://1251file.xboy7334.workers.dev";
+
+/* =========================
+   ADMIN AUTHENTICATION
+   Credentials are entered by the admin and kept only in sessionStorage.
+   No username/password is hard-coded in this HTML.
+========================= */
+const AUTH_KEY = "your_choice_admin_auth";
+
+function getAuthHeader(){
+  const auth=sessionStorage.getItem(AUTH_KEY);
+  return auth ? {"Authorization":"Basic "+auth} : {};
+}
+
+function setAuth(username,password){
+  sessionStorage.setItem(AUTH_KEY,btoa(unescape(encodeURIComponent(username+":"+password))));
+}
+
+function clearAuth(){
+  sessionStorage.removeItem(AUTH_KEY);
+}
+
+function hasAuth(){
+  return !!sessionStorage.getItem(AUTH_KEY);
+}
+
+function showAdmin(){
+  document.body.classList.add("logged-in");
+}
+
+function showLogin(){
+  document.body.classList.remove("logged-in");
+  $("loginUser").focus();
+}
+
+function showLoginError(message){
+  const box=$("loginError");
+  box.textContent=message;
+  box.style.display="block";
+}
+
+function hideLoginError(){
+  const box=$("loginError");
+  box.textContent="";
+  box.style.display="none";
+}
+
+async function verifyLogin(){
+  const response=await fetch(API+"/api/admin/orders",{
+    method:"GET",
+    headers:Object.assign({"Accept":"application/json"},getAuthHeader()),
+    cache:"no-store"
+  });
+
+  if(response.status===401 || response.status===403){
+    throw new Error("Invalid username or password.");
+  }
+  if(!response.ok){
+    throw new Error("Admin server returned HTTP "+response.status+".");
+  }
+}
+
+async function login(username,password){
+  setAuth(username,password);
+  try{
+    await verifyLogin();
+    showAdmin();
+    hideLoginError();
+    await loadAll();
+  }catch(error){
+    clearAuth();
+    throw error;
+  }
+}
+
+async function logout(){
+  clearAuth();
+  showLogin();
+  $("loginPassword").value="";
+  $("loginButton").disabled=false;
+  $("loginButton").textContent="🔐 Sign in to Admin";
+}
+let menuData = [];
+let allOrders = [];
+let activeMenuCategory = "all";
+
+function $(id){return document.getElementById(id)}
+
+function getReportDate(value){
+  if(!value) return "";
+
+  try{
+    let dateString=String(value).trim();
+
+    if(
+      !dateString.endsWith("Z") &&
+      !/[+-]\\d{2}:\\d{2}$/.test(dateString)
+    ){
+      dateString=dateString.replace(" ","T")+"Z";
+    }
+
+    const date=new Date(dateString);
+    if(Number.isNaN(date.getTime())) return "";
+
+    const parts=new Intl.DateTimeFormat("en-CA",{
+      timeZone:"Asia/Kolkata",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }).formatToParts(date);
+
+    const get=function(type){
+      const part=parts.find(function(p){return p.type===type});
+      return part ? part.value : "";
+    };
+
+    return get("year")+"-"+get("month")+"-"+get("day");
+  }catch(error){
+    return "";
+  }
+}
+
+function renderDateWiseReport(){
+  const body=$("dateReportBody");
+  const summary=$("dateReportSummary");
+
+  if(!body || !summary) return;
+
+  const from=$("reportFromDate").value;
+  const to=$("reportToDate").value;
+
+  if(from && to && from > to){
+    summary.innerHTML='<div class="error">From Date cannot be after To Date.</div>';
+    body.innerHTML="";
+    return;
+  }
+
+  const filtered=allOrders.filter(function(order){
+    const date=getReportDate(order.created_at);
+    if(!date) return false;
+    if(from && date < from) return false;
+    if(to && date > to) return false;
+    return true;
+  });
+
+  const grouped={};
+
+  filtered.forEach(function(order){
+    const date=getReportDate(order.created_at);
+    if(!grouped[date]){
+      grouped[date]={
+        orders:0,
+        sales:0
+      };
+    }
+
+    grouped[date].orders++;
+    grouped[date].sales+=Number(order.total_amount||0);
+  });
+
+  const dates=Object.keys(grouped).sort().reverse();
+
+  let totalOrders=0;
+  let totalSales=0;
+
+  dates.forEach(function(date){
+    totalOrders+=grouped[date].orders;
+    totalSales+=grouped[date].sales;
+  });
+
+  summary.innerHTML=
+    '<div class="report-summary">'+
+      '<div class="report-box"><small>Total Orders</small><b>'+totalOrders+'</b></div>'+
+      '<div class="report-box"><small>Total Sales</small><b>₹'+totalSales.toFixed(0)+'</b></div>'+
+      '<div class="report-box"><small>Days</small><b>'+dates.length+'</b></div>'+
+    '</div>';
+
+  if(!dates.length){
+    body.innerHTML='<div class="loading">এই date range-এ কোনো order নেই।</div>';
+    return;
+  }
+
+  let html='<div class="table-wrap"><table class="report-table">'+
+    '<thead><tr><th>Date</th><th>Orders</th><th>Sales</th></tr></thead><tbody>';
+
+  dates.forEach(function(date){
+    const d=grouped[date];
+    const displayDate=new Date(date+"T00:00:00").toLocaleDateString("en-IN",{
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
+    });
+
+    html+=
+      '<tr>'+
+      '<td><b>'+escapeHtml(displayDate)+'</b></td>'+
+      '<td>'+d.orders+'</td>'+
+      '<td><b>₹'+d.sales.toFixed(0)+'</b></td>'+
+      '</tr>';
+  });
+
+  html+=
+    '<tr class="report-total">'+
+    '<td>Grand Total</td>'+
+    '<td>'+totalOrders+'</td>'+
+    '<td>₹'+totalSales.toFixed(0)+'</td>'+
+    '</tr></tbody></table></div>';
+
+  body.innerHTML=html;
+}
+
+
+function showMessage(id,message,type){
+  const box=$(id);
+  if(!box)return;
+  box.innerHTML='<div class="'+type+'">'+escapeHtml(message)+'</div>';
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+/* =========================================================
+   ADMIN ORDER TIME
+   Convert UTC / SQLite timestamp to India Standard Time
+========================================================= */
+function formatAdminDateTime(value){
+  if(!value)return "Time not available";
+
+  try{
+    let dateString=String(value).trim();
+
+    if(
+      !dateString.endsWith("Z") &&
+      !/[+-]\d{2}:\d{2}$/.test(dateString)
+    ){
+      dateString=dateString.replace(" ","T")+"Z";
+    }
+
+    const date=new Date(dateString);
+
+    if(Number.isNaN(date.getTime())){
+      return escapeHtml(value);
+    }
+
+    return date.toLocaleString("en-IN",{
+      timeZone:"Asia/Kolkata",
+      day:"2-digit",
+      month:"short",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hour12:true
+    });
+  }catch(error){
+    return escapeHtml(value);
+  }
+}
+
+async function api(path,options){
+  const requestOptions=Object.assign({},options||{});
+  requestOptions.headers=Object.assign({},getAuthHeader(),requestOptions.headers||{});
+  const response=await fetch(API+path,requestOptions);
+  const text=await response.text();
+  let data={};
+
+  try{data=text?JSON.parse(text):{}}
+  catch(e){throw new Error("Server returned invalid JSON. HTTP "+response.status)}
+
+  if(!response.ok){
+    throw new Error(data.message||data.error||("HTTP "+response.status));
+  }
+
+  return data;
+}
+
+function option(value,selected){
+  return '<option value="'+escapeHtml(value)+'"'+
+    (String(value)===String(selected)?" selected":"")+">"+
+    escapeHtml(value)+"</option>";
+}
+
+function callCustomer(phone){
+  if(!phone){alert("Phone number নেই");return}
+  window.location.href="tel:"+String(phone).replace(/[^\d+]/g,"");
+}
+
+function whatsapp(phone,name){
+  if(!phone){alert("Phone number নেই");return}
+  let number=String(phone).replace(/\D/g,"");
+  if(number.length===10)number="91"+number;
+  const message=encodeURIComponent(
+    "Hello "+(name||"Customer")+", Your Choice Family Restaurant থেকে যোগাযোগ করছি।"
+  );
+  window.open("https://wa.me/"+number+"?text="+message,"_blank");
+}
+
+async function loadAll(){
+  $("ordersBody").innerHTML='<tr><td colspan="7" class="loading">Loading orders...</td></tr>';
+  $("bookingsBody").innerHTML='<tr><td colspan="8" class="loading">Loading bookings...</td></tr>';
+  $("currentMenu").innerHTML='<div class="loading">Loading menu...</div>';
+
+  await Promise.allSettled([loadOrders(),loadBookings(),loadMenu()]);
+}
+
+async function loadOrders(){
+  const body=$("ordersBody");
+
+  try{
+    const data=await api("/api/admin/orders");
+    const orders=Array.isArray(data.orders)?data.orders:[];
+    allOrders=orders;
+
+    $("totalOrders").textContent=orders.length;
+
+    let pending=0;
+    let sales=0;
+
+    orders.forEach(function(order){
+      if(String(order.status)==="Pending")pending++;
+      sales+=Number(order.total_amount||0);
+    });
+
+    $("pendingOrders").textContent=pending;
+    $("totalSales").textContent="₹"+sales.toFixed(0);
+
+    renderDateWiseReport();
+
+    if(!orders.length){
+      body.innerHTML='<tr><td colspan="7" class="loading">কোনো Order নেই</td></tr>';
+      return;
+    }
+
+    body.innerHTML="";
+
+    orders.forEach(function(order){
+      const row=document.createElement("tr");
+
+      let items="—";
+      if(Array.isArray(order.items)&&order.items.length){
+        items=order.items.map(function(item){
+          return escapeHtml(item.item_name)+" × "+escapeHtml(item.quantity)+" — ₹"+escapeHtml(item.price);
+        }).join("<br>");
+      }
+
+      row.innerHTML=
+        "<td><b>#"+escapeHtml(order.id)+"</b><br>"+
+        "<small>"+formatAdminDateTime(order.created_at)+"</small></td>"+
+
+        "<td><b>"+escapeHtml(order.customer_name||"")+"</b><br>"+
+        escapeHtml(order.phone||"")+"<br>"+
+        escapeHtml(order.address||"")+"<br>"+
+        '<button type="button" class="call">📞 Call</button>'+
+        '<button type="button" class="whatsapp">WhatsApp</button></td>'+
+
+        "<td>"+items+"</td>"+
+        "<td><b>₹"+Number(order.total_amount||0).toFixed(0)+"</b></td>"+
+        "<td>"+escapeHtml(order.payment_method||"COD")+"</td>"+
+
+        "<td><select class=\"orderStatus\">"+
+        option("Pending",order.status)+
+        option("Confirmed",order.status)+
+        option("Preparing",order.status)+
+        option("Delivered",order.status)+
+        option("Cancelled",order.status)+
+        "</select></td>"+
+
+        '<td><button type="button" class="update">Update</button></td>';
+
+      row.querySelector(".update").addEventListener("click",function(){
+        const status=row.querySelector(".orderStatus").value;
+        updateOrder(order.id,status);
+      });
+
+      row.querySelector(".call").addEventListener("click",function(){
+        callCustomer(order.phone);
+      });
+
+      row.querySelector(".whatsapp").addEventListener("click",function(){
+        whatsapp(order.phone,order.customer_name);
+      });
+
+      body.appendChild(row);
+    });
+
+  }catch(error){
+    $("totalOrders").textContent="0";
+    $("pendingOrders").textContent="0";
+    $("totalSales").textContent="₹0";
+
+    body.innerHTML='<tr><td colspan="7" class="error">Order Error: '+escapeHtml(error.message)+"</td></tr>";
+  }
+}
+
+async function updateOrder(id,status){
+  try{
+    await api("/api/admin/orders/"+encodeURIComponent(id),{
+      method:"PATCH",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({status:status})
+    });
+
+    alert("Order status updated.");
+    await loadOrders();
+  }catch(error){
+    alert("Order update failed: "+error.message);
+  }
+}
+
+async function loadBookings(){
+  const body=$("bookingsBody");
+
+  try{
+    const data=await api("/api/admin/bookings");
+    const bookings=Array.isArray(data.bookings)?data.bookings:[];
+
+    if(!bookings.length){
+      body.innerHTML='<tr><td colspan="8" class="loading">কোনো Table Booking নেই</td></tr>';
+      return;
+    }
+
+    body.innerHTML="";
+
+    bookings.forEach(function(booking){
+      const row=document.createElement("tr");
+
+      row.innerHTML=
+        "<td>#"+escapeHtml(booking.id)+"</td>"+
+        "<td>"+escapeHtml(booking.customer_name||"")+"</td>"+
+        "<td>"+escapeHtml(booking.phone||"")+"<br>"+
+        '<button type="button" class="call">📞 Call</button>'+
+        '<button type="button" class="whatsapp">WhatsApp</button></td>'+
+        "<td>"+escapeHtml(booking.booking_date||"")+"</td>"+
+        "<td>"+escapeHtml(booking.booking_time||"")+"</td>"+
+        "<td>"+escapeHtml(booking.guests||"")+"</td>"+
+        "<td><select class=\"bookingStatus\">"+
+        option("Pending",booking.status)+
+        option("Confirmed",booking.status)+
+        option("Completed",booking.status)+
+        option("Cancelled",booking.status)+
+        "</select></td>"+
+        '<td><button type="button" class="update">Update</button></td>';
+
+      row.querySelector(".update").addEventListener("click",function(){
+        const status=row.querySelector(".bookingStatus").value;
+        updateBooking(booking.id,status);
+      });
+
+      row.querySelector(".call").addEventListener("click",function(){
+        callCustomer(booking.phone);
+      });
+
+      row.querySelector(".whatsapp").addEventListener("click",function(){
+        whatsapp(booking.phone,booking.customer_name);
+      });
+
+      body.appendChild(row);
+    });
+
+  }catch(error){
+    body.innerHTML='<tr><td colspan="8" class="error">Booking Error: '+escapeHtml(error.message)+"</td></tr>";
+  }
+}
+
+async function updateBooking(id,status){
+  try{
+    await api("/api/admin/bookings/"+encodeURIComponent(id),{
+      method:"PATCH",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({status:status})
+    });
+
+    alert("Booking status updated.");
+    await loadBookings();
+  }catch(error){
+    alert("Booking update failed: "+error.message);
+  }
+}
+
+
+function normalizeMenuCategory(value){
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g,"and")
+    .replace(/[–—-]/g," ")
+    .replace(/[.,()]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function getMenuCategoryLabel(value){
+  const key=normalizeMenuCategory(value);
+  const labels={
+    "biryani and mughlai":"Biryani & Mughlai",
+    "biryani mughlai":"Biryani & Mughlai",
+    "biryani mughlai dish":"Biryani & Mughlai",
+    "soups":"Soups",
+    "soup":"Soups",
+    "chinese starter":"Chinese Starter",
+    "chinese starters":"Chinese Starter",
+    "chinese rice":"Chinese Rice",
+    "noodles":"Noodles",
+    "chinese main course":"Chinese Main Course",
+    "tandoor and starter":"Tandoor & Starter",
+    "tandoor starter":"Tandoor & Starter",
+    "salad and raita":"Salad & Raita",
+    "salad raita":"Salad & Raita",
+    "rice and pulao":"Rice & Pulao",
+    "rice pulao":"Rice & Pulao",
+    "roti":"Roti",
+    "indian main course":"Indian Main Course",
+    "dal":"Dal",
+    "egg":"Egg",
+    "chicken":"Chicken",
+    "mutton":"Mutton"
+  };
+  return labels[key] || String(value || "Other");
+}
+
+const MENU_CATEGORY_ORDER=[
+  "biryani and mughlai",
+  "soups",
+  "chinese starter",
+  "chinese rice",
+  "noodles",
+  "chinese main course",
+  "tandoor and starter",
+  "salad and raita",
+  "rice and pulao",
+  "roti",
+  "indian main course",
+  "dal",
+  "egg",
+  "chicken",
+  "mutton"
+];
+
+function renderMenuCategoryToolbar(){
+  const toolbar=$("menuCategoryToolbar");
+  if(!toolbar)return;
+
+  const groups={};
+  menuData.forEach(function(item){
+    const key=normalizeMenuCategory(item.category)||"other";
+    groups[key]=true;
+  });
+
+  const keys=Object.keys(groups);
+  const ordered=[
+    ...MENU_CATEGORY_ORDER.filter(function(key){return groups[key]}),
+    ...keys.filter(function(key){return !MENU_CATEGORY_ORDER.includes(key)})
+  ];
+
+  let html=
+    '<button type="button" class="menu-category-btn'+
+    (activeMenuCategory==="all"?" active":"")+
+    '" data-category="all">All</button>';
+
+  ordered.forEach(function(key){
+    html+=
+      '<button type="button" class="menu-category-btn'+
+      (activeMenuCategory===key?" active":"")+
+      '" data-category="'+escapeHtml(key)+'">'+
+      escapeHtml(getMenuCategoryLabel(key))+
+      '</button>';
+  });
+
+  toolbar.innerHTML=html;
+
+  toolbar.querySelectorAll(".menu-category-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      activeMenuCategory=btn.dataset.category||"all";
+      renderMenuCategoryToolbar();
+      renderCurrentMenu();
+    });
+  });
+}
+
+function renderCurrentMenu(){
+  const box=$("currentMenu");
+  if(!box)return;
+
+  if(!menuData.length){
+    box.innerHTML='<div class="loading">কোনো Menu নেই</div>';
+    return;
+  }
+
+  const filtered=menuData.filter(function(item){
+    if(activeMenuCategory==="all")return true;
+    return normalizeMenuCategory(item.category)===activeMenuCategory;
+  });
+
+  if(!filtered.length){
+    box.innerHTML='<div class="loading">এই category-তে কোনো Menu নেই।</div>';
+    return;
+  }
+
+  const groups={};
+
+  filtered.forEach(function(item){
+    const key=normalizeMenuCategory(item.category)||"other";
+    if(!groups[key]){
+      groups[key]={
+        label:getMenuCategoryLabel(item.category),
+        items:[]
+      };
+    }
+    groups[key].items.push(item);
+  });
+
+  const keys=Object.keys(groups);
+  const ordered=[
+    ...MENU_CATEGORY_ORDER.filter(function(key){return groups[key]}),
+    ...keys.filter(function(key){return !MENU_CATEGORY_ORDER.includes(key)})
+  ];
+
+  let html="";
+
+  ordered.forEach(function(key){
+    const group=groups[key];
+
+    html+='<div class="admin-menu-category">'+
+      '🍽️ '+escapeHtml(group.label)+
+      ' <span style="font-size:12px;color:#64748b;">('+group.items.length+' items)</span>'+
+      '</div>';
+
+    html+='<div class="table-wrap"><table class="admin-menu-table"><thead><tr>'+
+      "<th>ID</th><th>Image</th><th>Name</th><th>Category</th>"+
+      "<th>Price</th><th>Available</th><th>Action</th>"+
+      "</tr></thead><tbody>";
+
+    group.items.forEach(function(item){
+      const image=item.image
+        ? '<img class="menu-image" src="'+escapeHtml(item.image)+
+          '" alt="'+escapeHtml(item.name)+'" onerror="this.style.display=\'none\'">'
+        :"No Image";
+
+      html+="<tr>"+
+        "<td>#"+escapeHtml(item.id)+"</td>"+
+        "<td>"+image+"</td>"+
+        "<td><b>"+escapeHtml(item.name)+"</b><br><small>"+escapeHtml(item.description||"")+"</small></td>"+
+        "<td>"+escapeHtml(item.category||"")+"</td>"+
+        "<td><b>₹"+Number(item.price||0).toFixed(0)+"</b></td>"+
+        "<td>"+(Number(item.available)===1?"✅ Available":"❌ Hidden")+"</td>"+
+        "<td><button type=\"button\" class=\"edit\">Edit</button>"+
+        "<button type=\"button\" class=\"hide\">"+(Number(item.available)===1?"Hide":"Show")+"</button>"+
+        "<button type=\"button\" class=\"delete\">Delete</button></td>"+
+        "</tr>";
+    });
+
+    html+="</tbody></table></div>";
+  });
+
+  box.innerHTML=html;
+
+  box.querySelectorAll("tbody tr").forEach(function(row){
+    const idText=row.children[0].textContent.replace("#","");
+    const item=menuData.find(function(x){return String(x.id)===String(idText)});
+    if(!item)return;
+
+    row.querySelector(".edit").addEventListener("click",function(){
+      editMenu(item.id);
+    });
+    row.querySelector(".hide").addEventListener("click",function(){
+      toggleMenu(item.id);
+    });
+    row.querySelector(".delete").addEventListener("click",function(){
+      deleteMenu(item.id);
+    });
+  });
+}
+
+async function loadMenu(){
+  const box=$("currentMenu");
+
+  try{
+    const data=await api("/api/admin/menu");
+    menuData=Array.isArray(data.menu)?data.menu:[];
+
+    renderMenuCategoryToolbar();
+    renderCurrentMenu();
+
+  }catch(error){
+    box.innerHTML='<div class="error">Menu Error: '+escapeHtml(error.message)+"</div>";
+  }
+}
+
+function resetMenuForm(){
+  $("menuId").value="";
+  $("menuName").value="";
+  $("menuCategory").value="";
+  $("menuPrice").value="";
+  $("menuImage").value="";
+  $("menuDescription").value="";
+  $("menuAvailable").value="1";
+  $("saveButton").textContent="➕ Add Menu";
+  $("cancelButton").style.display="none";
+}
+
+function editMenu(id){
+  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
+  if(!item){alert("Menu item পাওয়া যায়নি।");return}
+
+  $("menuId").value=item.id;
+  $("menuName").value=item.name||"";
+  $("menuCategory").value=item.category||"";
+  $("menuPrice").value=item.price??"";
+  $("menuImage").value=item.image||"";
+  $("menuDescription").value=item.description||"";
+  $("menuAvailable").value=Number(item.available)===1?"1":"0";
+  $("saveButton").textContent="💾 Update Menu";
+  $("cancelButton").style.display="inline-block";
+
+  window.scrollTo({top:$("menuForm").getBoundingClientRect().top+window.scrollY-20,behavior:"smooth"});
+}
+
+async function toggleMenu(id){
+  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
+  if(!item)return;
+
+  const newAvailable=Number(item.available)===1?0:1;
+
+  try{
+    await api("/api/admin/menu/"+encodeURIComponent(id),{
+      method:"PATCH",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({available:newAvailable})
+    });
+    await loadMenu();
+  }catch(error){
+    alert("Menu status update failed: "+error.message);
+  }
+}
+
+async function deleteMenu(id){
+  const item=menuData.find(function(menu){return Number(menu.id)===Number(id)});
+  if(!item)return;
+  if(!confirm('Delete "'+item.name+'"?'))return;
+
+  try{
+    await api("/api/admin/menu/"+encodeURIComponent(id),{method:"DELETE"});
+    await loadMenu();
+  }catch(error){
+    alert("Menu delete failed: "+error.message);
+  }
+}
+
+$("menuForm").addEventListener("submit",async function(event){
+  event.preventDefault();
+
+  const id=$("menuId").value.trim();
+
+  const data={
+    name:$("menuName").value.trim(),
+    category:$("menuCategory").value.trim(),
+    description:$("menuDescription").value.trim(),
+    price:Number($("menuPrice").value),
+    image:$("menuImage").value.trim(),
+    available:Number($("menuAvailable").value)
+  };
+
+  if(!data.name){alert("Menu Name দিন।");return}
+  if(!Number.isFinite(data.price)||data.price<0){alert("সঠিক Price দিন।");return}
+
+  const saveButton=$("saveButton");
+  saveButton.disabled=true;
+
+  try{
+    if(id){
+      await api("/api/admin/menu/"+encodeURIComponent(id),{
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+      });
+      alert("Menu updated successfully.");
+    }else{
+      await api("/api/admin/menu",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+      });
+      alert("Menu added successfully.");
+    }
+
+    resetMenuForm();
+    await loadMenu();
+  }catch(error){
+    alert("Menu save failed: "+error.message);
+  }finally{
+    saveButton.disabled=false;
+  }
+});
+
+$("cancelButton").addEventListener("click",function(){resetMenuForm()});
+$("refreshButton").addEventListener("click",function(){loadAll()});
+
+$("reportButton").addEventListener("click",function(){
+  renderDateWiseReport();
+});
+
+$("reportResetButton").addEventListener("click",function(){
+  $("reportFromDate").value="";
+  $("reportToDate").value="";
+  renderDateWiseReport();
+});
+
+window.addEventListener("error",function(event){
+  const box=$("globalMessage");
+  if(box)box.innerHTML='<div class="error">JavaScript Error: '+escapeHtml(event.message||"Unknown error")+"</div>";
+});
+
+window.addEventListener("unhandledrejection",function(event){
+  const box=$("globalMessage");
+  if(box){
+    const message=event.reason&&event.reason.message?event.reason.message:String(event.reason||"Unknown Promise Error");
+    box.innerHTML='<div class="error">Promise Error: '+escapeHtml(message)+"</div>";
+  }
+});
+
+document.getElementById("passwordToggle").addEventListener("click",function(){
+  const input=$("loginPassword");
+  const visible=input.type==="text";
+  input.type=visible?"password":"text";
+  this.textContent=visible?"👁":"🙈";
+  this.setAttribute("aria-label",visible?"Show password":"Hide password");
+});
+
+$("loginForm").addEventListener("submit",async function(event){
+  event.preventDefault();
+  hideLoginError();
+
+  const username=$("loginUser").value.trim();
+  const password=$("loginPassword").value;
+  if(!username || !password){
+    showLoginError("Username and password are required.");
+    return;
+  }
+
+  const button=$("loginButton");
+  button.disabled=true;
+  button.textContent="⏳ Signing in...";
+
+  try{
+    await login(username,password);
+  }catch(error){
+    showLoginError(error.message||"Login failed. Please check your credentials.");
+    button.disabled=false;
+    button.textContent="🔐 Sign in to Admin";
+    $("loginPassword").focus();
+  }
+});
+
+$("logoutButton").addEventListener("click",function(){
+  logout();
+});
+
+document.addEventListener("DOMContentLoaded",async function(){
+  if(hasAuth()){
+    try{
+      await verifyLogin();
+      showAdmin();
+      await loadAll();
+    }catch(error){
+      clearAuth();
+      showLogin();
+      showLoginError("Your session expired. Please sign in again.");
+    }
+  }else{
+    showLogin();
+  }
+});
+</script>
+</body>
+</html>
